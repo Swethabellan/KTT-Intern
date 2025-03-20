@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Application Form</title>
+    </head>
+    <body>
+        <form autocomplete="on">
+            <center><h1>Student Details</h1></center>
+            <fieldset >
+                <legend>Personal Details</legend>
+                <label for="name">Student Name*:</label>
+                <input type="text" id="name" name="name" required><br><br>
+                <label for="gender">Gender*:</label>
+                <input type="radio" id="male" name="gender">
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender">
+                <label for="female">Female</label><br><br>
+                <label for="fname">Fathers Name:</label>
+                <input type="text" id="fname" name="fname">
+                <label for="foccupation">Fathers Occupation:</label>
+                <input type="text" id="foccupation" name="foccupation"><br><br>
+                <label for="mname">Mother Name:</label>
+                <input type="text" id="mname" name="mname">
+                <label for="moccupation">Mothers Occupation:</label>
+                <input type="text" id="moccupation" name="moccupation"><br><br>
+                <label for="address">Address:</label>
+               <textarea></textarea><br><br>
+               <label for="religion">Religion:</label>
+               <select>
+                <option value="hindu">Hindu</option>
+                <option value="Muslim">Muslim</option>
+                <option value="Cristian">Cristian</option>
+               </select><br><br>
+               <label for="blood">Blood Group:</label>
+               
+                <select  name="blood" id="blood">
+                 <optgroup label="A">
+               <option value="A+ve">A<sup>+ve</sup></option>
+                <option value="A-ve">A-ve</option>
+                 </optgroup>
+                 <optgroup label="B">
+                <option value="B+ve">B<sup>+ve</sup></option>
+                 <option value="B-ve">B-ve</option>
+                 </optgroup>
+                <optgroup label="AB">
+                 <option value="AB+ve">AB<sup>+ve</sup></option>
+                 <option value="AB-ve">AB-ve</option>
+                 </optgroup>
+                 <optgroup label="O">
+                <option value="O+ve">O<sup>+ve</sup></option>
+                 <option value="O-ve">O-ve</option>
+                 </optgroup><br><br>
+                 </select><br><br>
+                 <label for="Phone">Phone Number:</label>
+                 <input type="tel" id="Phone">
+                 <label for="aphone">Alternate Number:</label>
+                 <input type="tel" id="aphone"><br><br>
+                 <label for="email">Email:</label>
+                 <input type="email" id="email">
+            </fieldset><br>
+
+            <fieldset>
+                <legend>Academic Details</legend>
+                <label for="sslc">SSLC School Name:</label>
+                <input type="text" id="sslc">
+                <label for="sslcmark">SSLC Mark (in %)</label>
+                <input type="number" id="sslcmark"><br><br>
+                <label for="HSC/Diploma">HSC/Diploma:</label>
+                <select>
+                    <option value="HSC">HSC</option>
+                    <option value="Diploma">Diploma</option>
+                </select><br><br>
+                <label for="hsc/dip">HSC/Dip School Name:</label>
+                <input type="text" id="hsc">
+                <label for="hscmark">SSLC Mark (in %)</label>
+                <input type="number" id="sslcmark" ><br><br>
+
+            </fieldset><br><br>
+
+            <fieldset>
+                <legend>Addmission Details:</legend>
+                <label for="optingfor">Choose the department: </label>
+                <select  name="dept" id="dept">
+                 <optgroup label="B.Tech">
+               <option value="A+ve">A<sup>+ve</sup></option>
+                <option value="A-ve">A-ve</option>
+                 </optgroup>
+                 <optgroup label="BE">
+                <option value="B+ve">B<sup>+ve</sup></option>
+                 <option value="B-ve">B-ve</option>
+                 </optgroup>
+            </fieldset>
+        </form>
+    </body>
+</html>
