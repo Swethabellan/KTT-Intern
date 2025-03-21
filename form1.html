@@ -8,6 +8,8 @@
             <center><h1>Student Details</h1></center>
             <fieldset >
                 <legend>Personal Details</legend>
+                <label for="photo">Student Photo:</label>
+                <input type="file" id="photo" required><br><br>
                 <label for="name">Student Name*:</label>
                 <input type="text" id="name" name="name" required><br><br>
                 <label for="gender">Gender*:</label>
@@ -15,6 +17,10 @@
                 <label for="male">Male</label>
                 <input type="radio" id="female" name="gender">
                 <label for="female">Female</label><br><br>
+                <label for="db">Date of Birth:</label>
+                <input type="date" id="db" name="db"><br><br>
+                <label for="Age">Age:</label>
+                <input type="number" id="age" name="age"><br><br>
                 <label for="fname">Fathers Name:</label>
                 <input type="text" id="fname" name="fname">
                 <label for="foccupation">Fathers Occupation:</label>
@@ -23,7 +29,10 @@
                 <input type="text" id="mname" name="mname">
                 <label for="moccupation">Mothers Occupation:</label>
                 <input type="text" id="moccupation" name="moccupation"><br><br>
-                <label for="address">Address:</label>
+                <label for="address">Present Address:</label>
+               <textarea></textarea><br><br>
+               <input type="checkbox" id="address" autocomplete="on">
+               <label for="address"> Permanent Address:</label>
                <textarea></textarea><br><br>
                <label for="religion">Religion:</label>
                <select>
@@ -56,7 +65,10 @@
                  <label for="aphone">Alternate Number:</label>
                  <input type="tel" id="aphone"><br><br>
                  <label for="email">Email:</label>
-                 <input type="email" id="email">
+                 <input type="email" id="email"><br><br>
+                 <label for="aadhar">Aadhar Number:</label>
+                 <input type="number">
+
             </fieldset><br>
 
             <fieldset>
@@ -74,6 +86,84 @@
                 <input type="text" id="hsc">
                 <label for="hscmark">SSLC Mark (in %)</label>
                 <input type="number" id="sslcmark" ><br><br>
+                <table border="1">
+                    <tr>
+                        <th>Hsc/sslc</th>
+                        <th>School Subject</th>
+                        <th>School Marks(Scored)</th>
+                        <th>School Marks(max)</th>
+                        <th>School Marks(total)</th>
+                        <th>School Marks(%)</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="5">SSLC</th>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                        <td rowspan="5"><input type="number"></td>
+                        <td rowspan="5"><input type="number"></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                    </tr>
+
+                    <tr>
+                        <th rowspan="6">HSC/Diploma</th>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                        <td rowspan="6"><input type="number"></td>
+                        <td rowspan="6"><input type="number"></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                    <tr>
+                        <th><input type="text"></th>
+                        <td><input type="number"></td>
+                        <td><input type="number"></td>
+                    </tr>
+                </table><br><br>
+
+                <label for="10th">SSLC Mark Sheet:</label>
+                <input type="file" id="10th">
+                <label for="12th">HSC/Diploma Mark Sheet:</label>
+                <input type="file" id="12th">
+
 
             </fieldset><br><br>
 
@@ -82,14 +172,35 @@
                 <label for="optingfor">Choose the department: </label>
                 <select  name="dept" id="dept">
                  <optgroup label="B.Tech">
-               <option value="A+ve">A<sup>+ve</sup></option>
-                <option value="A-ve">A-ve</option>
+               <option value="civil">Civil Engineering</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Biotech">Biotechnology</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Electronics & Communication Engineering">Electronics & Communication Engineering/option>
+                <option value="Information">Information Technology</option>
                  </optgroup>
                  <optgroup label="BE">
-                <option value="B+ve">B<sup>+ve</sup></option>
-                 <option value="B-ve">B-ve</option>
+                <option value="csbs">Computer Science and Business Systems</sup></option>
+                 <option value="Cse">Computer Science and Engineering</option>
+                 <option value="textile">Textile Technology</sup></option>
+                 <option value="me">Mechatronics Engineering</option>
                  </optgroup>
-            </fieldset>
+                 </select><br><br>
+                 <label for="category">Seat Category:</label>
+                 <input type="radio" id="counseling" name="category">
+                 <label for="counseling">Counseling</label>
+                 <input type="radio" id="management" name="category">
+                 <label for="management">Management</label><br><br>
+                 <label for="acc">Accomodation:</label>
+                 <input type="radio" id="hostel" name="acc">
+                 <label for="hostel">Hostel</label>
+                 <input type="radio" id="days" name="acc">
+                 <label for="days">Dayscholar</label><br><br>
+
+
+        </fieldset><br><br>
+        <input type="reset">
+        <input type="Submit">
         </form>
     </body>
 </html>
