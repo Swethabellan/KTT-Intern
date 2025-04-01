@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+    <title>The title</title>
+    <link rel="sytelsheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+        /*Universal Selector*/
+        h1{
+            font-size: 20px;
+            /* background-color: rgb(255, 99,71,0.7); */
+            color: antiquewhite;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            border: 2px solid violet;
+            padding: 30px;
+            margin: 20px;
+            border-style: dashed;
+            border-radius: 15px;
+
+        }
+        body{
+            background-image: url('');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+            font-size: larger;
+            text-transform: capitalize;
+        }
+         p {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            margin-right: 50px;
+            margin-left: 50px;
+            }
+        /*Combinator Selector*/
+        h1+p{
+            color:red;
+            background-color: aquamarine;
+        }
+        p.one {
+            border-style: solid;
+            border-color: red green blue yellow;
+            border-radius: 5px;
+        }
+        img{
+            width: 40px;
+            height: 70px;
+            float: left;
+        }
+        /* Pseudo-class selectors  */
+        a:link{
+            color: rgb(36, 147, 244);
+            background-color: transparent;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            
+        }
+        a:visited{
+             color: rgb(235, 17, 53);
+        }
+        a:hover{
+            color:red;
+        }
+        a:active{
+            color:yellow;
+        }
+
+        table,th,td{
+            border: 1px  black;
+           border-style: dotted;
+           border-color: rgb(255, 0, 55);
+            border-radius: 10px;
+            width: 100%;
+            text-align: left;
+            padding: 15px;
+            border-spacing: 30px;
+        }
+        tr:nth-child(even){
+            background-color: rgb(114, 97, 97);
+
+        }
+    </style>
+</head>
+<body>
+    <h1>This is a heading</h1>
+    <p >This is a paragraph </p>
+    <p title="This is a 'pen'">This is eraser</p>
+    <p><a href="#c4">jump to c4</a></p>
+    <p><a href="#c6">Jump</a></p>
+    <h2>Chapter 1</h2>
+    <p>This is something different</p>
+    <h2>Chapter 2</h2>
+    <p>This is something different</p>
+    <h2 id="c4">Chapter 4</h2>
+    <p>This is something different</p>
+
+    <a href="https://www.w3schools.com/"  target="_blank">w3schools</a>
+    <img src="" alt="no image" width="" height=""><br>
+   <br><br>
+    <pre>
+        My Bonnie lies over the ocean.
+
+        My Bonnie lies over the sea.
+
+        My Bonnie lies over the ocean.
+
+        Oh, bring back my Bonnie to me.
+    </pre>
+
+    <p class="one">A solid multicolor border</p>
+
+    <!--formatting tags-->
+    <p>This is<b>Bold</b>,<i>Italic</i>,<strong>strong</strong><em>Emphasis</em>,<sub>Subscript</sub><sup>Superscript</sup>,<mark>Mark</mark>,<small>Small</small><ins>Inserted</ins><del>Deleted text</del></p>
+    <blockquote cite="http://rac.ncra.tifr.res.in/ort/hist.html">The Ooty Radio Telescope (ORT) is located in Muthorai near Ooty, in southern India. It is part of the National Centre for Radio Astrophysics (NCRA) of the Tata Institute of Fundamental Research (TIFR), which is funded by the Government of India through the Department of Atomic Energy. The radio telescope is a 530-metre (1,740 ft) long and 30-metre (98 ft) wide cylindrical parabolic antenna. It operates at a frequency of 326.5 MHz with a maximum bandwidth of 15 MHz at the front end</blockquote>
+    <p> My aim is to become a <q>Successfull person</q></p>
+    <p>The <abbr title="Non Government Organization">NGO</abbr> was founded in 1948.</p>
+    <address>
+        4/34<br>
+        Kambatty Village<br>
+        T.MAnihatty POst<br>
+        The Nilgiris.
+    </address>
+    <table border="1">
+        <tr >
+            <th rowspan="2"> Name</th>
+            <th rowspan="2">Place</th>
+            <th rowspan="2">Contact</th>
+            <th rowspan="2">Department</th>
+            <th colspan="2">CGPA</th>
+        </tr>
+        <tr>
+            <th>SGPA</th>
+            <th>GPA</th>
+        </tr>
+        <tr>
+            <td>Swetha B</td>
+            <td>Ooty</td>
+            <td>9653</td>
+            <td>IT</td>
+            <td >GPA</td>
+            <td>SGPA</td>
+        </tr>
+        <tr>
+            <td>Ragavi D</td>
+            <td>Madhurai</td>
+            <td>9673</td>
+            <td>ECE</td>
+            <td >GPA</td>
+            <td>SGPA</td>
+        </tr>
+    </table>
+    <hr>
+    <table>
+        <tr>
+            <th>PID</th>
+            <td>per1</td>
+            <td>per2</td>
+        </tr>
+        <tr>
+            <th rowspan="2">PNo: Cat</th>
+            <td>per1</td>
+            <td>per2</td>
+        </tr>
+        <tr>
+            <!-- <th>PID</th> -->
+            <td>24</td>
+            <td>4r2</td>
+        </tr>
+        <tr>
+            <th>PI4</th>
+            <td>2000</td>
+            <td>per2</td>
+        </tr>
+    </table>
+    <ul style="list-style-type:disc ;">
+        <li>Apple</li>
+        <li>Orange</li>
+        <li>Mango</li>
+    </ul>
+    <ol type="1">
+        <li>Apple</li>
+        <li>Orange</li>
+        <li>Mango</li>    
+    </ol>
+    <dl>
+        <dt>Apple</dt>
+        <dd>This is Apple</dd>
+        <dt>Orange</dt>
+        <dd>This is Orange</dd>
+        <dt>Mango</dt>
+        <dd>This is Mango</dd>
+    </dl>
+    <iframe src="file:///C:/Users/sweth/OneDrive/Desktop/Html/Demo.html#c6" title="" style="border: none; width: 500px; height: 500px;"></iframe><br>
+    <bdo dir="rtl">Text in bi directional</bdo>
+    <h2>Forms</h2>
+    <form autocomplete="on">
+        <fieldset>
+    <label for="fname">Name:</label>
+    <input type="text" id="fname" name="fname"><br>
+    <label for="id">email:</label>
+    <input type="email" id="email" name="email"><br>
+    <label for="passwd">Password</label>
+    <input type="password" id="passwd" name="passwd"><br>
+    <p>Dept</p>
+    <input type="radio" id="it" name="dept" value="it" checked>
+    <label for="it">IT</label><br>
+    <input type="radio" id="cse" name="dept" value="cse">
+    <label for="cse">CSE</label><br>
+
+    <label for="skills">Skills</label><br>
+    <select id="skills" name="skills" size="2" multiple>
+        <option value="a">HTML</option><br>
+        <option value="b" selected>CSS</option><br>
+        <option value="c" >JS</option><br>
+        <option value="d" >SQL</option><br>
+    </select>
+    <p>About you</p><br>
+    <textarea name="about" rows="10" cols="30">
+
+    </textarea>
+    <br>
+    <button type="button" onclick="alert('Submitted')">Click</button>
+</fieldset>
+
+    </form>
+</body>
+</html>

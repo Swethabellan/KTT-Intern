@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Form</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    </head>
+    <body>
+        <form>
+            <fieldset>
+                <legend style="font-size: 40px;">Job Application</legend>
+                <hr>
+                <label for="fullname">Full Name</label><br>
+                <input type="text" id="fullname" placeholder="First Name">
+                <input type="text" id="fullname" placeholder="Middle Name">
+                <input type="text" id="fullname" placeholder="Last Name">
+                <br><br>
+                <label for="dob">Birth Date</label><br>
+                <input list="month" placeholder="Please select a month">
+                <datalist id="month">
+                    <option value="January">
+                    <option value="February">
+                    <option value="March">
+                    <option value="April">
+                    <option value="May">
+                    <option value="June">
+                   <option value="July">
+                </datalist>
+                <input list="day" placeholder="Please select a day">
+                <datalist id="day">
+                    <option value="Monday">
+                    <option value="Tuesday">
+                    <option value="Wednesday">
+                    <option value="Thursday">
+                    <option value="Friday">
+                    <option value="Saturday">
+                   <option value="Sunday">
+                </datalist>
+                <input list="year" placeholder="Please select a year">
+                <datalist id="year">
+                    <option value="2001">
+                    <option value="2002">
+                    <option value="2003">
+                    <option value="2004">
+                    <option value="2006">
+                    <option value="2007">
+                   <option value="2008">
+                </datalist><br><br>
+                <label for="address">Address</label><br>
+                <input type="text" id="address"><br><br>
+                <label for="saddress">Street Address</label><br>
+                <input type="text" id="saddress"><br><br>
+                <label for="saddress2"> Street Address line 2:</label><br>
+                <input type="text" id="saddress2">
+                <input type="text" id="saddress2"><br><br>
+                <label for="post">Postal/Zip Code</label><br>
+                <input type="number" id="post"><br><br>
+                <label for="email">Email Address</label><br>
+                <input type="email" id="email" placeholder="myname@example.com"><br><br>
+                <label for="position">position Applied</label><br>
+                <select placeholder="Please Select" multiple>
+                    <optgroup label="Frontend">
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                        <option value="javascript">JavaScript</option>
+                    </optgroup>
+                    <optgroup label="Backend">
+                        <option value="node">NodeJs</option>
+                        <option value="springboot">SpringBoot</option>
+                        <option value="javascript">JavaScript</option>
+                    </optgroup>
+                </select><br><br>
+               <label for="resume">Upload Your Resume</label><br>
+               <input type="file" id="resume"><br><br>
+               <label for="color">Color</label><br>
+               <input type="color" id="color">
+               <label for="cover">Cover</label><br>
+
+               <textarea row="20" cols="50" >
+               </textarea><br><br>
+               <input type="button" value="Apply"> 
+
+            </fieldset>
+
+        </form>
+
+
+        <hr>
+        <table>
+            <tr>
+            <td colspan="3">Full Name</td>
+            </tr>
+            <tr>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td colspan="3">Birth Date</td>
+            </tr>
+            <tr>
+                <td style="width:20px"><select placeholder="Please select a month">
+                    <option value="1" scope="col">Jan</option>
+                    <option value="2">Feb</option>
+                    <option value="3">March</option>
+
+                </select></td>
+                <td>
+                    <select>
+                        <option value="1">1
+                        <option value="2">2
+                        <option value="3">3
+    
+                    </select>
+                </td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td colspan="3">Current Address</td>
+            </tr>
+            <tr>
+                <td colspan="3"><input type="text" scope="col"></td>
+            </tr>
+        </table>
+    </body>
+</html>

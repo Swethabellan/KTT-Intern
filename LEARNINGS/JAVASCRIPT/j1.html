@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="./script.js"></script>
+</head>
+
+<body>
+    <p>Before the script</p>
+    <script>
+        alert('HelloWorld!'); alert('World');
+        let $a = 1;
+        let _ = 2;
+        alert($a + _);
+        console.log(9007 + 1)
+        let name = promt("What is your name?", "");
+        alert(`Hello ,${name}`);
+        alert(name)
+        let age;
+        alert(age);
+        let a = prompt(`how old are you?`, 100);
+        alert(`you are ${a}  years old`);
+        let i = confirm("Are you 80 years old");
+        alert(i)//true if OK is pressed.
+        let value = true;
+        alert(typeof value); // boolean
+
+        value = String(value);//string
+        alert(typeof value);
+        alert(2 + '1'); // 21
+        alert(2 + 2 + '1');//41
+        alert('1' + 2 + 2); // 122
+        alert(6 - '2'); // 4
+
+
+        let counter = 0;
+        counter++;
+        ++counter;
+        alert(counter); //2
+
+        function myFunction() {
+            var x = 10;
+            if (true) {
+                let y = 20;
+                const z = 30;
+                console.log(x, y, z); // Output: 10 20 30
+            }
+            console.log(x); // Output: 10
+        }
+
+        myFunction();
+    </script>
+
+    <p>After the script</p>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Basics</title>
+    <script>
+        // Variables and Data Types
+        let name = "Swetha";
+        let age1 = 21;
+        let isStudent = true;
+        let height;
+
+        // Type Conversion
+        let stringAge = String(age);
+        let ageFromString = Number("30");
+        alert("Welcome to the JavaScript Basics!");
+        let userName = prompt("What's your name?");
+        if (userName != null) {
+            alert("Hello, " + userName + "!");
+        }
+        let isReady = confirm("Are you ready to perform some basic math?");
+        if (isReady) {
+            let num1 = parseInt(prompt("Enter the first number:"));
+            let num2 = parseInt(prompt("Enter the second number:"));
+            let sum = num1 + num2;
+            let difference = num1 - num2;
+            let product = num1 * num2;
+            let quotient = num1 / num2;
+            let remainder = num1 % num2;
+
+            // Displaying results
+            alert("Here are the results:\n" +
+                "Sum: " + sum + "\n" +
+                "Difference: " + difference + "\n" +
+                "Product: " + product + "\n" +
+                "Quotient: " + quotient + "\n" +
+                "Remainder: " + remainder);
+        } else {
+            alert("Error!");
+        }
+
+        let accessAllowed;
+        let age = parseInt(prompt('How old are you?', ''));
+
+        if (age > 18) {
+            accessAllowed = true;
+        } else {
+            accessAllowed = false;
+        }
+
+        alert(accessAllowed);
+
+        //comment
+
+        let user = prompt("Who is there?");
+        if (user == 'Admin') {
+            
+            let pass = prompt("Password");
+            if (pass = "The Master") {
+                alert("Welcome");
+            } else if (pass = "" || pass == null) {
+                alert("Cancel");
+            } else {
+                alert("wrong password");
+            }
+        } else if (user = "" || user == null) {
+            alert("cancel");
+        } else {
+            alert("I dont know you");
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1>JavaScript Basics Demonstration</h1>
+    <p>ThankYou!</p>
+</body>
+
+</html>

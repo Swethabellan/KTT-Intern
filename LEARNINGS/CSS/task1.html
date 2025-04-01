@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid</title>
+    <style>
+        .o {
+            display: grid;
+            /* column-gap: 50px; */
+            gap: 50px 120px;
+            grid-template-columns: auto auto auto;
+            padding: 10px;
+            background-color: rgb(108, 66, 147);
+        }
+
+        .o>div {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid black;
+            background-color: rgb(71, 77, 133);
+        }
+
+        .h {
+            grid-column-start: 1;
+            grid-column-end: 4;
+        }
+
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 80px 80px auto;
+            gap: 10px;
+            background-color: rgb(207, 199, 206);
+            padding: 10px;
+            /* justify-content: center; */
+            /*justify-content- start ,end */
+            place-content: end center;
+            height: 300px;
+            /* grid-column:2/span 2 */
+        }
+
+        .grid-container>div {
+            background-color: #7d5c84;
+            text-align: center;
+            padding: 10px;
+            font-size: 30px;
+        }
+
+        .item1 {
+            grid-row-start: 1;
+            grid-row-end: 3;
+        }
+
+        .grid-container1 {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            gap: 10px 20px;
+            background-color: rgb(123, 176, 161);
+            padding: 10px;
+
+        }
+
+        .grid-container1>div {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 10px;
+            font-size: 30px;
+        }
+
+        .i1 {
+            grid-row: 1 /span 4;
+        }
+
+        .grid-container2 {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            gap: 10px;
+            background-color: rgb(225, 157, 224);
+            padding: 10px;
+        }
+
+        .grid-container2>div {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 10px;
+            font-size: 30px;
+        }
+
+        .it4 {
+            grid-area: 1 / 2 / 3 / 2;
+        }
+
+        .it1 {
+            grid-area: 1/3;
+            justify-self: right;
+            /* justify-row axis  ||  align-column axis */
+            align-self: start;
+        }
+
+        .it5 {
+            align-self: start;
+            justify-content: left;
+            grid-area: 3/1;
+        }
+
+        .a {
+            display: grid;
+            /* grid-template-columns: auto auto auto;  */
+            /* grid-template-rows: auto auto; */
+            background-color: aqua;
+            padding: 10px;
+            align-items: center;
+        }
+
+        .b {
+            display: grid;
+            /* grid-template-columns: auto auto auto;  */
+            /* grid-template-rows: auto auto; */
+            background-color: aqua;
+            padding: 10px;
+
+        }
+
+        .c {
+            display: grid;
+            /* grid-template-columns: auto auto auto;  */
+            /* grid-template-rows: auto auto; */
+            background-color: aqua;
+            padding: 10px;
+
+        }
+
+        .a>div {
+            background-color: bisque;
+            border: 1px solid saddlebrown;
+            padding: 10px;
+            font-size: 30px;
+            text-align: center;
+        }
+
+        .b>div {
+            background-color: bisque;
+            border: 1px solid saddlebrown;
+            padding: 10px;
+            font-size: 30px;
+            text-align: center;
+        }
+
+        .c>div {
+            background-color: bisque;
+            border: 1px solid saddlebrown;
+            padding: 10px;
+            font-size: 30px;
+            text-align: center;
+        }
+
+        * {
+            padding: 10;
+            margin: 10;
+            box-sizing: border-box;
+        }
+
+        .c1 {
+            display: grid;
+            width: 500px;
+            gap: 20px;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            border: 2px solid black;
+            justify-self: center;
+            align-self: center;
+
+        }
+
+        .grid-items {
+            display: grid;
+            margin: 10px;
+            gap: 20px;
+            background-color: #7d5c84;
+            color: aqua;
+            width: 50px;
+            height: 50px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box1 {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        @media only screen and (max-width: 1000px) {
+            body {
+                background-color: rgb(227, 126, 196);
+
+            }
+        }
+    </style>
+</head>
+<h1>Grid layout</h1>
+
+<body>
+    <div class="o">
+        <!-- <div class="a"> -->
+        <div class="h">1</div>
+        <div class="i">2</div>
+        <div class="i">3</div>
+        <!-- </div> -->
+        <!-- <div class="b"> -->
+        <div class="i">4</div>
+        <div class="i">5</div>
+        <div class="i">6</div>
+        <!-- </div> -->
+        <!-- <div class="c"> -->
+        <div class="i">7</div>
+        <div class="i">8</div>
+        <div class="i">9</div>
+        <!-- </div> -->
+
+    </div>
+    <hr>
+    <BR></BR>
+    <h2>Grid row:</h2>
+    <div class="grid-container">
+        <div class="item1">1</div>
+        <div class="item2">2</div>
+        <div class="item3">3</div>
+        <div class="item4">4</div>
+        <div class="item5">5</div>
+        <div class="item6">6</div>
+        <div class="item7">7</div>
+        <div class="item8">8</div>
+    </div>
+    <hr>
+    <BR></BR>
+    <div class="grid-container1">
+        <div class="i1">1</div>
+        <div class="i2">2</div>
+        <div class="i3">3</div>
+        <div class="i4">4</div>
+        <div class="i5">5</div>
+        <div class="i6">6</div>
+        <div class="i7">7</div>
+        <div class="i8">8</div>
+        <div class="i9">9</div>
+        <div class="i10">10</div>
+        <div class="i11">11</div>
+    </div>
+
+    <hr>
+    <BR></BR>
+    <h2>Grid area</h2>
+    <div class="grid-container2">
+        <div class="it1">1</div>
+        <div class="it2">2</div>
+        <div class="it3">3</div>
+        <div class="it4">4</div>
+        <div class="it5">5</div>
+        <div class="it6">6</div>
+        <div class="it7">7</div>
+        <div class="it8">8</div>
+    </div>
+
+    <br><br>
+    <div class="c1">
+        <div class="grid-items box1">1</div>
+        <div class="grid-items box2">2</div>
+        <div class="grid-items box3">3</div>
+        <div class="grid-items box4">4</div>
+        <div class="grid-items box5">5</div>
+        <div class="grid-items box6">6</div>
+        <div class="grid-items box7">7</div>
+        <div class="grid-items box8">8</div>
+        <div class="grid-items box9">9</div>
+
+    </div>
+
+</body>
+
+</html>
