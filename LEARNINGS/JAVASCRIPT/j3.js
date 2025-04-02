@@ -191,5 +191,47 @@ function User(name) {
   
   john.sayHi(); // My name is: John
 
+//Chaining:->a safe way to access nested object propertie
 
+let user6 = {}; // user has no address
+alert(user6.address ? user6.address.street ? user6.address.street.name : null : null);
+
+let user5 = {}; // user has no address
+alert( user5?.address?.street ); // undefined (no error)
+
+
+//Symbols:
+
+
+let id1 = Symbol("id");
+alert(id); // TypeError
+
+let id2 = Symbol("id");
+alert(id.toString());//works
+
+let user7 = { // belongs to another code
+    name: "John"
+  };
   
+  let id = Symbol("id");
+  
+  user7[id] = 1;
+  
+  alert( user7[id] ); // we can access the data using the symbol as the key
+
+
+
+  /*Object Conversion
+  a.obj-String*/
+  alert(obj);
+anotherObj[obj] = 123;
+
+//b,Number:
+let num = Number(obj);
+
+let n = +obj; 
+
+let delta = date1 - date2;
+
+let greater = user1 > user2;
+
