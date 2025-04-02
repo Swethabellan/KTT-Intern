@@ -98,4 +98,98 @@ let user = {
   for (let code in codes) {
     alert(code); // 1, 41, 44, 49
   }
+
+  //object reference and copying
+let message = "Hello!";
+let phrase = message;
+
+//accessing objects and modifying
+let username = { name: 'John' };
+let admin = username;
+admin.name = 'Pete'; 
+alert(user.name);
+
+//Comparison by reference
+let a = {};
+let b = a; 
+alert( a == b ); // true
+alert( a === b ); // true
+
+
+let a1 = {};
+let b1 = {}; // two independent objects
+alert( a1 == b1 ); // false
+
+//Cloning:
+let user1 = {
+    name: "John",
+    age: 30
+  };
+  
+  let clone = {}; 
+  for (let key in user1) {
+    clone[key] = user[key];
+  }
+  clone.name = "Pete"; 
+  alert( user1.name ); // John
+
+//Object assign:
+let user2 = { name: "John" };
+
+let permissions1 = { canView: true };
+let permissions2 = { canEdit: true };
+
+Object.assign(user, permissions1, permissions2);
+
+alert(user2.name); // John
+alert(user2.canView); // true
+alert(user2.canEdit); // true
+
+//this 
+let user3 = { name: "John" };
+let admin = { name: "Admin" };
+
+function sayHi() {
+  alert( this.name );
+}
+user3.f = sayHi;
+admin.f = sayHi;
+
+user3.f(); // John  (this == user)
+admin.f(); // Admin  (this == admin)
+
+/*Constructor functions:  
+1.Named with captial letter first
+2. Should execute only with "new operator"*/
+function User(name) {
+    this.name = name;
+    this.isAdmin = false;
+  }
+  
+  let user4 = new User("Jack");
+  
+  alert(user.name); // Jack
+  alert(user.isAdmin); // false
+
+//Return from Constructors:
+function BigUser() {
+    this.name = "John";
+    return { name: "Godzilla" };  //Godzilla
+  }
+  alert( new BigUser().name );  // Godzilla
+
+//Methods in constructor
+function User(name) {
+    this.name = name;
+  
+    this.sayHi = function() {
+      alert( "My name is: " + this.name );
+    };
+  }
+  
+  let john = new User("John");
+  
+  john.sayHi(); // My name is: John
+
+
   
