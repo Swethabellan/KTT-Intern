@@ -225,3 +225,29 @@ function User(name) {
   
   alert(user.name); // Jack
   alert(user.isAdmin); // false
+
+
+  //chaining calls:
+  function User(name, age, eyes) {
+    this.username = name; // create a `property` and take the parameter
+    this.name = () => { // ~> method
+    
+    alert(this.username);
+    return this; // return self object
+    };
+    this.userage = age; 
+    this.age = () => { // ~> method
+    
+    alert(this.userage);
+    return this; // return self object
+    };
+    this.usereyes = eyes; 
+    this.eyes = () => {// ~> method
+    
+    alert(this.usereyes);
+    return this; // return self object
+    };
+    }
+    
+    let account = new User("john", 30, "black");
+    account.name().age().eyes(); // chaining call's
