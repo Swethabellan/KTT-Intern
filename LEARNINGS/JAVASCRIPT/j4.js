@@ -213,3 +213,15 @@ user.f(); // John  (this == user)
 admin.f(); // Admin  (this == admin)
 
 admin['f'](); 
+
+
+//constructor function:
+function User(name) {
+    this.name = name;
+    this.isAdmin = false;
+  }
+  
+  let user = new User("Jack");
+  
+  alert(user.name); // Jack
+  alert(user.isAdmin); // false
