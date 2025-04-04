@@ -391,4 +391,18 @@ alert(id.toString()); // Symbol(id), now it works
 Symbols allow us to create “hidden” properties of an object, that no other part of code can accidentally access or overwrite.
 
 
+Object number:
+BigInt ->to represnt integers of arbitrary length.
+( 2 power 53 -1)
+
+let a=1e9;
+e->multiplies the number by 1 with the given zeros count.
+
+HexaDecimals:
+Hexadecimal numbers are widely used in JavaScript to represent colors, encode characters, and for many other things.
+0xff->Hexadecimal
+0o377->Octal
+0b11111111>Binary
+
+
 
