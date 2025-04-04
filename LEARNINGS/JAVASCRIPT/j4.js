@@ -253,5 +253,33 @@ function User(name) {
     account.name().age().eyes(); // chaining call's
 
 
+
+//obj-primitive:
+let user = {
+  name: "John",
+
+  toString() {
+    return this.name;
+  }
+};
+
+let user = {name: "John"};
+
+console.log(user); // [object Object]
+console.log(user.valueOf() === user); // true->
+
+console.log(user); // toString -> John
+console.log(user + 500); // toString -> John500
+
+
+    let obj = {
+    toString(){
+        return "2";
+      }
+    };
+  console.log(obj * 2)//4
+
+
+
   console.log("Min Grade = " + Math.min(...student.subjects.map(subject => subject.grade)));
 console.log("Max Grade = " + Math.max(...student.subjects.map(subject => subject.grade)));
