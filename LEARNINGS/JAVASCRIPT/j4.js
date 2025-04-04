@@ -251,3 +251,7 @@ function User(name) {
     
     let account = new User("john", 30, "black");
     account.name().age().eyes(); // chaining call's
+
+
+  console.log("Min Grade = " + Math.min(...student.subjects.map(subject => subject.grade)));
+console.log("Max Grade = " + Math.max(...student.subjects.map(subject => subject.grade)));
