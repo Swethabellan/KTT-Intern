@@ -406,3 +406,6 @@ Hexadecimal numbers are widely used in JavaScript to represent colors, encode ch
 
 
 
+<!-- Slice->extracts a part of a string.
+Split->allows you to split the string into an array of substrings based on a given pattern
+Splice->a JavaScript Array method that is used to remove, replace or insert items starting at a chosen index -->
