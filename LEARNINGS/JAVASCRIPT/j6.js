@@ -59,15 +59,19 @@ let employee = {
         relation: "Daughter",
         phone: "9123456789"
     },
-
-
+    addbenefits:function(benift){
+        this.benefits.push(benift)
+        console.log(`${benift}`)
+    }
+    ,
     calculateFinalSalary: function() {
         const bonusAmount = (this.salary * this.bonusPercentage) / 100;
         return this.salary + bonusAmount - (this.monthlyDeduction * 12);
     }
 };
 
-
+employee.addbenefits("Hike");
+console.log(employee.benefits);
 employee.finalSalary = employee.calculateFinalSalary();
 
 
