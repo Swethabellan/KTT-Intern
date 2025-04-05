@@ -114,6 +114,7 @@ console.log("\n");
 let fullName = employee.firstName.concat(" ", employee.lastName).toUpperCase();
 let emailDomain = employee.email.split("@")[1];
 let shortId = employee.id.slice(4);
+
 console.log(`Employee: ${fullName}`);
 console.log(`Domain: ${emailDomain}`);
 console.log(`ID Number: ${shortId}`);
