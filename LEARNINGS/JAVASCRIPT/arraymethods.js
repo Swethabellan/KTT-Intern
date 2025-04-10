@@ -24,11 +24,11 @@ const displayProducts = products.map(product => ({
   name: product.name,
   formattedPrice: `$${product.price.toFixed(2)}`
 }));
-// console.log("Products for Sale:");
-// displayProducts.forEach(product => {
-//   console.log(`${product.name}: ${product.formattedPrice}`);
-// });
-
+console.log("Products for Sale:");
+displayProducts.forEach(product => {
+  console.log(`${product.name}: ${product.formattedPrice}`);
+ 
+});
 //find() ->it returns the first element in an array that matches a condition,
 
 const users = [
