@@ -6,12 +6,12 @@ const server = http.createServer((req, res) => {
   res.end('Hi SwethaBellan\n');
 });
 
-const PORT = 3000;
+const PORT = 3100;
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`);
 });
 
-const http = require('http');
+// const http = require('http');
 // const fs = require('fs');
 
 // const server1 = http.createServer((req, res) => {
