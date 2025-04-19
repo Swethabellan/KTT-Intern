@@ -1,0 +1,105 @@
+body {
+    margin: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    background: #F5F5F5;
+    /* min-height: 100vh; */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  .container {
+    background: #F8F9FA;
+    border: 1px solid #D3D3D3;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .profile-header {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  .user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .user-info img {
+    width: 100px;
+    height: 100px;
+    background: #333;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  .user-info .details h2 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #172B4D;
+  }
+  .user-info .details p {
+    margin: 5px 0;
+    font-size: 15px;
+    color: #0f2022;
+  }
+  .user-info .team-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-size: 0.9em;
+  }
+ /* .team{
+    background-color: #00CED1;
+ } */
+  .editable-field {
+    margin-bottom: 15px;
+  }
+  .editable-field label {
+    display: block;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  .editable-field textarea, .editable-field input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #D3D3D3;
+    border-radius: 5px;
+    font-size: 15px;
+    resize: vertical;
+  }
+  .save-button {
+   background-color: #00CED1;
+    color: #100f0f;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  .save-button:hover {
+    background: #3294c9;
+  }
+  .cancel-link {
+    margin-left: 10px;
+    color: #d71b1b;
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .activity-log {
+    margin-top: 20px;
+    font-size: 20px;
+  }
+  .top-header {
+    display: flex;
+    justify-content: space-around;
+    text-decoration: none;
+    align-items: center;
+
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  }
