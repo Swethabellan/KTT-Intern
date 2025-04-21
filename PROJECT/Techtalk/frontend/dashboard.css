@@ -44,18 +44,23 @@ body {
 .header {
   display: flex;
   justify-content: space-around;
-  padding: 30px 20px;
+  padding: 30px 5px;
   gap: 20px;
   flex-wrap: wrap;
 }
 
 .box {
- flex:1;
-  width: 40px;
+ /* flex:1; */
+ flex-wrap: wrap;
+ padding: 10px 10px;
+  width: 220px;
+  height: 100px;
   background:  #00CED1;
   color: white;
   padding: 30px;
+  margin-top: 3px;
   text-align: center;
+  justify-content:space-evenly;
   border-radius: 12px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
 }
@@ -63,7 +68,22 @@ body {
 .box:hover {
   transform: translateY(-5px);
 }
-
+.add-questions{
+ text-align:center;
+ margin-left: 200px;
+ margin-right: 50px;
+ color: #bc0d0d;
+ background: #00b894;
+ padding: 10px 10px;
+ flex-wrap: wrap;
+ width:150px;
+ border-radius: 12px;
+ box-shadow:2px 3px 8px;
+ cursor: pointer;
+}
+.add-questions:hover{
+  background-color:rgb(23, 201, 177);
+}
 table {
   width: 90%;
   margin: 0 auto;
@@ -93,7 +113,7 @@ tr:last-child td {
   border-radius: 8px;
   font-size: 15px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  /* transition: all 0.3s ease; */
 }
 
 .answer {
