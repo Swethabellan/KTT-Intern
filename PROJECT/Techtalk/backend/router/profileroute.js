@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const profile = require("../models/profile");
-app.put('/api/profile', authenticateToken, async (req, res) => {
+app.put('/profile', authenticateToken, async (req, res) => {
     try {
       const userId = req.user.id;
       const { bio, skills } = req.body;
@@ -18,3 +18,4 @@ app.put('/api/profile', authenticateToken, async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+  module.exports = router;
