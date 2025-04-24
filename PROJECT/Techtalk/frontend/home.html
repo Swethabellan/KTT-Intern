@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question Board</title>
+  <link rel="stylesheet" href="./home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="navbar">
+
+    <img src="./techtalk2.jpg" class="log" width="60px" height="50px">
+
+    <input type="text" class="search-bar" placeholder="Search question">
+    <div class="nav-links">
+      <a href="#">News</a>
+      <a href="#">Forums</a>
+      <a href="#">Blogs</a>
+    </div>
+    <a href="./profile.html" class="sign-in">Profile</a>
+  </div>
+  <div class="container">
+    <div class="sidebar">
+      <h2></h2>
+      <div class="product">
+        <h3 class="a">Total Questions</h3>
+      </div>
+      <div class="product">
+        <h3 class="a">Answered</h3>
+      </div>
+      <div class="product">
+       <h3 class="a">Unanswered</h3>
+      </div>
+    </div>
+    <div class="main-content">
+      <h1>Question Board</h1>
+      <div class="question">
+        <h3>JavaScript</h3>
+        <h4>How can I remove a specific item from an array in JavaScript?</h4>
+        <div class="meta">Upvote <i class="fas fa-thumbs-up upvote"> (40)</i> downvote<i class="fas fa-thumbs-down downvote"> (14)</i> </div>
+      </div>
+      <div class="question">
+        <h3>PostgreSQL</h3>
+        <h4>PostgreSQL Table Field exists in Type Field;</h4>
+        <div class="meta">Upvote <i class="fas fa-thumbs-up upvote"> (10)</i>downvote <i class="fas fa-thumbs-down downvote"> (1)</i> </div>
+      </div>
+      <div class="question">
+        <h3>Programming </h3>
+        <h4> Functional programming vs Object Oriented programming [closed]</h4>
+        <div class="meta">Upvote <i class="fas fa-thumbs-up upvote"> (14)</i>downvote <i class="fas fa-thumbs-down downvote"> (13)</i></div>
+      </div>
+      <div class="question">
+        <h3>Artificial Intelligence</h3>
+        <h4>What is the most unusual use of artificial intelligence you have seen?</h4>
+        <div class="meta">Upvote <i class="fas fa-thumbs-up upvote"> (36)</i>downvote <i class="fas fa-thumbs-down downvote"> (29)</i></div>
+      </div>
+      <div class="question">
+        <h3>Node.js</h3>
+        <h4>How do I get started with Node.js</h4>
+        <div class="meta">Upvote <i class="fas fa-thumbs-up upvote"> (36)</i> downvote<i class="fas fa-thumbs-down downvote"> (29)</i></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll('.upvote').forEach(upvote => {
+      upvote.addEventListener('click', function() {
+        let count = parseInt(this.textContent.match(/\d+/)[0]);
+        this.textContent = ` (${count + 1})`;
+      });
+    });
+    document.querySelectorAll('.downvote').forEach(downvote => {
+      downvote.addEventListener('click', function() {
+        let count = parseInt(this.textContent.match(/\d+/)[0]);
+        this.textContent = ` (${count + 1})`;
+      });
+    });
+  </script>
+</body>
+</html>
