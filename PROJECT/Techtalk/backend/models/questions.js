@@ -2,16 +2,16 @@ const {DataTypes} = require("sequelize");
 const sequelize=require("../config/database");
 
 const Questions=sequelize.define("Questions",{
-    id:{
-        type:DataTypes.INTEGER,
-        allowNull: false,
-        unique:true,
-        primaryKey:true
-       },
-      userid:{
-        type:DataTypes.INTEGER,
-        allowNull:false
-      },
+    // id:{
+    //     type:DataTypes.INTEGER,
+    //     allowNull: false,
+    //     unique:true,
+    //     primaryKey:true
+    //    },
+    //   userid:{
+    //     type:DataTypes.INTEGER,
+    //     allowNull:true
+    //   },
     title:{
         type:DataTypes.STRING,
         allowNull:false
@@ -22,14 +22,10 @@ const Questions=sequelize.define("Questions",{
         allowNull:false,
         unique:true
     },
-    tags:{
-        type:DataTypes.ARRAY(DataTypes.STRING),
-        allowNull:true
-    },
 
     status :{
         type :DataTypes.BOOLEAN,
-        allowNull:false
+        allowNull:true
     },
     
 })
