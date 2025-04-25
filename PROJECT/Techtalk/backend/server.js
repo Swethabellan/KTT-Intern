@@ -1,38 +1,26 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
-const { Sequelize, DataTypes, Op } = require('sequelize');
-const bcrypt = require('bcryptjs');
-const userRoutes=require('./router/Userroute')
-const questionRoutes=require('./router/questionroute');
- 
-const User =require('./models/user')
-const Questions=require('./models/questions');
-const Answers=require('./models/answer');
-const Profile = require('./models/profile');
-
 const sequelize = require('./config/database');
-const app=express()
-const PORT = 3000;
+const userRoute = require('./routes/Userroute'); 
+const questionRoute = require('./routes/questionroute'); 
 
-User.hasMany(Questions, { foreignKey: 'userId' });
-Questions.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Answers, { foreignKey: 'userId' });
-Questions.hasMany(Answers, { foreignKey: 'questionId' });
-Answers.belongsTo(Questions, { foreignKey: 'questionId' });
+const app = express();
+app.use(express.static('public'));
+app.use(express.json());
+app.use('/api', userRoute);
+app.use('/api', questionRoute);
 
-User.hasOne(Profile, { foreignKey: 'userId' });
-Profile.belongsTo(User, { foreignKey: 'userId' });
-sequelize.sync();
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json()); 
-app.use(cors());
-
-app.use('/api', userRoutes);
-app.use('/api',questionRoutes);
-
-
-app.listen(PORT, () => {
-    console.log(`App is running at port ${PORT}`);
-})
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connection has been established successfully.');
+    return sequelize.sync({ alter: true });
+  })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
