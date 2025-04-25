@@ -6,6 +6,46 @@
       background-color: #f4f7fa;
       color: #333;
     }
+    /* .open-button {
+      background-color: #555;
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      opacity: 0.8;
+      position: fixed;
+       bottom: 23px;
+      right: 28px; 
+      width: 280px;
+    } */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+.form-container input[type=text], .form-container input[type=textarea] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+.form-container .submit-btn{
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+.form-container .cancel-btn{
+  background-color: red;
+}
+.form-container .submit-btn:hover, .open-button:hover {
+  opacity: 1;
+}
     .log{
         margin-right: 20px;
         border-radius: 50%;
@@ -68,6 +108,16 @@
     .container {
       display: flex;
       height: calc(100vh - 60px);
+      justify-content: space-between;
+    }
+
+    .q{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .button-b{
+      cursor: pointer;
     }
     .a{
         display: flex;
@@ -169,3 +219,11 @@
       color: #27ae60;
     }
   
+
+.inactive{
+  display: none;
+}
+
+.active{
+  display: block;
+}

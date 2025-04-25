@@ -13,7 +13,7 @@
       <hr>
       <h2>Login</h2>
     </div>
-    <form id="loginForm" >
+    <form id="loginForm" novalidate >
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
@@ -26,18 +26,59 @@
       <div class="log">
         <div class="a">
       <button type="submit" class="login-btn"><a  style="text-decoration:none" href="./home.html">Login</a></button></div>
-      <!-- <div class="b">
-
-      <button type="submit" class="register-btn">Register</button>
-    </div> -->
+   
     </div>
     </form>
     <div class="a">
     <p style="font-size: 10px; color:grey; ">Not a member?  <a class="b" href="./signup.html" target="_blank">Signup</a></p>
+    <div id="error-message" class="error"></div>
 
     <!-- <div class="or">or</div>
     <button class="google-btn">Continue with Google</button>
   </div> -->
 </div>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent='';
+
+    if (!email || !password) {
+                errorMessage.textContent = 'Please fill in all fields.';
+                return;
+            }
+
+      try {
+          const response = await fetch('http://localhost:3000/api/login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ email, password })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+  
+              localStorage.setItem('Swetha', data.token);
+      
+              window.location.href = 'profile.html';
+          } else {
+              errorMessage.textContent = data.error || 'Login failed';
+              document.getElementById('login-form').reset();
+          }
+      } catch (error) {
+          errorMessage.textContent = 'An error occurred. Please try again.';
+          // alert("An error occurred. Please try again.")
+          console.error('Login error:', error);
+          document.getElementById('login-form').reset();
+      }
+  });
+  
+</script>
 </body>
 </html>
