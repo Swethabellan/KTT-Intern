@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question Board</title>
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="navbar">
+    <img src="../images/techtalk2.jpg" class="log" width="60px" height="50px">
+    <input type="text" class="search-bar" placeholder="Search question">
+    <div class="nav-links">
+      <a href="#">News</a>
+      <a href="#">Forums</a>
+      <a href="#">Blogs</a>
+    </div>
+    <a href="./profile.html" class="sign-in">Profile</a>
+  </div>
+
+  <div class="container">
+    <div class="sidebar">
+      <h2></h2>
+      <div class="product">
+        <h3 class="a">Total Questions: <span id="total-questions">0</span></h3>
+      </div>
+      <div class="product">
+        <h3 class="a">Answered</h3>
+      </div>
+      <div class="product">
+        <h3 class="a">Unanswered</h3>
+      </div>
+    </div>
+
+    <div style="width: 80%;">
+      <div class="q">
+        <h1>Question Board</h1>
+        <button class="open-button" onclick="openForm()">Post Questions</button>
+      </div>
+
+      <div class="main-content" id="main-div">
+        <div id="myForm" class="form-popup">
+          <form id="question-form" class="form-container">
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea id="description" name="description" required></textarea>
+            </div>
+            <div id="error-message" class="error"></div>
+            <button type="submit" class="submit-btn">Submit</button>
+            <button type="button" class="cancel-btn" onclick="closeForm()">Cancel</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="questions-list"></div>
+    </div>
+  </div>
+
+  <script>
+    let totalQuestions = 0;
+    const API_URL = 'http://127.0.0.1:3000/api/questions';
+
+    async function fetchTotalQuestions() {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = 'login.html';
+          return;
+        }
+        const response = await fetch('http://127.0.0.1:3000/api/total-questions', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          if (response.status === 403) {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+            return;
+          }
+          throw new Error('Failed to fetch total questions');
+        }
+
+        const data = await response.json();
+        totalQuestions = data.totalQuestions;
+        document.getElementById('total-questions').textContent = totalQuestions;
+      } catch (error) {
+        console.error('Error fetching total questions:', error);
+        document.getElementById('total-questions').textContent = 'Error';
+      }
+    }
+
+    // Fetch and display all questions
+    async function loadQuestions() {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = 'login.html';
+          return;
+        }
+        const response = await fetch('http://127.0.0.1:3000/api/questions', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (!response.ok) {
+          if (response.status === 403) {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+            return;
+          }
+          throw new Error('Failed to fetch questions');
+        }
+        const questions = await response.json();
+        const questionsList = document.getElementById('questions-list');
+        questionsList.innerHTML = '';
+        questions.forEach(question => {
+          const questionDiv = document.createElement('div');
+          questionDiv.className = 'question';
+          questionDiv.innerHTML = `
+            <h4>${question.title}</h4>
+            <p>${question.content}</p>
+            <button class="answer">Answer</button>
+            <div class="meta">
+              Upvote <i class="fas fa-thumbs-up upvote"> (0)</i>
+              Downvote <i class="fas fa-thumbs-down downvote"> (0)</i>
+            </div>
+          `;
+          questionsList.appendChild(questionDiv);
+        });
+      } catch (error) {
+        console.error('Error loading questions:', error);
+        document.getElementById('questions-list').innerHTML = '<p>Error loading questions</p>';
+      }
+    }
+  
+   
+    document.getElementById('question-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const errorMessage = document.getElementById('error-message');
+      errorMessage.textContent = '';
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        errorMessage.style.color = 'red';
+        errorMessage.textContent = 'Please log in to post a question';
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        const response = await fetch('http://127.0.0.1:3000/api/questions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ title, description })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (response.status === 403) {
+            errorMessage.style.color = 'red';
+            errorMessage.textContent = 'Session expired. Please log in again.';
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+            return;
+          }
+          throw new Error(data.error || 'Failed to post question');
+        }
+
+        errorMessage.style.color = 'green';
+        errorMessage.textContent = 'Question posted successfully!';
+
+        const questionsList = document.getElementById('questions-list');
+        const newQuestion = document.createElement('div');
+        newQuestion.className = 'question';
+        newQuestion.innerHTML = `
+          <h4>${title}</h4>
+          <p>${description}</p>
+           <button class="answer">Answer</button>
+          <div class="meta">
+            Upvote <i class="fas fa-thumbs-up upvote"> (0)</i>
+            Downvote <i class="fas fa-thumbs-down downvote"> (0)</i>
+          </div>
+        `;
+        questionsList.prepend(newQuestion);
+        questionsList.appendChild(newQuestion);
+        document.getElementById('question-form').reset();
+        closeForm();
+        fetchTotalQuestions();
+        loadQuestions();
+      } catch (error) {
+        errorMessage.style.color = 'red';
+        errorMessage.textContent = error.message;
+        console.error('Error posting question:', error);
+      }
+    });
+
+  
+    function openForm() {
+      document.getElementById('myForm').style.display = 'block';
+      document.getElementById('error-message').textContent = '';
+    }
+
+    function closeForm() {
+      document.getElementById('myForm').style.display = 'none';
+      document.getElementById('question-form').reset();
+      document.getElementById('error-message').textContent = '';
+    }
+
+  
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchTotalQuestions();
+      loadQuestions();
+    });
+  </script>
+</body>
+</html>
