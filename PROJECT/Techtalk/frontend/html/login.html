@@ -29,7 +29,7 @@
       </div>
     </form>
     <div class="a">
-      <p style="font-size: 10px; color:grey;">Not a member? <a class="b" href="./signup.html" target="_blank">Signup</a></p>
+      <p style="font-size: 14px; color:grey;">Not a member? <a class="b" href="./signup.html" target="_blank">Signup</a></p>
       <div id="error-message" class="error"></div>
     </div>
   </div>
@@ -48,7 +48,7 @@
       }
 
       try {
-        const response = await fetch('http://127.0.0.1:3000/api/login', {
+        const response = await fetch('http://127.0.0.1:3000/api/users/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -60,7 +60,7 @@
 
         if (response.ok) {
           localStorage.setItem('token', data.token);
-          window.location.href = 'home.html';
+          window.location.href = 'QA.html';
         } else {
           errorMessage.textContent = data.error || 'Login failed';
           document.getElementById('loginForm').reset();

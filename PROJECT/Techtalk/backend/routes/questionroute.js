@@ -1,86 +1,89 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
-const app=express();
 const { Op } = require('sequelize');
-const Question = require('../models/question');
-const Answer = require('../models/answer');
-const User = require('../models/user');
+const {Question} = require('../models');
+const {Answer} = require('../models');
+const {User} = require('../models');
 const authenticateToken = require('../middleware/auth');
 
-
-router.get('/total-questions', authenticateToken,async (req, res) => {
+router.get('/questions', authenticateToken, async (req, res) => {
   try {
-    console.log('Fetching total questions');
-    const totalQuestions = await Question.count();
-    console.log('Total questions:', totalQuestions); 
-    res.status(200).json({ totalQuestions });
+      const questions = await Question.findAll({
+          include: [
+              { model: User, attributes: ['username'] },
+              { model: Answer, include: [{ model: User, attributes: ['username'] }] }
+          ]
+      });
+      console.log('Fetched questions:', JSON.stringify(questions, null, 2));
+      res.json(questions);
   } catch (error) {
-    console.error('Error fetching total questions:', error);
-    res.status(500).json({ error: 'Failed to fetch total questions' });
+      console.error('Error fetching questions:', error);
+      res.status(500).json({ message: 'Error fetching questions', error: error.message });
   }
 });
-router.get('/questions',async (req, res) => {
+
+router.get('/total-questions', authenticateToken, async (req, res) => {
+    try {
+        const totalQuestions = await Question.count();
+        res.json({ totalQuestions });
+    } catch (error) {
+        console.error('Error fetching total questions:', error);
+        res.status(500).json({ message: 'Error fetching total questions' });
+    }
+});
+
+router.get('/answered-questions', authenticateToken, async (req, res) => {
   try {
-    const questions = await Question.findAll({
-      include: [
-        { model: User, attributes: ['username'] }
-      ]
-    });
-    res.json(questions);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+      const answeredQuestions = await Question.count({
+          where: {
+              comments: { [Op.gt]: 0 }
+          }
+      });
+      console.log('Answered questions:', answeredQuestions);
+      res.json({ answeredQuestions });
+  } catch (error) {
+      console.error('Error fetching answered questions:', error);
+      res.status(500).json({ message: 'Error fetching answered questions' });
   }
 });
+
+router.get('/unanswered-questions', authenticateToken, async (req, res) => {
+  try {
+      const unansweredQuestions = await Question.count({
+          where: {
+              comments: { [Op.eq]: 0 }
+          }
+      });
+      console.log('Unanswered questions:', unansweredQuestions);
+      res.json({ unansweredQuestions });
+  } catch (error) {
+      console.error('Error fetching unanswered questions:', error);
+      res.status(500).json({ message: 'Error fetching unanswered questions' });
+  }
+});
+
+
 router.post('/questions', authenticateToken, async (req, res) => {
   try {
-  const { title, description } = req.body;
- 
-  if (!title || !description) {
-    return res.status(400).json({ error: 'Title and description are required' });
-  }
-  const userId = req.user.id; 
-  if (!userId) {
-    return res.status(401).json({ error: 'User authentication failed' });
-  }
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'User authentication failed' });
+    }
+
+    const {  description } = req.body;
+    if ( !description) {
+      return res.status(400).json({ error: 'Description are required' });
+    }
 
     const question = await Question.create({
-      userId,
-      title,
-      description,
-      upvotes: 0,
-      downvotes: 0
+      userId: req.user.id,
+      description
     });
-
-    res.status(201).json({ message: "Question added successfully", question });
+    const newquestion=result.rows[0];
+    res.status(201).json({ message: 'Question created', question :newquestion });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error adding question" });
+    res.status(500).json({ error: error.message });
   }
 });
-
-// router.post('/questions', authenticateToken, async (req, res) => {
-//   try {
-//     if (!req.user || !req.user.id) {
-//       return res.status(401).json({ error: 'User authentication failed' });
-//     }
-
-//     const { title, description } = req.body;
-//     if (!title || !description) {
-//       return res.status(400).json({ error: 'Title and description are required' });
-//     }
-
-//     const question = await Question.create({
-//       userId: req.user.id,
-//       title,
-//       description,
-//     });
-//     const newQuestion=result.rows[0];
-//     res.status(201).json({ message: 'Question created', question :question });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
 
 
 

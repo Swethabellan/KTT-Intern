@@ -1,491 +1,128 @@
 <!DOCTYPE html>
 <html lang="en-IN">
-
 <head>
   <meta charset="UTF-8">
-  <title>Swetha</title>
-  <lin rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <title>Swetha</title>
+    <link rel="shortcut icon" href="./Images/Screenshot 2024-09-08 082303.png" type="image/x-icon">
     <style>
-      .flex {
-        background-color: rgb(19, 33, 47);
-        display: flex;
-        padding: 15px;
-        justify-content: space-between;
-        color: #f4f4f4;
-        border: 5px solid white;
-
-      }
-
-      .flex-container {
-        display: flex;
-        flex-direction: row;
-        background-color: rgb(121, 143, 164);
-      }
-      .flex-container>div {
-        background-color: #f1f1f1;
-        width: 100px;
-        margin: 10px;
-        text-align: center;
-        line-height: 75px;
-        font-size: 30px;
-      }
-
-      .flex-container1{
-  display: flex;
-  flex-direction: column;
-}.flex-container1>div {
-        background-color: #f1f1f1;
-        width: 100px;
-        margin: 10px;
-        text-align: center;
-        line-height: 75px;
-        font-size: 30px;
-      }
-.flex-container2 {
-  display: flex;
-  flex-direction: row-reverse;
-}
-.flex-container2>div {
-        background-color: #f1f1f1;
-        width: 100px;
-        margin: 10px;
-        text-align: center;
-        line-height: 75px;
-        font-size: 30px;
-      }
-.flex-container3 {
-  display: flex;
-  flex-direction: column-reverse;
-  background-color: rgb(172, 31, 104);
-}
-
-.flex-container3 > div {
-  background-color: #f1f1f1;
-  width: 100px;
-  margin: 10px;
-  text-align: center;
-  line-height: 75px;
-  font-size: 30px;
-}
-.flex-container4 {
-  display: flex;
-  flex-wrap: nowrap;
-  background-color: rgb(172, 31, 104);
-}
-
-.flex-container4>div {
-  background-color: #f1f1f1;
-  width: 100px;
-  margin: 10px;
-  text-align: center;
-  line-height: 75px;
-  font-size: 30px;
-}
-
-.flex-container5 {
-  display: flex;
-  height: 600px;
-  flex-wrap: wrap;
-  align-content: stretch;
-}
-.flex-container5>div {
-  background-color: #7029ea;
-  width: 100px;
-  margin: 10px;
-  text-align: center;
-  line-height: 75px;
-  font-size: 30px;
-}
-.flex-container6 {
-  display: flex;
-  align-items: stretch;
-  background-color: #f1f1f1;
-}
-
-.flex-container6 > div {
-  background-color: rgb(143, 30, 255);
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header h1 {
+            margin: 0;
+        }
+        .learnings {
+  background-color: violet;
   color: white;
-  margin: 10px;
+  border: 2px solid black;
+  margin: 20px;
+  padding: 20px;
+}
+th, td {
+  padding-top: 10px;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+#footer {
+  background-color: lightblue;
+  color: black;
+  padding: 40px;
   text-align: center;
-  line-height: 75px;
-  font-size: 30px;
-}
-.container7{
-  display: grid;
-  grid-template-columns: auto auto ;
-  background-color: rgb(49, 62, 75);
-  padding: 10px;
-}
-.container7 > div {
-  background-color: #f1f1f1;
-  border: 1px solid black;
-  padding: 10px;
-  font-size: 30px;
-  text-align: center;
-}
-
-      /* .div1 {
-        background: rgb(62, 211, 191);
-      }
-
-      .div2 {
-        background: rgb(84, 52, 187);
-      }
-
-      .div3 {
-        background: green;
-      } */
-
-      h1.sticky {
-        position: sticky;
-        top: 0;
-        padding: 5px;
-        background-color: #cae8ca;
-        border: 2px solid #4CAF50;
-      }
-
-      body {
-        font-family: "Sofia", sans-serif;
-        margin: 0;
-        padding: 0;
-        line-height: 1.6;
-        background-color: #f4f4f4;
-        color: #333;
-      }
-
-      h1 {
-        style: "font-size:10vw"
-      }
-
-      .learnings {
-        background-color: violet;
-        color: white;
-        border: 2px solid black;
-        margin: 20px;
-        padding: 20px;
-      }
-
-      th,
-      td {
-        padding-top: 10px;
-        padding-bottom: 20px;
-        padding-left: 30px;
-        padding-right: 40px;
-        text-align: center;
-      }
-
-      tr:hover {
-        background-color: #b93434;
-      }
-
-      ul.a {
-        list-style-image: url('./HMI.jpg');
-        list-style-position: outside;
-        background: #333;
-        padding: 20px;
-      }
-
-      ul.b {
-        list-style-type: square;
-        list-style-position: inside;
-      }
-
-      ul.c {
-        list-style-type: upper-roman;
-      }
-
-      ul.a li {
-        background-color: antiquewhite;
-        color: #0f0;
-      }
-
-      .ab1 {
-        text-decoration-line: overline;
-        text-decoration-color: hsl(0, 100%, 50%);
-        text-decoration-style: double;
-        cursor: pointer;
-      }
-
-      .ab2 {
-        text-decoration-line: line-through;
-        text-decoration-color: #0f0;
-        text-decoration-thickness: 5px;
-        cursor: crosshair;
-      }
-
-      .ab3 {
-        text-decoration: underline;
-        text-transform: capitalize;
-      }
-
-      .ab4 {
-        text-decoration: overline underline;
-        text-shadow: 2px 2px;
-      }
-
-      img {
-        vertical-align: baseline;
-      }
-
-      p.class1 {
-        direction: rtl;
-        unicode-bidi: bidi-override;
-      }
-
-      img.a {
-        vertical-align: baseline;
-      }
-
-      img.b {
-        vertical-align: text-top;
-      }
-
-      img.c {
-        vertical-align: text-bottom;
-      }
-
-      img.d {
-        vertical-align: sub;
-      }
-
-      img.e {
-        vertical-align: super;
-      }
-
-      .container {
-        position: relative;
-      }
-
-      .topleft {
-        position: absolute;
-        top: 8px;
-        left: 16px;
-        font-size: 18px;
-        color: #0f0;
-      }
-
-      .topright {
-        position: absolute;
-        top: 8px;
-        right: 16px;
-        font-size: 18px;
-        color: #0f0;
-      }
-
-      .bottomleft {
-        position: absolute;
-        bottom: 8px;
-        left: 16px;
-        font-size: 18px;
-        color: #0f0;
-      }
-
-      .center {
-        position: absolute;
-        top: 50%;
-        width: 100%;
-        text-align: center;
-        font-size: 18px;
-      }
-
-
-
-
-      #footer {
-        background-color: lightblue;
-        color: black;
-        padding: 40px;
-        text-align: center;
-        margin: 30px;
-        border: 1px solid black;
-        outline: 1px solid red;
-        outline-offset: 15px;
-        text-align-last: justify;
-      }
+} 
     </style>
 </head>
-
 <body>
-  <!-- Introduction -->
-  <h1 class="sticky">
-    <center> Swetha Bellan</center>
+     <!-- Introduction -->
+    <h1>
+       <center> <h1>Swetha Bellan</h1></center>
+    </h1>
+        <h2>About Me</h2>
+        <p>
+            Hello! I'm Swetha B, pursuing final year  <b> Information Technology<b> in <mark>Bannari Amman Institute of Technology</mark>.I have done projects in MERN stack.
+        </p>
+        <p><i>I'm <b>Swetha </b></i> working at KTT as Intern.</p>
+        <!-- Projects -->
+        <h2>Projects</h2>
+            <h3>Human and Machine Interface for 6 axis robotic arm</h3>
+                <img src="HMI.jpg"  alt="HMI Image" width="200">
+            <div>This project uses MERN stack for developing.HMI is a versatile arm that replicates human arm.</div>
+            <a href="#">View Project</a>
+            <h3>Fertilizer Monitoring System</h3>
+            <p>My role here is to develop a frontend like login page etc using Html,Css.</p>
+            <a href="#">View Project</a>
+            <br>
+            <q>"Here we used some other source files.</q>
+        <h2>Skills</h2>
+        <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Basic JavaScript (Learning)</li>
+            <li>Problem Solving</li>
+        </ul>
 
-  </h1>
-  <div class="flex">
-    <div class="div1">About</div>
-    <div class="div2">Projects</div>
-    <div class="div3">Learning</div>
-  </div><br><br>
-  <p class="class1"><i>I'm <b>Swetha </b></i> working at KTT as Intern.</p>
-  <!-- Projects -->
-  <h2>Projects</h2>
-  <h3>Human and Machine Interface for 6 axis robotic arm</h3>
-  <div class="img"> <img src="./HMI.jpg" alt="HMI Image"></div>
-  <p>This project uses MERN stack for developing.HMI is a versatile arm that replicates human arm.</p>
-  <a href="#">View Project</a>
-  <h3>Fertilizer Monitoring System</h3>
-  <p>My role here is to develop a frontend like login page etc using Html,Css.</p>
-  <a href="#">View Project</a>
-  <br>
-  <q>"Here we used some other source files.</q>
-  <h2 class="a">Skills</h2>
-  <ul>
-    <li>HTML</li>
-    <li>CSS</li>
-    <li>Basic JavaScript (Learning)</li>
-    <li>Problem Solving</li>
-  </ul>
-  <ul class="b">
-    <li>HTML</li>
-    <li>CSS</li>
-    <li>Basic JavaScript (Learning)</li>
-    <li>Problem Solving</li>
-  </ul>
-  <ul class="c">
-    <li>HTML</li>
-    <li>CSS</li>
-    <li>Basic JavaScript (Learning)</li>
-    <li>Problem Solving</li>
-  </ul>
+         <table border="1">
+        <tr>
+            <th>Educatiom</th>
+            <th>Year</th>
+        </tr>
+        <tr>
+            <td>Holy Angel Matriculation School</td>
+            <td>2019-2021</td>
+        </tr>
+             <tr>
+            <td>Bannari Amman Institute of Technology</td>
+            <td>2021-2025</td>
+        </tr>
+    </table>
+    <!--Entity-->
+   <p> The less-than sign: &lt;</p>
+  <center>  <h2> Learnings</h2> </center>
+<div class="learnings">
+    <h2>HTML</h2>
+    <p>HTML is the standard markup language for Web pages.
+        With HTML you can create your own Website.<br>
+        <a href="https://www.w3schools.com/html">To learn Html</a>.</p>
+    </div> 
+    
+    <div class="learnings">
+    <h2>CSS</h2>
+    <p>CSS is the language we use to style an HTML document.
+        CSS describes how HTML elements should be displayed.<br>
+        <a href="https://www.w3schools.com/css">To learn CSS</a>.</p>
+    </div>
+    
+    <div class="learnings">
+    <h2>JavaScript</h2>
+    <p>JavaScript is the world's most popular programming language.
+        JavaScript is the programming language of the Web.       
+        JavaScript is easy to learn.<br>
+        <a href="https://www.w3schools.com/js">To learn CSS</a>.</p>
+    </div>
 
-  <table border="1">
-    <tr>
-      <th>Education</th>
-      <th>Year</th>
-    </tr>
-    <tr>
-      <td>Holy Angel Matriculation School</td>
-      <td>2019-2021</td>
-    </tr>
-    <tr>
-      <td>Bannari Amman Institute of Technology</td>
-      <td>2021-2025</td>
-    </tr>
-    <div style="overflow-x:auto;">
-  </table>
-  </div>
-  <!--Entity-->
-  <p> The less-than sign: &lt;</p>
-
-
-  <div class="container">
-    <img src="./HMI.jpg" alt="Cinque Terre" width="340" height="300">
-    <div class="topleft">Top Left</div>
-    <div class="bottomleft">Bottom Left</div>
-  </div>
-  </div>
-
-
-
-  <h2 class="ab1">vertical-align: baseline (default):</h2>
-  <p>An <img class="a" src="./amazon_logo.png" width="9" height="9"> image with a default alignment.</p>
-
-  <h2 class="ab2">vertical-align: text-top:</h2>
-  <p>An <img class="b" src="./amazon_logo.png" width="9" height="9"> image with a text-top alignment.</p>
-
-  <h2 class="ab3">vertical-align: text-bottom:</h2>
-  <p>An <img class="c" src="./amazon_logo.png " width="9" height="9"> image with a text-bottom alignment.</p>
-
-  <h2 class="ab4">vertical-align: sub:</h2>
-  <p>An <img class="d" src="./amazon_logo.png" width="9" height="9"> image with a sub alignment.</p>
-
-  <h2>vertical-align: sup:</h2>
-  <p>An <img class="e" src="./amazon_logo.png" width="9" height="9"> image with a super alignment.</p>
-
-
-  <table style="width:100%">
-    <tr>
-      <th>Name</th>
-      <td>Swetha</td>
-    </tr>
-    <tr>
-      <th rowspan="2">Phone</th>
-      <td>951415</td>
-    </tr>
-    <tr>
-      <td>394890</td>
-    </tr>
-  </table>
+    <iframe src="Index.html" style="height:500px;width:500px" title="Iframe Example"></iframe>
+        <h2>Contact</h2>
+        <p>Feel free to reach out to me via email or through my social media profiles.</p>
+        <p id="footer">Email: swethabellan@gmail.com</p>
+        <p><abbr title="This is the title">Hover me to see the  title</abbr></p>
+        <table style="width:100%">
+          <tr>
+            <th>Name</th>
+            <td>Swetha</td>
+          </tr>
+          <tr>
+            <th rowspan="2">Phone</th>
+            <td>951415</td>
+          </tr>
+          <tr>
+            <td>394890</td>
+          </tr>
+        </table>
 </body>
-
-
-<h1>Flex-direction</h1>
-<p>flex-direction=row</p>
-<div class="flex-container">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-</div>
-<p>Flex direction=column
-</p>
-<div class="flex-container1">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>  
-</div>
-<p>Flex direction:row-reverse</p>
-<div class="flex-container2">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>  
-</div>
-<p>Felx direction:column-reverse</p>
-<div class="flex-container3">
-
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>  
-</div>
-<h1>Flex wrap property</h1>
-<p>flex -wrap:no wrap
-</p>
-<div class="flex-container4">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>  
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>  
-  <div>7</div>
-  <div>8</div>
-  <div>9</div>  
-  <div>10</div>
-  <div>11</div>
-  <div>12</div>  
-</div>
-<h2>Flex => justify content values: center,flex-start,flex-end,space-around,space-between,space-evenly</p>
-<h2>Align-content:stretch</h2>
-  <div class="flex-container5">
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>  
-    <div>4</div>
-    <div style="align-self: center">5</div>
-    <div>6</div>  
-    <div>7</div>
-    <div>8</div>
-    <div>9</div>  
-    <div>10</div>
-    <div>11</div>
-    <div>12</div>  
-  </div>
-  <h2>Flex grow property</h2>
-  
-<div class="flex-container6">
-  <div style="flex-grow: 1">1</div>
-  <div style="flex-grow: 1">2</div>
-  <div style="flex-grow: 8">3</div>
-</div>
-<h2>Grid Layout</h2>
-
-<div class="container7">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>  
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>  
-  <div>7</div>
-  <div>8</div>
-</div>
 </html>

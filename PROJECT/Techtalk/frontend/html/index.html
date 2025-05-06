@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Board - Tech Talk</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">Tech Talk</div>
+            <nav class="top-nav">
+                <a href="#">Home</a>
+                <a href="#">About Us</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact Us</a>
+            </nav>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Type search words...">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="user-profile">
+                <span>Welcome, Ahmed Hassan</span>
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Left Sidebar -->
+            <aside class="left-sidebar">
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Add Group</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Groups Page</a></li>
+                    <li><a href="#"><i class="fas fa-rss"></i> Feed</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> User Profile</a></li>
+                    <li><a href="#"><i class="fas fa-comments"></i> Communities</a></li>
+                    <li><a href="#" class="active"><i class="fas fa-question"></i> Questions</a></li>
+                    <li><a href="#"><i class="fas fa-poll"></i> Polls</a></li>
+                    <li><a href="#"><i class="fas fa-tags"></i> Tags</a></li>
+                    <li><a href="#"><i class="fas fa-award"></i> Badges</a></li>
+                    <li><a href="#"><i class="fas fa-coins"></i> Buy Points</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Users</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+                    <li><a href="#"><i class="fas fa-shopping-cart"></i> Buy Theme</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content-header">
+                    <a href="#" class="tab active">Recent Questions</a>
+                    <a href="#" class="tab">Most Answered</a>
+                    <a href="#" class="tab">Bump Question</a>
+                    <a href="#" class="tab">Answers</a>
+                    <a href="#" class="tab">Most Visited</a>
+                    <span>...</span>
+                </div>
+                <div id="questions-list">
+                    <p>Loading questions...</p>
+                </div>
+            </main>
+
+            <!-- Right Sidebar -->
+            <aside class="right-sidebar">
+                <button id="post-question-btn" class="ask-question-btn">Ask A Question</button>
+                <div class="sidebar-section">
+                    <h3>Popular Answers</h3>
+                    <div class="popular-answer">
+                        <p>How to approach applying for a job to a company...</p>
+                        <button class="answer-btn">Answer</button>
+                        <span>7 Answers</span>
+                    </div>
+                    <div class="popular-answer">
+                        <p>Why are the British confused about us calling bread rolls...</p>
+                        <button class="answer-btn">Answer</button>
+                        <span>5 Answers</span>
+                    </div>
+                    <div class="popular-answer">
+                        <p>How to handle personal stress caused by utterly incompetent...</p>
+                        <button class="answer-btn">Answer</button>
+                        <span>5 Answers</span>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h3>Recent Activities</h3>
+                    <p>There are no activities yet.</p>
+                </div>
+                <div class="sidebar-section">
+                    <h3>Top Members</h3>
+                    <div class="top-member">
+                        <img src="https://via.placeholder.com/40" alt="Marko Smith">
+                        <div>
+                            <p>Marko Smith</p>
+                            <span>3 Questions • 261 Points</span>
+                            <span class="badge">Enlightened</span>
+                        </div>
+                    </div>
+                    <div class="top-member">
+                        <img src="https://via.placeholder.com/40" alt="Ahmed Hassan">
+                        <div>
+                            <p>Ahmed Hassan</p>
+                            <span>3 Questions • 234 Points</span>
+                            <span class="badge">Professional</span>
+                        </div>
+                    </div>
+                    <div class="top-member">
+                        <img src="https://via.placeholder.com/40" alt="Aaron Aiken">
+                        <div>
+                            <p>Aaron Aiken</p>
+                            <span>3 Questions • 169 Points</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Post Question Modal -->
+    <div id="post-question-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close">×</span>
+            <h2>Ask a New Question</h2>
+            <form id="question-form">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter a concise title..." required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Provide more details..." required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Post Question</button>
+                    <button type="button" id="cancel-btn" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log('No token found, redirecting to login');
+            window.location.href = 'login.html';
+        }
+
+        // Modal control
+        const postQuestionBtn = document.getElementById('post-question-btn');
+        const modal = document.getElementById('post-question-modal');
+        const closeModal = document.getElementById('close-modal');
+        const cancelBtn = document.getElementById('cancel-btn');
+
+        postQuestionBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.getElementById('question-form').reset();
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.getElementById('question-form').reset();
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.getElementById('question-form').reset();
+            }
+        });
+
+        // Function to display questions
+        function displayQuestions(questions) {
+            const questionsList = document.getElementById('questions-list');
+            questionsList.innerHTML = '';
+
+            if (questions.length === 0) {
+                questionsList.innerHTML = '<p class="empty-message">No questions found. Be the first to ask!</p>';
+                return;
+            }
+
+            questions.forEach(question => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                const pinned = question.pinned ? '<span class="pinned">Pinned</span>' : '';
+                questionDiv.innerHTML = `
+                    <div class="question-header">
+                        <img src="https://via.placeholder.com/40" alt="${question.User.username}" class="user-avatar">
+                        <div>
+                            <h3>${question.title} ${pinned}</h3>
+                            <p class="meta">Asked by <span class="username">${question.User.username}</span> • ${new Date(question.createdAt).toLocaleDateString()} • ${question.language || 'English'}</p>
+                            <p>${question.description}</p>
+                        </div>
+                    </div>
+                    <div class="question-footer">
+                        <span class="vote">▲ ${question.upvotes || 0}</span>
+                        <span class="vote">▼ ${question.downvotes || 0}</span>
+                        <span>${question.Answers ? question.Answers.length : 0} Answers</span>
+                        <span>◇ ${question.views || 0} Views</span>
+                        <button class="answer-btn">Answer</button>
+                    </div>
+                `;
+                questionsList.appendChild(questionDiv);
+            });
+        }
+
+        // Fetch and display all questions
+        async function loadQuestions() {
+            const questionsList = document.getElementById('questions-list');
+            try {
+                const response = await fetch('http://localhost:3000/api/questions', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const questions = await response.json();
+                displayQuestions(questions);
+            } catch (error) {
+                console.error('Error fetching questions:', error);
+                questionsList.innerHTML = '<p class="error-message">Failed to load questions. Please try again later.</p>';
+            }
+        }
+
+        // Load all questions on page load
+        loadQuestions();
+
+        // Search questions
+        document.getElementById('search-btn').addEventListener('click', async () => {
+            const query = document.getElementById('search-input').value.trim();
+            const questionsList = document.getElementById('questions-list');
+
+            if (!query) {
+                loadQuestions();
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/questions/search?query=${encodeURIComponent(query)}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const questions = await response.json();
+                displayQuestions(questions);
+            } catch (error) {
+                console.error('Error searching questions:', error);
+                questionsList.innerHTML = '<p class="error-message">Failed to search questions. Please try again later.</p>';
+            }
+        });
+
+        // Handle form submission to post a question
+        document.getElementById('question-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+
+            if (!title || !description) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/questions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, description })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    modal.style.display = 'none';
+                    document.getElementById('question-form').reset();
+                    loadQuestions();
+                } else {
+                    alert(data.error || 'Failed to post question.');
+                }
+            } catch (error) {
+                console.error('Error posting question:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

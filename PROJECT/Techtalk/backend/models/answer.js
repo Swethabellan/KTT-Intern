@@ -1,38 +1,53 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const User = require('./user');
-const Question = require('./question');
 
-// const Answer = sequelize.define('Answer', {
-//   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-//   questionId: { type: DataTypes.INTEGER, allowNull: false },
-//  
-//   content: { type: DataTypes.TEXT, allowNull: false }
-// }, { timestamps: true });
+module.exports = (sequelize) => {
+    const Answer = sequelize.define('Answer', {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        questionId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Questions',
+                key: 'id'
+            }
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Users',
+                key: 'id'
+            }
+        },
+        date: {
+            type: DataTypes.DATEONLY,
+            allowNull: false
+        },
+        content: {
+            type: DataTypes.TEXT,
+            allowNull: false
+        }
+    }, {
+        timestamps: true,
+        tableName: 'Answers'
+    }, {
+        classMethods: {
+            associate: function (models) {
+                Answer.belongsTo(models.Question);
+                Answer.hasOne(models.User);
+            }
 
+        }
+    });
 
-const Answer = sequelize.define('Answer', {
- 
-  
-  questionId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: 'questions', 
-      key: 'id' 
-    },
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
-  },
-  // userId: { type: DataTypes.INTEGER, allowNull: false },
- 
-  content: { type: DataTypes.TEXT, allowNull: false }
-}, {
-  tableName: 'answers'
-});
-User.hasMany(Answer, { foreignKey: 'userId' });
-Answer.belongsTo(User, { foreignKey: 'userId' });
+    Answer.associate = (models) => {
+        Answer.belongsTo(models.User);
+        Answer.belongsTo(models.Question);
+    }; 
 
-Question.hasMany(Answer, { foreignKey: 'questionId' });
-Answer.belongsTo(Question, { foreignKey: 'questionId' });
-
-module.exports = Answer;
+    return Answer;
+};

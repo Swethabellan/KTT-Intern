@@ -1,41 +1,38 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const User = require('./user');
-const Question = sequelize.define('Question', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull:false,
-    
-  },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  description: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  
-  upvotes: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  downvotes: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
+const { Sequelize } = require('sequelize');
 
-}, {
-  tableName: 'questions', 
-  timestamps: true
-});
+module.exports = (sequelize) => {
+	const Question = sequelize.define('Question', {
+		id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        description: {
+            type: Sequelize.TEXT,
+            allowNull: true
+        },
+        likes: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+        },
+        dislikes: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+        },
+        comments: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+        }
 
-Question.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Question, { foreignKey: 'userId' });
+	}, {
+		timestamps: true,
+		tableName: 'Questions'
+	});
 
-module.exports = Question;
+    Question.associate = (models) => {
+        Question.belongsTo(models.User);
+        Question.hasMany(models.Answer);
+    };
+
+	return Question;
+};

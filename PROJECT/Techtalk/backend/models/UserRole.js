@@ -1,18 +1,13 @@
-const { DataTypes, Association } = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-	const Question = sequelize.define('Profile', {
+	const UserRole = sequelize.define('UserRole', {
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		userId: {
-			type: DataTypes.INTEGER,
-			allowNull: false
-		},
 		profilePicture: {
-
 			type: DataTypes.STRING,
 			allowNull: true,
 			defaultValue: ''
@@ -40,15 +35,12 @@ module.exports = (sequelize) => {
 
 	}, {
 		timestamps: true,
-		tableName: 'Profiles'
-	}, {
-		classMethods: {
-			associate: function (models) {
-			
-			}
-			
-		}
+		tableName: 'UserRole'
 	});
 
-	return Question;
+	UserRole.associate = (models) => {
+		UserRole.belongsTo(models.User);
+	};
+
+	return UserRole;
 };

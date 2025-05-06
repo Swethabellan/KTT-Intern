@@ -11,11 +11,11 @@ body {
   }
   .container {
     background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
+    padding: 50px 50px;
     border-radius: 10px;
-    width: 300px;
+    width: 350px;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); 
   }
   .header {
     margin-bottom: 20px;
@@ -53,6 +53,28 @@ body {
     background: #cccdcd; 
     box-sizing: border-box;
   }
+  .form-group1 
+  {
+    margin-bottom: 10px;
+    justify-content: space-between;
+    margin-left: 2px;
+
+    
+    /* width: 90%; */
+    /* padding: 7px; */
+    /* border: 1px solid #949296; */
+    /* border-radius: 15px; */
+    /* background: #cccdcd;  */
+    /* box-sizing: border-box; */
+  }
+  .main{
+    display: flex;
+    justify-content: space-evenly;
+
+  }
+  .roles2{
+    margin-right: 40px;
+  }
   .rad{
     padding:10px 20px;
     justify-content: center;
@@ -73,7 +95,7 @@ body {
     cursor: pointer;
     justify-content: center;
     margin-top: 10px;
-     margin-left: 90px;
+     margin-left: 100px;
     margin-right: 30px; 
 
   }
@@ -82,9 +104,17 @@ body {
   }
   .b{
     color: #00B7EB;
+    
   }
  .log{
   display: flex;
+  font-size: 10;
  
  }
-  
+.login{
+  font-size: 15px;
+}
+.login p{
+  font-size: 15px;
+ 
+}
