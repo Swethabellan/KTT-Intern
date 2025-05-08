@@ -103,12 +103,24 @@ group by a.name;
 
 -- ORDER BY a.name;
 
-select a.name,count(b.id) as book_count
+with cte 
+as (select a.name,count(b.id) as book_count
 from "Authors" a
-inner join "Books_name" b on a.id=b.author_id
-where a.name like '%Lee'
-group by a.name;
+inner join "Books_name" b on a.id=b.author_id);
 
+WITH author_book_counts AS (
+    SELECT a.name, COUNT(b.id) AS book_count
+    FROM "Authors" a
+    INNER JOIN "Books_name" b ON a.id = b.author_id
+    GROUP BY a.name
+)
+SELECT name, book_count
+FROM author_book_counts
+ORDER BY book_count DESC, name; 
+-- where a.name like '%Lee'
+-- group by a.name;
+
+select * from cte;
 
 select a.name,b.book_title from "Authors" as a
 inner join "Books_name" as b on a.id=b.author_id
@@ -251,4 +263,27 @@ FROM table_name table1
 JOIN table_name table2 ON table1.column = table2.column;
 SELECT emp.employee_name AS employee, mng.employee_name AS manager
 FROM Employees emp
-JOIN Employees mng ON emp.manager_id = mng.employee_id
+JOIN Employees mng ON emp.manager_id = mng.employee_id;
+
+
+create table employees(
+    emp_id int,
+    emp_name VARCHAR(255),
+    manager_id int
+);
+INSERT into employees(emp_id,emp_name,manager_id)
+values (1,'Employee_1',NULL),
+(2,'Employee_2',1),
+(3,'Employee_3',1),
+(4,'Employee_4',2);
+
+SELECT * from employees;
+
+SELECT emp.emp_name as Employee_name , mang.emp_name as Manager_name
+from employees as emp
+join employees as mang 
+on emp.manager_id=mang.emp_id; 
+
+ SELECT c.customer_id, (c.first_name|| " "||c.last_name) as elderone, (b.first_name|| " "||b.last_name) as youngerone from Customers c,Customers b
+where c.age > b.age;
+
