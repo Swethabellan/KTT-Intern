@@ -45,14 +45,14 @@
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
 
-        /* .vote-btn {
+        .vote-btn {
             transition: color 0.3s, transform 0.3s;
         }
 
         .vote-btn:hover {
             color: #3182ce;
             transform: scale(1.2);
-        } */
+        }
 
         .btn-primary {
             background: linear-gradient(90deg, #3182ce, #63b3ed);
@@ -91,8 +91,10 @@
             background: white;
             padding: 2rem;
             border-radius: 10px;
-            width: 500px;
+            width: 600px;
             max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
@@ -129,30 +131,32 @@
             margin-left: 1rem;
         }
 
-        .count-update {
-            transition: opacity 0.3s ease;
-        }
-
-        .count-update.updating {
-            opacity: 0.5;
-        }
-
-        .answers-container {
-            margin-top: 10px;
-            padding: 10px;
-            background: #f9f9f9;
-            border-radius: 5px;
-            display: none;
-        }
-
         .answer-item {
-            padding: 5px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
         .answer-item:last-child {
             border-bottom: none;
         }
+
+        .answer-timestamp {
+            background: #e5e7eb;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #4b5563;
+            white-space: nowrap;
+        }
+
+        .answer-content {
+            flex: 1;
+            margin-right: 1rem;
+        }
+
         .question-group {
             margin-bottom: 20px;
         }
@@ -163,6 +167,30 @@
             color: #333;
             margin-bottom: 10px;
         }
+
+        .confirmation-message {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #e6f3ff;
+            border-radius: 5px;
+            color: #333;
+        }
+
+        .answers-preview {
+            margin-top: 1rem;
+        }
+
+        .all-answers {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .all-answers.visible {
+            display: block;
+        }
     </style>
 </head>
 
@@ -172,18 +200,15 @@
             <span class="material-icons mr-2">forum</span> TechTalk
         </div>
         <a href="./QA.html" class="flex items-center mb-4"><span class="material-icons mr-2">home</span> Home</a>
-        <a href="./profile.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User
-            Profile</a>
-        <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">new_releases</span> New
-            Questions</a>
+        <a href="./profile.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User Profile</a>
+        <a href="#" class="flex items-center mb-4 chat-menu" id="chatMenu"><span class="material-icons mr-2">chat</span> Chat</a>
         <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">label</span> Tags</a>
         <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">star</span> Badges</a>
         <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">people</span> Users</a>
         <div class="settings-container">
             <a href="#" class="settings-btn"><span class="material-icons mr-2">settings</span> Settings</a>
             <ul class="dropdown-menu">
-                <li><a href="#" class="settings-option logout-btn"
-                        style="margin-left: 50px;margin-top: 30px;align-self: auto;">Logout</a></li>
+                <li><a href="#" class="settings-option logout-btn" style="margin-left: 50px;margin-top: 30px;align-self: auto;">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -200,126 +225,7 @@
         </div>
 
         <div id="questions-list">
-            <!-- Questions  -->
-        </div>
-
-        <div class="question-card p-6 mb-6">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <img src="" alt="User" class="w-10 h-10 rounded-full mr-4">
-                    <div>
-                        <div class="font-semibold text-gray-800">Swetha <span class="text-blue-500"></span></div>
-                        <div class="text-sm text-gray-500">Asked: Apr 29, 2025 </div>
-                    </div>
-                </div>
-                <!-- <div class="flex space-x-4">
-                    <button class="vote-btnup"><span class="material-icons">thumb_up</span></button>
-                    <span class="text-gray-600">36</span>
-                    <button class="vote-btndown"><span class="material-icons">thumb_down</span></button>
-                </div> -->
-            </div>
-            <h2 class="text-xl font-semibold text-gray-800 mt-4">What is JavaScript?</h2>
-            <p class="text-gray-600 mt-2" id="text">JavaScript was initially created to “make web pages alive”. The
-                programs in this language are called scripts. They can be written right in a web page’s HTML and run
-                automatically as the page loads.Scripts are provided and executed as plain text. They don’t need special
-                preparation or compilation to run. In this aspect, JavaScript is very different from another language
-                called Java.</p>
-            <div
-                style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
-                <div
-                    style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
-                    <button class="text-gray-600"><span class="material-icons mr-1">chat</span> 3</button>
-                </div>
-
-                <div style="position: relative; flex: 1;">
-                    <input type="text" placeholder="Type your answer..."
-                        style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
-                    <button
-                        style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;">Answer</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="question-card p-6 mb-6">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <img src="" alt="User" class="w-10 h-10 rounded-full mr-4">
-                    <div>
-                        <div class="font-semibold text-gray-800">Sushma <span class="text-purple-500"></span></div>
-                        <div class="text-sm text-gray-500">Asked: Apr 29, 2025</div>
-                    </div>
-                </div>
-                <!-- <div class="flex space-x-4">
-                    <button class="vote-btnup"><span class="material-icons">thumb_up</span></button>
-                    <span class="text-gray-600">74</span>
-                    <button class="vote-btndown"><span class="material-icons">thumb_down</span></button>
-                </div> -->
-            </div>
-            <h2 class="text-xl font-semibold text-gray-800 mt-4">What are all the language does a Android Developer use?
-            </h2>
-            <p class="text-gray-600 mt-2" id="text">Android developers primarily use Kotlin and Java for developing
-                native Android apps. While these are the most common, other languages can be used, particularly for
-                cross-platform development or specific aspects of the app</p>
-            <div
-                style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
-                <div
-                    style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
-                    <button class="text-gray-600"><span class="material-icons mr-1">chat</span> 3</button>
-                </div>
-
-                <!-- <div style="position: relative; flex: 1;">
-                    <input type="text" placeholder="Type your answer..."
-                        style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
-                    <button
-                        style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;">Answer</button>
-                </div> -->
-                <div style="position: relative; flex: 1;">
-                    <input type="text" placeholder="Type your answer..."
-                        style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
-                    <button
-                        style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;"
-                        onclick="submitAnswer(`${question.id}`, this)">Answer</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="question-card p-6 mb-6">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <img src="" alt="User" class="w-10 h-10 rounded-full mr-4">
-                    <div>
-                        <div class="font-semibold text-gray-800">Keerthi <span class="text-blue-500"></span></div>
-                        <div class="text-sm text-gray-500">Asked: Apr 29, 2025 </div>
-                    </div>
-                </div>
-                <!-- <div class="flex space-x-4">
-                    <button class="vote-btnup"><span class="material-icons">thumb_up</span></button>
-                    <span class="text-gray-600">-12</span>
-                    <button class="vote-btndown"><span class="material-icons">thumb_down</span></button>
-                </div> -->
-            </div>
-            <h2 class="text-xl font-semibold text-gray-800 mt-4">How to solve missing image appearance on the chrome
-                using Vs Code?</h2>
-            <p class="text-gray-600 mt-2" id="text">you can't use operating system paths like C:\... for your image
-                source - that works when you run the site locally, because the browser is on the same machine as the
-                webserver and can read from the same local path, but once your site is on a server, browsers on other
-                machines don't have access to its disk. Get into the habit of specifying your image sources as relative
-                URLs then a) they can be served properly over HTTP from anywhere, and b) you don't have to rewrite the
-                paths when you publish the site to another server</p>
-            <div
-                style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
-                <div
-                    style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
-                    <button class="text-gray-600"><span class="material-icons mr-1">chat</span> 3</button>
-                </div>
-
-                <div style="position: relative; flex: 1;">
-                    <input type="text" placeholder="Type your answer..."
-                        style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
-                    <button
-                        style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;">Answer</button>
-                </div>
-            </div>
+            <!-- Questions will be dynamically loaded here -->
         </div>
     </div>
 
@@ -363,14 +269,6 @@
                 <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
                 <span>How to handle errors while coding...</span>
             </div>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>How to handle errors while coding...</span>
-            </div>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>How to handle errors while coding...</span>
-            </div>
         </div>
         <div>
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Top Members</h3>
@@ -380,20 +278,11 @@
             </div>
             <div class="text-gray-600 mb-2 flex items-center">
                 <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>Yashwanth<span class="text-blue-500">- 234 Points</span> <span
-                        class="text-purple-500"></span></span>
+                <span>Yashwanth<span class="text-blue-500">- 234 Points</span> <span class="text-purple-500"></span></span>
             </div>
             <div class="text-gray-600 mb-2 flex items-center">
                 <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
                 <span>Aruna <span class="text-blue-500">-230 Points</span></span>
-            </div>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>Pavithra <span class="text-blue-500">-229 Points</span></span>
-            </div>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>Dhanush <span class="text-blue-500">-220 Points</span></span>
             </div>
         </div>
     </div>
@@ -401,18 +290,20 @@
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup-content">
             <h2>Ask a Question</h2>
+            <div id="confirmationMessage" style="display: none;" class="confirmation-message"></div>
             <input type="text" id="questionTitle" placeholder="Question Title">
             <textarea id="questionDescription" placeholder="Question Description" rows="4"></textarea>
             <button class="btn-submit" onclick="submitQuestion()">Submit</button>
             <button class="btn-cancel" onclick="closePopup()">Cancel</button>
+            <button class="btn-submit" onclick="resetPopupForm()" style="display: none;" id="askAnotherButton">Ask Another Question</button>
         </div>
     </div>
 
     <div class="popup-overlay" id="answersPopupOverlay">
         <div class="popup-content">
-            <h2>Answers</h2>
+            <h2>All Answers</h2>
             <div id="answersPopupContent">
-             
+                <!-- Answers will be dynamically loaded here -->
             </div>
             <button class="btn-cancel" onclick="closeAnswersPopup()">Close</button>
         </div>
@@ -470,8 +361,7 @@
                     return [];
                 }
             },
-            
-           async fetchAllAnswers() {
+            async fetchAllAnswers() {
                 try {
                     const token = localStorage.getItem('token');
                     if (!token) {
@@ -491,46 +381,34 @@
                 }
             },
             async submitAnswer(questionId, answerText) {
-    try {
-        const token = localStorage.getItem('token');
-        console.log('Token:', token);
-        if (!token) {
-            console.warn('No token found, redirecting to login.');
-            window.location.href = 'login.html';
-            return null;
-        }
-        console.log('Submitting answer with payload:', { questionId, content: answerText });
-        const response = await fetch('http://127.0.0.1:3000/api/questions/answers', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        window.location.href = 'login.html';
+                        return null;
+                    }
+                    const response = await fetch('http://127.0.0.1:3000/api/questions/answers', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ questionId, content: answerText })
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        const errorMessage = `Failed to submit answer: ${errorData.error || 'Unknown error'}${errorData.details ? ` - ${errorData.details}` : ''}`;
+                        localStorage.setItem('lastAnswerError', errorMessage);
+                        throw new Error(`Failed to submit answer: ${response.status} ${errorData.error || 'Unknown error'}${errorData.details ? ` - ${errorData.details}` : ''}`);
+                    }
+                    const data = await response.json();
+                    localStorage.removeItem('lastAnswerError');
+                    return data;
+                } catch (error) {
+                    console.error('Error submitting answer:', error.message);
+                    return null;
+                }
             },
-            body: JSON.stringify({ questionId, content: answerText })
-        });
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            console.error('Error response from server:', errorData);
-            if (response.status === 401) {
-                localStorage.removeItem('token');
-                window.location.href = 'login.html';
-                return null;
-            }
-            localStorage.setItem('lastAnswerError', `Failed to submit answer: ${errorData.error || 'Unknown error'}`);
-            throw new Error(`Failed to submit answer: ${response.status} ${errorData.error || 'Unknown error'}`);
-        }
-        const data = await response.json();
-        console.log('Answer submission response:', data);
-        localStorage.removeItem('lastAnswerError');
-
-         await updateCounts();
-         await updateCommentCounts();
-        return data;
-    } catch (error) {
-        console.error('Error submitting answer:', error.message);
-        return null;
-    }
-},
             async submitQuestion(title, description) {
                 try {
                     const token = localStorage.getItem('token');
@@ -561,34 +439,10 @@
                 }
             }
         };
-async function updateCommentCounts() {
-            try {
-                const questions = await apiService.fetchQuestions();
-                questions.forEach(question => {
-                    const questionCard = document.querySelector(`.question-card[data-question-id="${question.id}"]`);
-                    if (questionCard) {
-                        const commentCountSpan = questionCard.querySelector('.comment-count');
-                        if (commentCountSpan) {
-                            commentCountSpan.textContent = question.comments || 0;
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error('Error updating comment counts:', error.message);
-            }
+
+        function formatDate(date) {
+            return `${date.getDate()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
         }
-
-        async function updateCounts() {
-            await Promise.all([
-                fetchTotalUsers(),
-                fetchTotalQuestions(),
-                fetchAnsweredQuestions(),
-                fetchUnansweredQuestions(),
-
-            ]);
-        }
-
-
 
         async function loadQuestions() {
             try {
@@ -600,42 +454,105 @@ async function updateCommentCounts() {
                 const questions = await apiService.fetchQuestions();
                 const questionsList = document.getElementById('questions-list');
                 questionsList.innerHTML = '';
-                questions.forEach(question => {
+
+                for (const question of questions) {
+                    const answers = await apiService.fetchAnswers(question.id);
                     const questionDiv = document.createElement('div');
                     questionDiv.className = 'question-card p-6 mb-6';
+                    questionDiv.setAttribute('data-question-id', question.id);
+
+                    const createdAt = new Date(question.createdAt);
+                    const formattedDate = formatDate(createdAt);
+
+                    // Display first two answers (if any)
+                    let answersPreviewHtml = '';
+                    if (answers.length > 0) {
+                        const firstTwoAnswers = answers.slice(0, 2);
+                        answersPreviewHtml = firstTwoAnswers.map(answer => {
+                            const answerCreatedAt = new Date(answer.createdAt);
+                            const formattedAnswerDate = formatDate(answerCreatedAt);
+                            return `
+                                <div class="answer-item">
+                                    <div class="answer-content">
+                                        <div class="flex items-center">
+                                            <div>
+                                                <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
+                                                <p class="text-gray-600">${answer.content}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="answer-timestamp">${formattedAnswerDate}</span>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+
+                    // Display all answers in a toggleable section
+                    let allAnswersHtml = '';
+                    if (answers.length > 0) {
+                        allAnswersHtml = answers.map(answer => {
+                            const answerCreatedAt = new Date(answer.createdAt);
+                            const formattedAnswerDate = formatDate(answerCreatedAt);
+                            return `
+                                <div class="answer-item">
+                                    <div class="answer-content">
+                                        <div class="flex items-center">
+                                            <div>
+                                                <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
+                                                <p class="text-gray-600">${answer.content}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="answer-timestamp">${formattedAnswerDate}</span>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+
                     questionDiv.innerHTML = `
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <img src="" alt="User" class="w-10 h-10 rounded-full mr-4">
                                 <div>
                                     <div class="font-semibold text-gray-800">${question.User?.username || 'Unknown User'}</div>
-                                    <div class="text-sm text-gray-500">Asked: ${new Date(question.createdAt).toLocaleDateString("sv-SE")}</div>
+                                    <div class="text-sm text-gray-500">Asked: ${formattedDate}</div>
                                 </div>
                             </div>
-        
+                            <div class="flex space-x-4">
+                                <button class="vote-btnup"><span class="material-icons">thumb_up</span></button>
+                                <span class="text-gray-600">${question.likes || 0}</span>
+                                <button class="vote-btndown"><span class="material-icons">thumb_down</span></button>
+                            </div>
                         </div>
                         <h2 class="text-xl font-semibold text-gray-800 mt-4">${question.title || 'Untitled'}</h2>
                         <p class="text-gray-600 mt-2" id="text">${question.description || ''}</p>
+                        <div class="answers-preview">
+                            ${answersPreviewHtml}
+                        </div>
+                        <div class="all-answers" id="all-answers-${question.id}">
+                            ${allAnswersHtml}
+                        </div>
                         <div style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
                             <div style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
-                                <button class="text-gray-600"><span class="material-icons mr-1">chat</span> ${question.comments || 0}</button>
+                                <button class="text-gray-600 comment-toggle" data-question-id="${question.id}">
+                                    <span class="material-icons mr-1">chat</span>
+                                    <span class="comment-count">${answers.length}</span>
+                                </button>
                             </div>
-                            
                            
                             <div style="position: relative; flex: 1;">
                                 <input type="text" placeholder="Type your answer..." style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
                                 <button style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;" onclick="submitAnswer(${question.id}, this)">Answer</button>
                             </div>
                         </div>
-                        
                     `;
                     questionsList.appendChild(questionDiv);
-                });
+                }
 
                 document.querySelectorAll('.comment-toggle').forEach(button => {
                     button.addEventListener('click', () => {
                         const questionId = button.getAttribute('data-question-id');
-                        console.log(`Comment button clicked for question ID: ${questionId}. Add custom behavior here.`);
+                        const allAnswersDiv = document.getElementById(`all-answers-${questionId}`);
+                        allAnswersDiv.classList.toggle('visible');
                     });
                 });
             } catch (error) {
@@ -643,37 +560,73 @@ async function updateCommentCounts() {
                 document.getElementById('questions-list').innerHTML = '<p>Error loading questions. Please try again later.</p>';
             }
         }
-        async function loadAnswers(questionId, answersContainer) {
+
+        async function openAnswersPopup() {
             try {
-                const answers = await apiService.fetchAnswers(questionId);
-                answersContainer.innerHTML = '';
-                if (answers.length === 0) {
-                    answersContainer.innerHTML = '<p class="text-gray-500">No answers yet.</p>';
+                const answersData = await apiService.fetchAllAnswers();
+                const answersPopupContent = document.getElementById('answersPopupContent');
+                answersPopupContent.innerHTML = '';
+
+                if (answersData.length === 0 || answersData.every(data => data.answers.length === 0)) {
+                    answersPopupContent.innerHTML = '<p class="text-gray-500">No answers yet.</p>';
                 } else {
-                    answers.forEach(answer => {
-                        const answerDiv = document.createElement('div');
-                        answerDiv.className = 'answer-item';
-                        answerDiv.innerHTML = `
-                    <div class="flex items-center">
-                        <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                        <div>
-                            <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
-                            <div class="text-sm text-gray-500">${new Date(answer.createdAt).toLocaleString()}</div>
-                            <p class="text-gray-600">${answer.content}</p>
-                        </div>
-                    </div>
-                `;
-                        answersContainer.appendChild(answerDiv);
+                    answersData.forEach(data => {
+                        if (data.answers.length > 0) {
+                            const questionGroup = document.createElement('div');
+                            questionGroup.className = 'question-group';
+                            questionGroup.innerHTML = `<h3>${data.question.title || 'Untitled'}</h3>`;
+                            data.answers.forEach(answer => {
+                                const createdAt = new Date(answer.createdAt);
+                                const formattedAnswerDate = formatDate(createdAt);
+                                const answerDiv = document.createElement('div');
+                                answerDiv.className = 'answer-item';
+                                answerDiv.innerHTML = `
+                                    <div class="answer-content">
+                                        <div class="flex items-center">
+                                            <div>
+                                                <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
+                                                <p class="text-gray-600">${answer.content}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="answer-timestamp">${formattedAnswerDate}</span>
+                                `;
+                                questionGroup.appendChild(answerDiv);
+                            });
+                            answersPopupContent.appendChild(questionGroup);
+                        }
                     });
                 }
+
+                document.getElementById('answersPopupOverlay').style.display = 'flex';
             } catch (error) {
-                console.error('Error loading answers:', error.message);
-                answersContainer.innerHTML = '<p class="text-gray-500">Error loading answers.</p>';
+                console.error('Error loading answers for popup:', error.message);
+                document.getElementById('answersPopupContent').innerHTML = '<p class="text-gray-500">Error loading answers.</p>';
             }
         }
 
+        function closeAnswersPopup() {
+            document.getElementById('answersPopupOverlay').style.display = 'none';
+            document.getElementById('answersPopupContent').innerHTML = '';
+        }
 
-
+        async function updateCommentCounts() {
+            try {
+                const questions = await apiService.fetchQuestions();
+                for (const question of questions) {
+                    const answers = await apiService.fetchAnswers(question.id);
+                    const questionCard = document.querySelector(`.question-card[data-question-id="${question.id}"]`);
+                    if (questionCard) {
+                        const commentCountSpan = questionCard.querySelector('.comment-count');
+                        if (commentCountSpan) {
+                            commentCountSpan.textContent = answers.length;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating comment counts:', error.message);
+            }
+        }
 
         async function submitAnswer(questionId, button) {
             const input = button.previousElementSibling;
@@ -689,45 +642,43 @@ async function updateCommentCounts() {
 
             if (submittedAnswer) {
                 input.value = '';
-                const questionCard = button.closest('.question-card');
-                const commentCountSpan = questionCard.querySelector('.comment-count');
-                const currentCount = parseInt(commentCountSpan.textContent) || 0;
-                commentCountSpan.textContent = currentCount + 1;
-
-        //         const answersContainer = questionCard.querySelector('.answers-container');
-        //         const answerDiv = document.createElement('div');
-        //         answerDiv.className = 'answer-item';
-        //         answerDiv.innerHTML = `
-        //     <div class="flex items-center">
-        //         <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-        //         <div>
-        //             <div class="font-semibold text-gray-800">${submittedAnswer.answer.User?.username || 'Unknown User'}</div>
-        //             <div class="text-sm text-gray-500">${new Date(submittedAnswer.answer.createdAt).toLocaleString()}</div>
-        //             <p class="text-gray-600">${submittedAnswer.answer.content}</p>
-        //         </div>
-        //     </div>
-        // `;
-        //         answersContainer.appendChild(answerDiv);
-        //         answersContainer.style.display = 'block';
-
+                await loadQuestions(); // Reload questions to update answers
                 await updateCommentCounts();
                 await updateCounts();
             } else {
                 const errorMessage = localStorage.getItem('lastAnswerError') || 'Failed to submit answer. Check the console for details and try again.';
-                alert('Failed to submit answer. Check the console for details and try again.');
+                alert(errorMessage);
             }
         }
 
-
-
         function openPopup() {
             document.getElementById('popupOverlay').style.display = 'flex';
+            document.getElementById('confirmationMessage').style.display = 'none';
+            document.getElementById('questionTitle').style.display = 'block';
+            document.getElementById('questionDescription').style.display = 'block';
+            document.getElementById('askAnotherButton').style.display = 'none';
+            document.querySelector('.btn-submit[onclick="submitQuestion()"]').style.display = 'inline-block';
         }
 
         function closePopup() {
             document.getElementById('popupOverlay').style.display = 'none';
             document.getElementById('questionTitle').value = '';
             document.getElementById('questionDescription').value = '';
+            document.getElementById('confirmationMessage').style.display = 'none';
+            document.getElementById('questionTitle').style.display = 'block';
+            document.getElementById('questionDescription').style.display = 'block';
+            document.getElementById('askAnotherButton').style.display = 'none';
+            document.querySelector('.btn-submit[onclick="submitQuestion()"]').style.display = 'inline-block';
+        }
+
+        function resetPopupForm() {
+            document.getElementById('questionTitle').value = '';
+            document.getElementById('questionDescription').value = '';
+            document.getElementById('confirmationMessage').style.display = 'none';
+            document.getElementById('questionTitle').style.display = 'block';
+            document.getElementById('questionDescription').style.display = 'block';
+            document.getElementById('askAnotherButton').style.display = 'none';
+            document.querySelector('.btn-submit[onclick="submitQuestion()"]').style.display = 'inline-block';
         }
 
         async function submitQuestion() {
@@ -740,10 +691,17 @@ async function updateCommentCounts() {
 
             const result = await apiService.submitQuestion(title, description);
             if (result) {
-                closePopup();
-                loadQuestions();
+                const createdAt = new Date(result.createdAt);
+                const formattedDate = formatDate(createdAt);
+                document.getElementById('confirmationMessage').innerHTML = `Question submitted successfully at ${formattedDate}!`;
+                document.getElementById('confirmationMessage').style.display = 'block';
+                document.getElementById('questionTitle').style.display = 'none';
+                document.getElementById('questionDescription').style.display = 'none';
+                document.getElementById('askAnotherButton').style.display = 'inline-block';
+                document.querySelector('.btn-submit[onclick="submitQuestion()"]').style.display = 'none';
+
+                await loadQuestions();
                 await updateCounts();
-                await updateCommentCounts();
             } else {
                 alert('Failed to submit question. Check the console for details and try again.');
             }
@@ -794,7 +752,6 @@ async function updateCommentCounts() {
                     throw new Error(`Failed to fetch total questions: ${response.status} ${errorData.message || ''}`);
                 }
                 const data = await response.json();
-                document.getElementById('total-questions').classList.add('count-update', 'updating');
                 document.getElementById('total-questions').textContent = data.totalQuestions;
             } catch (error) {
                 console.error('Error fetching total questions:', error.message);
@@ -854,54 +811,16 @@ async function updateCommentCounts() {
             }
         }
 
-
-      async function openAnswersPopup() {
-            try {
-                const answersData = await apiService.fetchAllAnswers();
-                const answersPopupContent = document.getElementById('answersPopupContent');
-                answersPopupContent.innerHTML = '';
-
-                if (answersData.length === 0 || answersData.every(data => data.answers.length === 0)) {
-                    answersPopupContent.innerHTML = '<p class="text-gray-500">No answers yet.</p>';
-                } else {
-                    answersData.forEach(data => {
-                        if (data.answers.length > 0) {
-                            const questionGroup = document.createElement('div');
-                            questionGroup.className = 'question-group';
-                            questionGroup.innerHTML = `<h3>${data.question.title || 'Untitled'}</h3>`;
-                            data.answers.forEach(answer => {
-                                const answerDiv = document.createElement('div');
-                                answerDiv.className = 'answer-item';
-                                answerDiv.innerHTML = `
-                                    <div class="flex items-center">
-                                        <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                                        <div>
-                                            <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
-                                            <div class="text-sm text-gray-500">${new Date(answer.createdAt).toLocaleString()}</div>
-                                            <p class="text-gray-600">${answer.content}</p>
-                                        </div>
-                                    </div>
-                                `;
-                                questionGroup.appendChild(answerDiv);
-                            });
-                            answersPopupContent.appendChild(questionGroup);
-                        }
-                    });
-                }
-
-                document.getElementById('answersPopupOverlay').style.display = 'flex';
-            } catch (error) {
-                console.error('Error loading answers for popup:', error.message);
-                document.getElementById('answersPopupContent').innerHTML = '<p class="text-gray-500">Error loading answers.</p>';
-            }
+        async function updateCounts() {
+            await Promise.all([
+                fetchTotalUsers(),
+                fetchTotalQuestions(),
+                fetchAnsweredQuestions(),
+                fetchUnansweredQuestions()
+            ]);
         }
 
-        function closeAnswersPopup() {
-            document.getElementById('answersPopupOverlay').style.display = 'none';
-            document.getElementById('answersPopupContent').innerHTML = '';
-        }
-
-
+        let pollingInterval;
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchTotalUsers();
@@ -910,6 +829,8 @@ async function updateCommentCounts() {
             fetchUnansweredQuestions();
             loadQuestions();
 
+            pollingInterval = setInterval(updateCounts, 10000);
+
             const chatMenu = document.getElementById('chatMenu');
             chatMenu.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -917,12 +838,14 @@ async function updateCommentCounts() {
             });
         });
 
+        window.addEventListener('beforeunload', () => {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+        });
+
         const settingsBtn = document.querySelector('.settings-btn');
         const dropdownMenu = document.querySelector('.dropdown-menu');
-    //     document.querySelectorAll('.comment-toggle').forEach(button => {
-    // button.addEventListener('click', async () => {
-    //     const questionId = button.getAttribute('data-question-id');
-    //     await openAnswersPopup(questionId);
 
         settingsBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -942,5 +865,4 @@ async function updateCommentCounts() {
         });
     </script>
 </body>
-
 </html>
