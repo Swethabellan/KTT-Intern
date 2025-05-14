@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       { id: user.id, username: user.username },
       process.env.JWT_SECRET ,
-      { expiresIn: '7h' }
+      { expiresIn: '24d' }
     );
     res.status(200).json({ message: 'Login Successful', token });
   } catch (error) {
@@ -151,3 +151,12 @@ router.get('/total-users', authenticateToken, async (req, res) => {
 // });
 
 module.exports = router;
+
+
+
+
+
+
+
+
+

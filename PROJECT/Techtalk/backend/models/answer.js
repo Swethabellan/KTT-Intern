@@ -1,53 +1,38 @@
-const { DataTypes } = require('sequelize');
+const { Sequelize } = require('sequelize');
 
 module.exports = (sequelize) => {
     const Answer = sequelize.define('Answer', {
         id: {
-            type: DataTypes.INTEGER,
+            type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
+        content: {
+            type: Sequelize.TEXT,
+            allowNull: false
+        },
         questionId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'Questions',
-                key: 'id'
-            }
+            type: Sequelize.INTEGER,
+            allowNull: false
         },
         userId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'Users',
-                key: 'id'
-            }
+            type: Sequelize.INTEGER,
+            allowNull: false
         },
         date: {
-            type: DataTypes.DATEONLY,
-            allowNull: false
-        },
-        content: {
-            type: DataTypes.TEXT,
-            allowNull: false
+            type: Sequelize.DATE,
+            allowNull: false,
+            defaultValue: Sequelize.NOW // Automatically set to the current date/time
         }
     }, {
         timestamps: true,
         tableName: 'Answers'
-    }, {
-        classMethods: {
-            associate: function (models) {
-                Answer.belongsTo(models.Question);
-                Answer.hasOne(models.User);
-            }
-
-        }
     });
 
     Answer.associate = (models) => {
-        Answer.belongsTo(models.User);
-        Answer.belongsTo(models.Question);
-    }; 
+        Answer.belongsTo(models.Question, { foreignKey: 'questionId' });
+        Answer.belongsTo(models.User, { foreignKey: 'userId' });
+    };
 
     return Answer;
 };

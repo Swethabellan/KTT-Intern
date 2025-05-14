@@ -61,10 +61,9 @@ module.exports = (sequelize) => {
 	});
 1
 	User.associate = (models) => {
-		User.belongsTo(models.UserRole);
-		User.hasMany(models.Question);
-		User.hasMany(models.Answer);
-	};
+        User.hasMany(models.Question, { foreignKey: 'userId' });
+        User.hasMany(models.Answer, { foreignKey: 'userId' });
+    };
 
 	return User;
 };

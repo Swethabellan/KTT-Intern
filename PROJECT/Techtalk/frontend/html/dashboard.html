@@ -49,3 +49,1005 @@
 </body>
 
 </html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechTalk - Q&A Forum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .sidebar {
+            background: #1a202c;
+            color: white;
+            min-height: 100vh;
+            padding: 1.5rem;
+            border-radius: 0 20px 20px 0;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar a {
+            color: #a0aec0;
+            padding: 8px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .vote-btn {
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .vote-btn:hover {
+            color: #3182ce;
+            transform: scale(1.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #3182ce, #63b3ed);
+            color: white;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2b6cb0, #4a90e2);
+        }
+
+        .user-profile {
+            background: #edf2f7;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #text {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body class="flex">
+    <!-- Sidebar -->
+    <div class="sidebar w-64">
+        <div class="text-2xl font-bold text-white mb-8 flex items-center ">
+            <span class="material-icons mr-2">forum</span> TechTalk
+        </div>
+        <a href="./QA.html" class="flex items-center mb-4"><span class="material-icons mr-2">home</span> Home</a>
+        <a href="./profile.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User
+            Profile</a>
+        <!-- <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">help</span> Questions</a> -->
+        <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">new_releases</span> New
+            Questions</a>
+        <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">label</span> Tags</a>
+        <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">star</span> Badges</a>
+        <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">people</span> Users</a>
+        <!-- <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">settings</span> Settings</a> -->
+        <div class="settings-container">
+            <a href="#" class="settings-btn"><span class="material-icons mr-2">settings</span></i> Settings</a>
+            <ul class="dropdown-menu">
+                <li><a href="#" class="settings-option logout-btn"
+                        style="margin-left: 50px;margin-top: 30px;align-self: auto;">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="flex-1 p-8">
+
+        <div class="flex justify-between items-center mb-8">
+            <div class="text-2xl font-semibold text-gray-800 mt-2 ml-2">All Questions:</div>
+            <div class="flex space-x-4">
+                <button class="text-gray-600 font-medium">Recent Questions</button>
+                <button class="text-gray-600 font-medium">Most Answered</button>
+
+                <button class="text-gray-600 font-medium">Answers</button>
+                <button class="text-gray-600 font-large">Unanswered</button>
+            </div>
+        </div>
+
+
+        <div id="questions-list">
+
+        </div>
+
+        <div class="question-card p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="" alt="User" class="w-10 h-10 rounded-full mr-4">
+                    <div>
+                        <div class="font-semibold text-gray-800">Swetha <span class="text-blue-500"></span></div>
+                        <div class="text-sm text-gray-500">Asked: Apr 29, 2025 </div>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <button class="vote-btnup"><span class="material-icons">thumb_up</span></button>
+                    <span class="text-gray-600">36</span>
+                    <button class="vote-btndown"><span class="material-icons">thumb_down</span></button>
+                </div>
+            </div>
+            <h2 class="text-xl font-semibold text-gray-800 mt-4">What is JavaScript?</h2>
+            <p class="text-gray-600 mt-2  " id="text">JavaScript was initially created to “make web pages alive”. The
+                programs in
+                this language are called scripts. They can be written right in a web page’s HTML and run automatically
+                as the page loads.Scripts are provided and executed as plain text. They don’t need special preparation
+                or compilation to run.
+                In this aspect, JavaScript is very different from another language called Java.</p>
+            <div
+                style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
+
+                <div
+                    style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+                    <button class="text-gray-600"><span class="material-icons mr-1">chat</span> 3</button>
+                </div>
+
+
+                <div
+                    style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+                    <button class="text-gray-600"><span class="material-icons mr-1">visibility</span> 466</button>
+                </div>
+
+
+                <div style="position: relative; flex: 1;">
+                    <input type="text" placeholder="Type your answer..."
+                        style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
+                    <button
+                        style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;">Answer</button>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="question-card p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="" alt="User" class="w-10 h-10 rounded-full mr-4">
+                    <div>
+                        <div class="font-semibold text-gray-800">Sushma <span class="text-purple-500"></span></div>
+                        <div class="text-sm text-gray-500">Asked: Apr 29, 2025</div>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <button class="vote-btnup"><span class="material-icons">thumb_up</span></button>
+                    <span class="text-gray-600">74</span>
+                    <button class="vote-btndown"><span class="material-icons">thumb_down</span></button>
+                </div>
+            </div>
+            <h2 class="text-xl font-semibold text-gray-800 mt-4">What are all the language does a Android Developer use?
+            </h2>
+            <p class="text-gray-600 mt-2" id="text">Android developers primarily use Kotlin and Java for developing
+                native Android
+                apps. While these are the most common, other languages can be used, particularly for cross-platform
+                development or specific aspects of the app</p>
+            <div
+                style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
+
+                <div
+                    style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+                    <button class="text-gray-600"><span class="material-icons mr-1">chat</span> 3</button>
+                </div>
+
+
+                <div
+                    style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+                    <button class="text-gray-600"><span class="material-icons mr-1">visibility</span> 466</button>
+                </div>
+
+
+                <div style="position: relative; flex: 1;">
+                    <input type="text" placeholder="Type your answer..."
+                        style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
+                    <button
+                        style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;">Answer</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="question-card p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="" alt="User" class="w-10 h-10 rounded-full mr-4">
+                    <div>
+                        <div class="font-semibold text-gray-800">Keerthi <span class="text-blue-500"></span></div>
+                        <div class="text-sm text-gray-500">Asked: Apr29, 2025 </div>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <button class="vote-btnup"><span class="material-icons">thumb_up</span></button>
+                    <span class="text-gray-600">-12</span>
+                    <button class="vote-btndown"><span class="material-icons">thumb_down</span></button>
+                </div>
+            </div>
+            <h2 class="text-xl font-semibold text-gray-800 mt-4">How to solve missing image appearance on the chrome
+                using Vs Code?</h2>
+            <p class="text-gray-600 mt-2" id="text">you can't use operating system paths like C:\... for your image
+                source - that
+                works when you run the site locally, because the browser is on the same machine as the webserver and can
+                read from the same local path, but once your site is on a server, browsers on other machines don't have
+                access to its disk. Get into the habit of specifying your image sources as relative URLs then a) they
+                can be served properly over HTTP from anywhere, and b) you don't have to rewrite the paths when you
+                publish the site to another server</p>
+            <div
+                style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
+
+                <div
+                    style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+                    <button class="text-gray-600"><span class="material-icons mr-1">chat</span> 3</button>
+                </div>
+
+
+                <div
+                    style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+                    <button class="text-gray-600"><span class="material-icons mr-1">visibility</span> 466</button>
+                </div>
+
+
+                <div style="position: relative; flex: 1;">
+                    <input type="text" placeholder="Type your answer..."
+                        style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
+                    <button
+                        style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;">Answer</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="w-80 p-8">
+        <div class="flex justify-between items-center mb-6">
+            <button class="btn-primary px-4 py-2 rounded-lg">Ask a Question</button>
+        </div>
+        <div class="user-profile p-4 mb-6">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <div class="text-lg font-semibold text-gray-800"></span>Questions</div>
+                    <div class="text-2xl text-blue-500 "><span id="total-questions"></span></div>
+                </div>
+                <div>
+                    <div class="text-lg font-semibold text-gray-800 mr-2">Total Users</div>
+                    <div class="text-2xl text-blue-500 "><span id="total-users"></span></div>
+                </div>
+            </div>
+            <div class="flex justify-between">
+                <div>
+                    <div class="text-lg font-semibold text-gray-800">Answered</div>
+                    <div class="text-2xl text-blue-500"><span id="answered-questions"></span></div>
+                </div>
+                <div>
+                    <div class="text-lg font-semibold text-gray-800">Unanswered</div>
+                    <div class="text-2xl text-blue-500"><span id="unanswered-questions"></span></div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Activities</h3>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>CSS is mainly used for ...</span>
+            </div>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>Why Html is important...</span>
+            </div>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>How to handle errors while coding...</span>
+            </div>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>How to handle errors while coding...</span>
+            </div>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>How to handle errors while coding...</span>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Top Members</h3>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>Ajith <span class="text-blue-500">-261 Points</span> <span class="text-yellow-500"></span></span>
+            </div>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>Yashwanth<span class="text-blue-500">- 234 Points</span> <span
+                        class="text-purple-500"></span></span>
+            </div>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>Aruna <span class="text-blue-500">-230 Points</span></span>
+            </div>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>Pavithra <span class="text-blue-500">-229 Points</span></span>
+            </div>
+            <div class="text-gray-600 mb-2 flex items-center">
+                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
+                <span>Dhanush <span class="text-blue-500">-220 Points</span></span>
+            </div>
+        </div>
+    </div>
+    <script>
+        let totalQuestions = 0;
+
+        async function fetchTotalUsers() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found, redirecting to login');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const response = await fetch('http://127.0.0.1:3000/api/total-users', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error('Fetch total users failed:', response.status, response.statusText);
+                    if (response.status === 403) {
+                        console.error('Unauthorized access, redirecting to login');
+                        localStorage.removeItem('token');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    throw new Error(`Failed to fetch total users: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                totalUsers = data.totalUsers;
+                document.getElementById('total-users').textContent = totalUsers;
+            } catch (error) {
+                console.error('Error fetching total users:', error.message);
+                document.getElementById('total-users').textContent = 'Error';
+            }
+        }
+
+        async function fetchTotalQuestions() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found, redirecting to login');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const response = await fetch('http://127.0.0.1:3000/api/total-questions', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error('Fetch total questions failed:', response.status, response.statusText);
+                    if (response.status === 403) {
+                        console.error('Unauthorized access, redirecting to login');
+                        localStorage.removeItem('token');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    throw new Error(`Failed to fetch total questions: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                totalQuestions = data.totalQuestions;
+                document.getElementById('total-questions').textContent = totalQuestions;
+            } catch (error) {
+                console.error('Error fetching total questions:', error.message);
+                document.getElementById('total-questions').textContent = 'Error';
+            }
+        }
+
+
+        // async function loadQuestions() {
+        //     try {
+        //         const token = localStorage.getItem('token');
+        //         if (!token) {
+        //             window.location.href = 'login.html';
+        //             return;
+        //         }
+        //         const response = await fetch('http://127.0.0.1:3000/api/questions/questions', {
+        //             method: 'GET',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'Authorization': `Bearer ${token}`
+        //             }
+        //         });
+        //         if (!response.ok) {
+        //             if (response.status === 403) {
+        //                 localStorage.removeItem('token');
+        //                 window.location.href = 'login.html';
+        //                 return;
+        //             }
+        //             throw new Error('Failed to fetch questions');
+        //         }
+        //         const questions = await response.json();
+        //         const questionsList = document.getElementById('questions-list');
+        //         questionsList.innerHTML = '';
+        //         questions.forEach(question => {
+        //             const questionDiv = document.createElement('div');
+        //             questionDiv.className = 'question-card p-6 mb-6';
+        //             questionDiv.innerHTML = `
+        //         <div class="flex items-center justify-between">
+        //             <div class="flex items-center">
+        //                 <img src="" alt="User" class="w-10 h-10 rounded-full mr-4">
+        //                 <div>
+        //                     <div class="font-semibold text-gray-800">${question.User?.username || 'Unknown User'} <span class="text-blue-500"></span></div>
+        //                     <div class="text-sm text-gray-500">Asked: ${question.date}</div>
+        //                 </div>
+        //             </div>
+        //             <div class="flex space-x-4">
+        //                 <button class="vote-btnup"><span class="material-icons">thumb_up</span></button>
+        //                 <span class="text-gray-600">${question.likes}</span>
+        //                 <button class="vote-btndown"><span class="material-icons">thumb_down</span></button>
+        //             </div>
+        //         </div>
+        //         <h2 class="text-xl font-semibold text-gray-800 mt-4">${question.content}</h2>
+        //         <p class="text-gray-600 mt-2" id="text">${question.description || ''}</p>
+        //         <div style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
+        //             <div style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+        //                 <button class="text-gray-600"><span class="material-icons mr-1">chat</span> ${question.comments || 0}</button>
+        //             </div>
+        //             <div style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+        //                 <button class="text-gray-600"><span class="material-icons mr-1">visibility</span> ${question.views || 466}</button>
+        //             </div>
+        //             <div style="position: relative; flex: 1;">
+        //                 <input type="text" placeholder="Type your answer..." style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
+        //                 <button style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;">Answer</button>
+        //             </div>
+        //         </div>
+        //         ${question.answers && question.answers.length > 0 ? `
+        //             <div class="mt-4">
+        //                 <h4 class="text-lg font-semibold text-gray-700">Answers:</h4>
+        //                 ${question.answers.map(answer => `
+        //                     <div class="bg-gray-100 p-3 rounded-md mt-2">
+        //                         <div class="text-sm text-gray-500">User ${answer.User?.username || 'Unknown User'} - ${answer.date}</div>
+        //                         <p class="text-gray-700 mt-1">${answer.content}</p>
+        //                     </div>
+        //                 `).join('')}
+        //             </div>
+        //         ` : ''}
+        //     `;
+        //             questionsList.appendChild(questionDiv);
+        //         });
+
+        //     } catch (error) {
+        //         console.error('Error loading questions:', error);
+        //         document.getElementById('questions-list').innerHTML = '<p>Error loading questions</p>';
+        //     }
+        // }
+
+ const apiService = {
+      async fetchQuestions() {
+        try {
+          // Replace with your actual API endpoint for questions
+          const response = await fetch('http://127.0.0.1:3000/api/questions/questions');
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Error fetching questions:', error);
+          return [];
+        }
+      },
+      async fetchAnswers(questionId) {
+        try {
+          // Replace with your actual API endpoint for answers
+          const response = await fetch(`http://127.0.0.1:3000/api/answers?questionId=${questionId}`);
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Error fetching answers:', error);
+          return [];
+        }
+      },
+      async submitAnswer(questionId, answerText) {
+        try {
+          // Replace with your actual API endpoint for submitting answers
+          const response = await fetch('http://127.0.0.1:3000/api/answers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ questionId, text: answerText }),
+          });
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Error submitting answer:', error);
+          return null;
+        }
+      },
+    };
+
+    // Function to render questions and handle interactions
+    async function initializeQA() {
+      const questionsContainer = document.getElementById('questions-container');
+      questionsContainer.innerHTML = '<p class="text-center text-gray-500">Loading...</p>';
+
+      // Fetch questions
+      const questions = await apiService.fetchQuestions();
+      if (questions.length === 0) {
+        questionsContainer.innerHTML = '<p class="text-center text-gray-500">No questions found.</p>';
+        return;
+      }
+
+      // Render each question
+      questionsContainer.innerHTML = '';
+      questions.forEach((question) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'border rounded-lg shadow-sm bg-white';
+        questionDiv.innerHTML = `
+          <!-- Question Header -->
+          <div class="p-4 border-b">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="text-sm text-gray-500">User: ${question.user || 'Anonymous'}</span>
+                <span class="text-sm text-gray-500">Asked: ${question.date || 'Unknown'}</span>
+              </div>
+              <div class="flex space-x-2">
+                <span class="text-sm text-gray-500">👍 ${question.likes || 0}</span>
+                <span class="text-sm text-gray-500">👎 ${question.dislikes || 0}</span>
+              </div>
+            </div>
+            <h2 class="text-xl font-semibold mt-2">${question.text}</h2>
+          </div>
+          <!-- Answers Section -->
+          <div class="p-4">
+            <button class="view-answers-btn text-blue-600 hover:underline mb-2" data-question-id="${question.id}">
+              View Answers (0)
+            </button>
+            <div class="answers-container space-y-2 hidden"></div>
+            <!-- Answer Input -->
+            <div class="mt-4 flex items-center space-x-2">
+              <input
+                type="text"
+                placeholder="Type your answer..."
+                class="answer-input flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button class="submit-answer-btn px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700">
+                Answer
+              </button>
+            </div>
+          </div>
+        `;
+
+        // Add event listeners
+        // const viewAnswersBtn = questionDiv.querySelector('.view-answers-btn');
+        const answersContainer = questionDiv.querySelector('.answers-container');
+        const answerInput = questionDiv.querySelector('.answer-input');
+        const submitAnswerBtn = questionDiv.querySelector('.submit-answer-btn');
+
+        // Handle view answers
+        viewAnswersBtn.addEventListener('click', async () => {
+          if (answersContainer.classList.contains('hidden')) {
+            // Fetch and display answers
+            const answers = await apiService.fetchAnswers(question.id);
+            answersContainer.innerHTML = answers.length > 0
+              ? answers.map((answer) => `<p class="text-gray-700">${answer.text}</p>`).join('')
+              : '<p class="text-gray-500">No answers yet.</p>';
+            answersContainer.classList.remove('hidden');
+            viewAnswersBtn.textContent = `View Answers (${answers.length})`;
+          } else {
+            answersContainer.classList.add('hidden');
+          }
+        });
+
+        // Handle answer submission
+        submitAnswerBtn.addEventListener('click', async () => {
+          const answerText = answerInput.value.trim();
+          if (!answerText) return;
+
+          submitAnswerBtn.disabled = true;
+          const submittedAnswer = await apiService.submitAnswer(question.id, answerText);
+          submitAnswerBtn.disabled = false;
+
+          if (submittedAnswer) {
+            const currentAnswers = answersContainer.innerHTML.includes('No answers yet.')
+              ? []
+              : answersContainer.querySelectorAll('p');
+            answersContainer.innerHTML = [...currentAnswers, submittedAnswer]
+              .map((answer) => `<p class="text-gray-700">${answer.text || answer}</p>`)
+              .join('');
+            answerInput.value = '';
+            viewAnswersBtn.textContent = `View Answers (${currentAnswers.length + 1})`;
+            answersContainer.classList.remove('hidden');
+          }
+        });
+
+        questionsContainer.appendChild(questionDiv);
+      });
+    }
+
+    // Initialize the Q&A section
+    document.addEventListener('DOMContentLoaded', initializeQA);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        async function fetchAnsweredQuestions() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found, redirecting to login');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const response = await fetch('http://127.0.0.1:3000/api/questions/answered-questions', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error('Fetch answered questions failed:', response.status, response.statusText);
+                    if (response.status === 403) {
+                        console.error('Unauthorized access, redirecting to login');
+                        localStorage.removeItem('token');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    throw new Error(`Failed to fetch answered questions: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                document.getElementById('answered-questions').textContent = data.answeredQuestions;
+            } catch (error) {
+                console.error('Error fetching answered questions:', error.message);
+                document.getElementById('answered-questions').textContent = 'Error';
+            }
+        }
+
+        async function fetchUnansweredQuestions() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found, redirecting to login');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const response = await fetch('http://127.0.0.1:3000/api/questions/unanswered-questions', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error('Fetch unanswered questions failed:', response.status, response.statusText);
+                    if (response.status === 403) {
+                        console.error('Unauthorized access, redirecting to login');
+                        localStorage.removeItem('token');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    throw new Error(`Failed to fetch unanswered questions: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                document.getElementById('unanswered-questions').textContent = data.unansweredQuestions;
+            } catch (error) {
+                console.error('Error fetching unanswered questions:', error.message);
+                document.getElementById('unanswered-questions').textContent = 'Error';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchTotalUsers();
+            fetchTotalQuestions();
+            fetchAnsweredQuestions();
+            fetchUnansweredQuestions();
+            loadQuestions();
+        });
+
+
+        const settingsBtn = document.querySelector('.settings-btn');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+
+        settingsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!settingsBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+        // document.querySelector('.logout-btn').addEventListener('click', () => {
+        //     localStorage.removeItem('token');
+        //     window.location.href = 'login.html';
+        // });
+
+    </script>
+
+</body>
+
+</html>
+
+
+
+const express = require('express');
+const router = express.Router();
+const { Op } = require('sequelize');
+const {Question} = require('../models');
+const {Answer} = require('../models');
+const {User} = require('../models');
+const authenticateToken = require('../middleware/auth');
+
+router.get('/questions', authenticateToken, async (req, res) => {
+  try {
+      const questions = await Question.findAll({
+          include: [
+              { model: User, attributes: ['username'] },
+              { model: Answer, include: [{ model: User, attributes: ['username'] }] }
+          ]
+      });
+      console.log('Fetched questions:', JSON.stringify(questions, null, 2));
+      res.json(questions);
+  } catch (error) {
+      console.error('Error fetching questions:', error);
+      res.status(500).json({ message: 'Error fetching questions', error: error.message });
+  }
+});
+
+router.get('/total-questions', authenticateToken, async (req, res) => {
+    try {
+        const totalQuestions = await Question.count();
+        res.json({ totalQuestions });
+    } catch (error) {
+        console.error('Error fetching total questions:', error);
+        res.status(500).json({ message: 'Error fetching total questions' });
+    }
+});
+
+router.get('/answered-questions', authenticateToken, async (req, res) => {
+  try {
+      const answeredQuestions = await Question.count({
+          where: {
+              comments: { [Op.gt]: 0 }
+          }
+      });
+      console.log('Answered questions:', answeredQuestions);
+      res.json({ answeredQuestions });
+  } catch (error) {
+      console.error('Error fetching answered questions:', error);
+      res.status(500).json({ message: 'Error fetching answered questions' });
+  }
+});
+
+router.get('/unanswered-questions', authenticateToken, async (req, res) => {
+  try {
+      const unansweredQuestions = await Question.count({
+          where: {
+              comments: { [Op.eq]: 0 }
+          }
+      });
+      console.log('Unanswered questions:', unansweredQuestions);
+      res.json({ unansweredQuestions });
+  } catch (error) {
+      console.error('Error fetching unanswered questions:', error);
+      res.status(500).json({ message: 'Error fetching unanswered questions' });
+  }
+});
+
+
+router.post('/questions', authenticateToken, async (req, res) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'User authentication failed' });
+    }
+
+    const {  description } = req.body;
+    if ( !description) {
+      return res.status(400).json({ error: 'Description are required' });
+    }
+
+    const question = await Question.create({
+      userId: req.user.id,
+      description
+    });
+    const newquestion=result.rows[0];
+    res.status(201).json({ message: 'Question created', question :newquestion });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+
+
+
+
+// router.get('/questions', authenticateToken, async (req, res) => {
+//   try {
+//     const { search } = req.query;
+//     const where = search
+//       ? {
+//           [Op.or]: [
+//             { title: { [Op.iLike]: `%${search}%` } },
+//             { description: { [Op.iLike]: `%${search}%` } }
+//           ]
+//         }
+//       : {};
+
+//     if (req.user && req.user.id) {
+//       where.userId = req.user.id; 
+//     }
+
+//     const questions = await Question.findAll({
+//       where,
+//       include: [{ model: User, attributes: ['username'] }]
+//     });
+//     res.json(questions);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+// router.get('/api/questions', async (req, res) => {
+//   try {
+//     const result = await pool.query('SELECT * FROM questions ORDER BY created_at DESC');
+//     res.json(result.rows);
+//   } catch (error) {
+//     console.error('Error fetching questions:', error);
+//     res.status(500).json({ error: 'Server error' });
+//   }
+// });
+
+// router.get('/questions/:id', authenticateToken, async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const question = await Question.findOne({
+//       where: { id },
+//       include: [
+//         { model: User, attributes: ['username'] },
+//         { model: Answer, include: [{ model: User, attributes: ['username'] }] }
+//       ]
+//     });
+//     if (question) res.json(question);
+//     else res.status(404).json({ error: 'Question not found' });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+// router.put('/questions/:id', authenticateToken, async (req, res) => {
+//   try {
+//     if (!req.user || !req.user.id) {
+//       return res.status(401).json({ error: 'User authentication failed' });
+//     }
+
+//     const { id } = req.params;
+//     const { status, answeredBy } = req.body;
+//     const question = await Question.findOne({ where: { id } });
+//     if (!question) return res.status(404).json({ error: 'Question not found' });
+
+//     if (question.userId !== req.user.id) {
+//       return res.status(403).json({ error: 'User is not associated to Questions!' });
+//     }
+
+//     const updatedAnsweredBy = Array.isArray(answeredBy) ? answeredBy : question.answeredBy || [];
+//     const [updated] = await Question.update(
+//       { status, answeredBy: updatedAnsweredBy },
+//       { where: { id } }
+//     );
+
+//     if (updated) {
+//       const updatedQuestion = await Question.findOne({ where: { id } });
+//       res.json({ message: 'Question updated', question: updatedQuestion });
+//     } else {
+//       res.status(404).json({ error: 'Question not found' });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+// router.post('/answers', authenticateToken, async (req, res) => {
+//   try {
+//     if (!req.user || !req.user.id) {
+//       return res.status(401).json({ error: 'User authentication failed' });
+//     }
+
+//     const { questionId, content } = req.body;
+//     if (!questionId || !content) {
+//       return res.status(400).json({ error: 'Question ID and content are required' });
+//     }
+//     if (!Number.isInteger(Number(questionId))) {
+//       return res.status(400).json({ error: 'Question ID must be a valid integer' });
+//     }
+
+//     const question = await Question.findOne({ where: { id: questionId } });
+//     if (!question) return res.status(404).json({ error: 'Question not found' });
+
+//     const answer = await Answer.create({
+//       questionId: Number(questionId),
+//       userId: req.user.id,
+//       content
+//     });
+
+//     let answeredBy = Array.isArray(question.answeredBy) ? question.answeredBy : [];
+//     if (!answeredBy.includes(req.user.username)) {
+//       answeredBy.push(req.user.username);
+//       await Question.update(
+//         { status: true, answeredBy },
+//         { where: { id: questionId } }
+//       );
+//     }
+
+//     const updatedQuestion = await Question.findOne({
+//       where: { id: questionId },
+//       include: [
+//         { model: User, attributes: ['username'] },
+//         { model: Answer, include: [{ model: User, attributes: ['username'] }] }
+//       ]
+//     });
+
+//     res.status(201).json({
+//       message: 'Answer created',
+//       answer,
+//       question: updatedQuestion
+//     });
+//   } catch (error) {
+//     if (error.name === 'SequelizeForeignKeyConstraintError') {
+//       return res.status(400).json({ error: 'Invalid question ID or user ID' });
+//     }
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+module.exports = router;

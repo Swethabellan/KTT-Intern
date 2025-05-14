@@ -1,47 +1,71 @@
-'use strict';
+// 'use strict';
 
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
+// const { Sequelize } = require('sequelize');
+// require('dotenv').config();
+
+// const basename = path.basename(__filename);
+
+// const connectionString = `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+// console.log('Connection String:', connectionString);
+// const sequelize = new Sequelize(connectionString, {
+//     logging: console.log,
+//     pool: {
+//         max: 5,
+//         min: 0,
+//         acquire: 30000,
+//         idle: 10000
+//     }
+// });
+// const db = {};
+
+// fs.readdirSync(__dirname)
+//     .filter(file => {
+//         return (
+//             file.indexOf('.') !== 0 &&
+//             file !== basename &&
+//             file.slice(-3) === '.js'
+//         );
+//     })
+//     .forEach(file => {
+//         const modelDefiner = require(path.join(__dirname, file));
+//         const model = modelDefiner(sequelize, Sequelize.DataTypes);
+//         db[model.name] = model;
+//     });
+
+// // Run model associations if defined
+// Object.keys(db).forEach(modelName => {
+//     if (db[modelName].associate) {
+//         db[modelName].associate(db);
+//     }
+// });
+
+// db.sequelize = sequelize;
+// db.Sequelize = Sequelize;
+
+// module.exports = db;
+
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+const QuestionModel = require('./Question');
+const UserModel = require('./User');
+const AnswerModel = require('./Answer');
 
-const basename = path.basename(__filename);
-
-const connectionString = `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
-console.log('Connection String:', connectionString);
-const sequelize = new Sequelize(connectionString, {
-    logging: console.log,
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
+const sequelize = new Sequelize(`postgres://postgres:SwethaBellan@localhost:5432/techtalk`, {
+    dialect: 'postgres',
+    logging: true,
+});
+const models = {
+    Question: QuestionModel(sequelize),
+    User: UserModel(sequelize),
+    Answer: AnswerModel(sequelize)
+};
+Object.keys(models).forEach(modelName => {
+    if (models[modelName].associate) {
+        models[modelName].associate(models);
     }
 });
-const db = {};
-
-fs.readdirSync(__dirname)
-    .filter(file => {
-        return (
-            file.indexOf('.') !== 0 &&
-            file !== basename &&
-            file.slice(-3) === '.js'
-        );
-    })
-    .forEach(file => {
-        const modelDefiner = require(path.join(__dirname, file));
-        const model = modelDefiner(sequelize, Sequelize.DataTypes);
-        db[model.name] = model;
-    });
-
-// Run model associations if defined
-Object.keys(db).forEach(modelName => {
-    if (db[modelName].associate) {
-        db[modelName].associate(db);
-    }
-});
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-module.exports = db;
+module.exports = {
+    sequelize,
+    ...models
+};
