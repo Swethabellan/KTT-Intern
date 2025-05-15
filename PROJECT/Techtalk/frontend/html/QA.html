@@ -200,7 +200,7 @@
             <span class="material-icons mr-2">forum</span> TechTalk
         </div>
         <a href="./QA.html" class="flex items-center mb-4"><span class="material-icons mr-2">home</span> Home</a>
-        <a href="./profile.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User Profile</a>
+        <a href="./userprof.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User Profile</a>
         <a href="#" class="flex items-center mb-4 chat-menu" id="chatMenu"><span class="material-icons mr-2">chat</span> Chat</a>
         <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">label</span> Tags</a>
         <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">star</span> Badges</a>
@@ -693,7 +693,7 @@
             if (result) {
                 const createdAt = new Date(result.createdAt);
                 const formattedDate = formatDate(createdAt);
-                document.getElementById('confirmationMessage').innerHTML = `Question submitted successfully at ${formattedDate}!`;
+                document.getElementById('confirmationMessage').innerHTML = `Question submitted successfully!`;
                 document.getElementById('confirmationMessage').style.display = 'block';
                 document.getElementById('questionTitle').style.display = 'none';
                 document.getElementById('questionDescription').style.display = 'none';
