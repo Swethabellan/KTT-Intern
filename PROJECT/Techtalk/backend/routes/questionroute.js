@@ -4,7 +4,6 @@ const { Op } = require('sequelize');
 const { Question, Answer, User } = require('../models');
 const authenticateToken = require('../middleware/auth');
 
-// GET /api/questions - Fetch all questions
 router.get('/', authenticateToken, async (req, res) => {
     try {
         const questions = await Question.findAll({
@@ -21,7 +20,6 @@ router.get('/', authenticateToken, async (req, res) => {
     }
 });
 
-// POST /api/questions - Create a new question
 router.post('/', authenticateToken, async (req, res) => {
     try {
         if (!req.user || !req.user.id) {
@@ -45,7 +43,6 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 });
 
-// GET /api/questions/total-questions - Count total questions
 router.get('/total-questions', authenticateToken, async (req, res) => {
     try {
         const totalQuestions = await Question.count();
@@ -56,7 +53,6 @@ router.get('/total-questions', authenticateToken, async (req, res) => {
     }
 });
 
-// GET /api/questions/answered-questions - Count answered questions
 router.get('/answered-questions', authenticateToken, async (req, res) => {
     try {
         const answeredQuestions = await Question.count({
@@ -71,7 +67,6 @@ router.get('/answered-questions', authenticateToken, async (req, res) => {
     }
 });
 
-// GET /api/questions/unanswered-questions - Count unanswered questions
 router.get('/unanswered-questions', authenticateToken, async (req, res) => {
     try {
         const unansweredQuestions = await Question.count({
@@ -86,7 +81,6 @@ router.get('/unanswered-questions', authenticateToken, async (req, res) => {
     }
 });
 
-// GET /api/questions/total-users - Count total users
 router.get('/total-users', authenticateToken, async (req, res) => {
     try {
         const totalUsers = await User.count();
@@ -97,7 +91,6 @@ router.get('/total-users', authenticateToken, async (req, res) => {
     }
 });
 
-// POST /api/questions/answers - Submit an answer
 router.post('/answers', authenticateToken, async (req, res) => {
     try {
         if (!req.user || !req.user.id) {
@@ -140,7 +133,32 @@ router.post('/answers', authenticateToken, async (req, res) => {
     }
 });
 
-// GET /api/questions/answers?questionId=<id> - Fetch answers for a question
+router.get('/user-answers', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        console.log(`Fetching answers for userId: ${userId}`);
+
+        const answers = await Answer.findAll({
+            where: { userId },
+            include: [
+                { model: User, attributes: ['id', 'username'] },
+                { model: Question, attributes: ['id', 'title'] }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+
+        console.log(`Fetched ${answers.length} answers for userId: ${userId}`);
+        if (answers.length === 0) {
+            console.log('No answers found for this user.');
+        }
+
+        res.status(200).json(answers);
+    } catch (error) {
+        console.error('Error fetching answers:', error.message);
+        res.status(500).json({ message: 'Error fetching answers', error: error.message });
+    }
+});
+
 router.get('/answers', authenticateToken, async (req, res) => {
     try {
         const { questionId } = req.query;

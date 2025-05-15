@@ -38,7 +38,8 @@ module.exports = (sequelize) => {
 		},
 		skills: {
 			type: DataTypes.STRING,
-			defaultValue: ''
+			defaultValue: '',
+			allowNull:true
 		},
 		badges: {
 			type: DataTypes.STRING,

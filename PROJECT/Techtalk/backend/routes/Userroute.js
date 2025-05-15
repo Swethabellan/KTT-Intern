@@ -2,21 +2,20 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const{ User} = require('../models');
-const Profile= require('../models/profile');
+const { User } = require('../models');
 const authenticateToken = require('../middleware/auth');
 
 router.post('/signup', async (req, res) => {
   try {
-    const {name, username, email, password, role } = req.body;
+    const { name, username, email, password, role } = req.body;
     if (!username || !email || !password || !name) {
       return res.status(400).json({ error: 'Name, username, email, password are required' });
     }
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(409).json({ error: 'Email already exists' });
-    } 
-    
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       name,
@@ -24,12 +23,11 @@ router.post('/signup', async (req, res) => {
       email,
       password: hashedPassword,
       role: role || 'user',
-      
     });
-    res.status(201).json({ message: 'User created',user });
+    res.status(201).json({ message: 'User created', user });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message:'Error creating user' });
+    console.error('Error creating user:', error);
+    res.status(500).json({ message: 'Error creating user' });
   }
 });
 
@@ -48,7 +46,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, username: user.username },
-      process.env.JWT_SECRET ,
+      process.env.JWT_SECRET,
       { expiresIn: '24d' }
     );
     res.status(200).json({ message: 'Login Successful', token });
@@ -59,104 +57,112 @@ router.post('/login', async (req, res) => {
 
 router.get('/total-users', authenticateToken, async (req, res) => {
   try {
-      const totalUsers = await User.count();
-      console.log('Total users:', totalUsers);
-      res.json({ totalUsers });
+    const totalUsers = await User.count();
+    console.log('Total users:', totalUsers);
+    res.json({ totalUsers });
   } catch (error) {
-      console.error('Error fetching total users:', error);
-      res.status(500).json({ message: 'Error fetching total users' });
+    console.error('Error fetching total users:', error);
+    res.status(500).json({ message: 'Error fetching total users' });
   }
 });
 
+router.get('/profile', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-// router.get('/profile', authenticateToken, async (req, res) => {
-//   try {
-//     if (!req.user || !req.user.id) {
-//       return res.status(401).json({ error: 'User authentication failed' });
-//     }
+    let skillsArray = [];
+    if (user.skills && typeof user.skills === 'string') {
+      skillsArray = user.skills.split(',').map(skill => skill.trim()).filter(skill => skill);
+    }
 
-//     let profile = await Profile.findOne({
-//       where: { userId: req.user.id },
-//       include: [{ model: User, attributes: ['username', 'email', 'name', 'role', 'bio', 'skills'] }]
-//     });
+    res.status(200).json({
+      id: user.id,
+      username: user.username,
+      bio: user.bio || '',
+      skills: skillsArray
+    });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
 
-//     if (!profile) {
-//       profile = await Profile.create({
-//         userId: req.user.id,
-//         profilePicture: '',
-//         location: '',
-//         website: '',
-//         github: '',
-//         linkedin: ''
-//       });
-//       profile = await Profile.findOne({
-//         where: { userId: req.user.id },
-//         include: [{ model: User, attributes: ['username', 'email', 'name', 'role', 'bio', 'skills'] }]
-//       });
-//     }
+router.put('/profile', authenticateToken, async (req, res) => {
+  try {
+    const { bio, skills } = req.body;
+    const userId = req.user.id;
 
-//     res.json(profile);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
+    if (bio && typeof bio !== 'string') {
+      return res.status(400).json({ message: 'Bio must be a string' });
+    }
+    if (skills && !Array.isArray(skills)) {
+      return res.status(400).json({ message: 'Skills must be an array' });
+    }
 
-// router.put('/profile', authenticateToken, async (req, res) => {
-//   try {
-//     if (!req.user || !req.user.id) {
-//       return res.status(401).json({ error: 'User authentication failed' });
-//     }
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-//     const { profilePicture, location, website, github, linkedin, bio, skills } = req.body;
-//     let profile = await Profile.findOne({ where: { userId: req.user.id } });
+    const skillsString = Array.isArray(skills) ? skills.join(', ') : user.skills;
 
-//     if (!profile) {
-//       profile = await Profile.create({
-//         userId: req.user.id,
-//         profilePicture: '',
-//         location: '',
-//         website: '',
-//         github: '',
-//         linkedin: ''
-//       });
-//     }
+    user.bio = bio !== undefined ? bio : user.bio;
+    user.skills = skillsString;
 
-//     await profile.update({
-//       profilePicture: profilePicture || profile.profilePicture,
-//       location: location || profile.location,
-//       website: website || profile.website,
-//       github: github || profile.github,
-//       linkedin: linkedin || profile.linkedin
-//     });
+    await user.save();
 
-//     const user = await User.findOne({ where: { id: req.user.id } });
-//     await user.update({
-//       bio: bio || user.bio,
-//       skills: skills || user.skills
-//     });
+    console.log(`Profile updated for user ${userId}:`, { bio: user.bio, skills: user.skills });
 
-//     const updatedProfile = await Profile.findOne({
-//       where: { userId: req.user.id },
-//       include: [{ model: User, attributes: ['username', 'email', 'name', 'role', 'bio', 'skills'] }]
-//     });
+    res.status(200).json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+router.get('/activity', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
 
-//     res.json({ message: 'Profile updated', profile: updatedProfile });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
+    const recentQuestions = await Question.findAll({
+      where: { userId },
+      order: [['createdAt', 'DESC']],
+      limit: 5,
+      attributes: ['id', 'title', 'createdAt']
+    });
 
-// router.get('/users', (req, res) => {
-//   res.send('Users endpoint');
-// });
+    const recentAnswers = await Answer.findAll({
+      where: { userId },
+      order: [['createdAt', 'DESC']],
+      limit: 5,
+      attributes: ['id', 'content', 'createdAt'],
+      include: [{ model: Question, attributes: ['title'] }]
+    });
+
+    const activities = [
+      ...recentQuestions.map(q => ({
+        type: 'question',
+        description: `Asked: ${q.title}`,
+        createdAt: q.createdAt
+      })),
+      ...recentAnswers.map(a => ({
+        type: 'answer',
+        description: `Answered on: ${a.Question.title}`,
+        createdAt: a.createdAt
+      }))
+    ];
+
+    activities.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const recentActivities = activities.slice(0, 5);
+
+    res.status(200).json(recentActivities);
+  } catch (error) {
+    console.error('Error fetching user activity:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
 
 module.exports = router;
-
-
-
-
-
-
-
-
-

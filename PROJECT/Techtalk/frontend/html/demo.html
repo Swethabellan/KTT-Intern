@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <style>
         * {
@@ -21,7 +24,6 @@
             transition: background-color 0.3s ease;
         }
 
-       
         .profile-wrapper {
             display: flex;
             width: 100%;
@@ -29,21 +31,57 @@
         }
 
         .sidebar {
-            width: 320px;
-            background-color: #1a202c;
-            padding: 20px;
+            background: #1a202c;
+            color: white;
+            min-height: 100vh;
+            padding: 1.5rem;
+            border-radius: 0 20px 20px 0;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            width: 256px;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
         }
 
-        
+        .sidebar a {
+            color: #a0aec0;
+            padding: 8px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .sidebar button {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            color: #a0aec0;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.3s;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar button:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .sidebar button i {
+            margin-right: 8px;
+        }
 
         .main-content {
-            margin-left: 310px;
+            margin-left: 256px;
             flex: 1;
-            border-right: 1px solid #e0e0e0;
-            padding: 20px;
+            padding: 15px;
             overflow-y: auto;
             height: 100vh;
         }
@@ -55,130 +93,144 @@
             overflow: hidden;
             transition: all 0.3s ease;
             margin-bottom: 10px;
+            margin-left: 2px;
         }
-
 
         .profile-header {
-            padding: 20px;
-            border-bottom: 2px solid #242121a1;
+            padding: 15px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 10px;
             position: relative;
+            margin-top: 20px;
         }
 
-        
+        .profile-info {
+            padding: 12px;
+        }
 
-        .profile-info h2 {
-            font-size: 32px;
+        .profile-container h2 {
+            margin-left: 50px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 26px;
             color: #1f1e1e;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
-       
-
-        .stats {
-            margin-top: 15px;
-            font-size: 16px;
-            color: #333;
+        .performance-stats {
             background-color: #f9f9f9;
-            padding: 10px 15px;
             border-radius: 10px;
-            display: flex;
-            gap: 22px;
+            padding: 15px;
+            margin: 15px 12px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #1a202c;
         }
 
-       
+        .performance-stats h3 {
+            font-size: 16px;
+            color: #221f1f;
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
 
-        .stats span {
-            font-weight: 500;
+        .performance-stats p {
+            font-size: 15px;
+            color: #333;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
         }
 
-        .stats i {
-            color: #19181893;
+        .performance-stats p:hover {
+            color: #1a202c;
         }
 
-       
+        .performance-stats p i {
+            color: #63b3ed;
+            font-size: 18px;
+        }
+
+        .performance-stats p span {
+            font-weight: 600;
+            color: #1a202c;
+            background-color: #e0e0e0;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+      
+
+        
 
         .bio {
-            margin-top: 20px;
-            font-size: 15px;
+            margin-top: 15px;
+            font-size: 14px;
             color: #444;
-            line-height: 1.6;
+            line-height: 1.5;
             background-color: #fff;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
             border-left: 4px solid #0e0e0e;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-
         .skills {
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .skills h3 {
-            font-size: 18px;
+            font-size: 16px;
             color: #221f1f;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
-       
 
         .skills span {
             display: inline-block;
             background-color: #1312129e;
             color: #fff;
-            padding: 8px 15px;
-            border-radius: 20px;
-            margin: 5px;
-            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            margin: 4px;
+            font-size: 13px;
             font-weight: 500;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-       
-
         .skills span:hover {
-            transform: translateY(-3px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
-       
         .action-buttons {
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 15px;
+            top: 15px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
 
-        .follow-btn, .contact-btn, .edit-profile-btn {
+        .contact-btn,
+        .edit-profile-btn {
             background-color: #e74c3c;
             color: #fff;
             border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 15px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             transition: background-color 0.3s ease;
             text-decoration: none;
         }
-
-       
 
         .contact-btn {
             background-color: #3a3935;
@@ -189,53 +241,28 @@
         }
 
         .edit-profile-btn {
-            background-color: #3498db; /* Different color to distinguish from other buttons */
+            background-color: #3498db;
         }
 
         .edit-profile-btn:hover {
             background-color: #2980b9;
         }
 
-
-
-      
-
-        .search-bar {
-            padding: 15px 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-      
-
-        .search-bar input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            font-size: 14px;
-            outline: none;
-        }
-
-       
-
         .tabs {
             display: flex;
             border-bottom: 1px solid #e0e0e0;
+            margin: 0 12px;
         }
-
-        
 
         .tab {
             flex: 1;
             text-align: center;
-            padding: 15px;
-            font-size: 16px;
+            padding: 12px;
+            font-size: 15px;
             color: #666;
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
-       
 
         .tab.active {
             color: #1a202c;
@@ -247,57 +274,45 @@
             background-color: #f9f9f9;
         }
 
-        
-
         .tab-content {
-            padding: 20px;
+            padding: 15px;
             display: none;
+            min-height: 300px;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        .question, .answer, .activity {
+        .question,
+        .answer {
             background-color: #f9f9f9;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
-    
-
-        .question p, .answer p, .activity p {
-            font-size: 16px;
+        .question p,
+        .answer p {
+            font-size: 15px;
             color: #333;
             margin-bottom: 5px;
         }
 
-
-        .question-meta, .answer-meta, .activity-meta {
-            font-size: 12px;
+        .question-meta,
+        .answer-meta {
+            font-size: 11px;
             color: #888;
         }
 
-       
-        .question-meta i, .answer-meta i, .activity-meta i {
+        .question-meta i,
+        .answer-meta i {
             margin-right: 5px;
         }
 
-        .question-meta span, .answer-meta span, .activity-meta span {
-            margin-right: 10px;
-        }
-
-        .chart-container {
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-       
-        canvas {
-            max-width: 100%;
+        .question-meta span,
+        .answer-meta span {
+            margin-right: 8px;
         }
 
         .modal {
@@ -315,148 +330,166 @@
 
         .modal-content {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
             width: 400px;
             position: relative;
         }
 
-       
-
         .modal-content h3 {
-            font-size: 20px;
+            font-size: 18px;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
-
 
         .modal-content label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             color: #666;
             margin-bottom: 5px;
         }
 
-      
-
-        .modal-content input, .modal-content textarea {
+        .modal-content input,
+        .modal-content textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
+            padding: 8px;
+            margin-bottom: 12px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
         }
-
-       
 
         .modal-content button {
             background-color: #1b1919;
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .modal-content button:hover {
             background-color: #2f2c2cc4;
         }
 
+        .modal-content button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
         .close-modal {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
+            top: 8px;
+            right: 8px;
+            font-size: 18px;
             cursor: pointer;
             color: #666;
         }
 
+        .error-text {
+            color: #e74c3c;
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        .retry-btn {
+            color: #3498db;
+            background: none;
+            border: none;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 13px;
+            margin-left: 5px;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ccc;
+            border-top: 2px solid #666;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="profile-wrapper">
         <div class="sidebar">
-            <div class="profile-container">
-                <div class="profile-header">
-                    <div class="profile-info">
-                        <h2>Swetha</h2>
-                        <div class="stats">
-                            <span><i class="fas fa-question-circle"></i> Questions:</span>
-                            <span><i class="fas fa-comment"></i> Answers:</span>
-                        </div>
-                        <br>
-                        <h3>Bio:</h3>
-                        <div class="bio" id="bioDisplay">
-                            
-                        </div>
-                        <div class="skills" id="skillsDisplay">
-                            <h3>Skills:</h3>
-                            
-                        </div>
-                    </div>
-                </div>
+            <div class="text-2xl font-bold text-white mb-8 flex items-center">
+                <span class="material-icons mr-2">forum</span> TechTalk
             </div>
+            <a href="./QA.html" class="flex items-center mb-4"><span class="material-icons mr-2">home</span> Home</a>
+            <a href="./userprof.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User Profile</a>
+            <a href="#" class="flex items-center mb-4 chat-menu" id="chatMenu"><span class="material-icons mr-2">chat</span> All Answers</a>
+            <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">label</span> Tags</a>
+            <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">star</span> Badges</a>
+            <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">people</span> Users</a>
+            <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
 
         <div class="main-content">
             <div class="profile-container">
                 <div class="profile-header">
-                    <h2 style="margin-left: 20px;">Profile </h2>
+                    <h2 id="usernameDisplay">Loading...</h2>
                     <div class="action-buttons">
-                        
-                        
                         <button class="contact-btn" id="contactBtn">Contact Me</button>
                         <a href="#" class="edit-profile-btn" id="editProfileBtn">Edit Profile</a>
                     </div>
                 </div>
-
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Search questions or activity...">
+                <div class="profile-info">
+                    <h3>Bio:</h3>
+                    <div class="bio" id="bioDisplay">Loading...</div>
+                    <div class="skills" id="skillsDisplay">
+                        <h3>Skills:</h3>
+                        <span>Loading...</span>
+                    </div>
                 </div>
+
+                <div class="performance-stats">
+                    <h3>Performance Stats</h3>
+                    <p><i class="fas fa-question-circle"></i> Questions Asked: <span id="mainQuestionsCount">0</span></p>
+                    <p><i class="fas fa-comment"></i> Answers Provided: <span id="mainAnswersCount">0</span></p>
+                    <p><i class="fas fa-star"></i> Badges Earned: <span id="badgesCount">0</span></p>
+                </div>
+
 
                 <div class="tabs">
                     <div class="tab active" data-tab="questions">Questions Asked</div>
                     <div class="tab" data-tab="answers">Answers Provided</div>
-                    <div class="tab" data-tab="activity">Recent Activity</div>
-                    <!-- <div class="tab" data-tab="stats">Statistics</div> -->
                 </div>
 
                 <div class="tab-content active" id="questions">
                     <div class="question">
-        
+                        <p>Loading...</p>
                         <div class="question-meta">
-                           
+                            <span><i class="fas fa-clock"></i>Loading...</span>
+                            <span><i class="fas fa-eye"></i>0 views</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="tab-content" id="answers">
                     <div class="answer">
-                       
+                        <p>Loading...</p>
                         <div class="answer-meta">
-                          
+                            <span><i class="fas fa-clock"></i>Loading...</span>
                         </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="activity">
-                    <div class="activity">
-                        <div class="activity-meta">
-                        </div>
-                    </div>
-                    <div class="activity">
-                        <div class="activity-meta">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="stats">
-                    <div class="chart-container">
-                        <h3>User Activity (Last 6 Months)</h3>
-                        <canvas id="activityChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -484,13 +517,344 @@
             <label for="editBio">Bio</label>
             <textarea id="editBio" rows="4" placeholder="Enter your bio"></textarea>
             <label for="editSkills">Skills (comma-separated)</label>
-            <input type="text" id="editSkills" placeholder="e.g., Investing, Finance, Stock Analysis">
-            <button onclick="saveProfile()">Save Changes</button>
+            <input type="text" id="editSkills" placeholder="e.g., Html,Css,Js">
+            <button id="saveProfileBtn" onclick="saveProfile()">Save Changes</button>
         </div>
     </div>
 
     <script>
-        // Tab functionality
+        const apiService = {
+            async fetchUserProfile(attempt = 1, maxAttempts = 3) {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        throw new Error('No token found. Please log in.');
+                    }
+                    const response = await fetch('http://127.0.0.1:3000/api/users/profile', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            localStorage.removeItem('token');
+                            throw new Error('Session expired. Please log in again.');
+                        }
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(`Failed to fetch profile: ${response.status} ${errorData.message || ''}`);
+                    }
+                    const profile = await response.json();
+                    console.log('Fetched user profile:', profile);
+                    return profile;
+                } catch (error) {
+                    console.error(`Attempt ${attempt}/${maxAttempts} - Error fetching profile:`, error.message);
+                    if (error.message.includes('Session expired') || error.message.includes('No token found')) {
+                        window.location.href = 'login.html';
+                        return null;
+                    }
+                    if (attempt < maxAttempts) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        return await this.fetchUserProfile(attempt + 1, maxAttempts);
+                    }
+                    throw new Error(error.message);
+                }
+            },
+
+            async updateUserProfile(bio, skills, attempt = 1, maxAttempts = 3) {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        throw new Error('No token found. Please log in.');
+                    }
+                    const saveProfileBtn = document.getElementById('saveProfileBtn');
+                    saveProfileBtn.disabled = true;
+                    saveProfileBtn.classList.add('loading');
+
+                    console.log('Sending profile update:', { bio, skills });
+                    const response = await fetch('http://127.0.0.1:3000/api/users/profile', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ bio, skills })
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            localStorage.removeItem('token');
+                            throw new Error('Session expired. Please log in again.');
+                        }
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(`Failed to update profile: ${response.status} ${errorData.message || 'Unknown error'}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Profile update response:', result);
+
+                    const updatedProfile = await this.fetchUserProfile();
+                    console.log('Fetched updated profile after save:', updatedProfile);
+
+                    return true;
+                } catch (error) {
+                    console.error(`Attempt ${attempt}/${maxAttempts} - Error updating profile:`, error.message);
+                    if (error.message.includes('Session expired') || error.message.includes('No token found')) {
+                        window.location.href = 'login.html';
+                        return false;
+                    }
+                    if (attempt < maxAttempts) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        return await this.updateUserProfile(bio, skills, attempt + 1, maxAttempts);
+                    }
+                    throw new Error(error.message);
+                } finally {
+                    const saveProfileBtn = document.getElementById('saveProfileBtn');
+                    saveProfileBtn.disabled = false;
+                    saveProfileBtn.classList.remove('loading');
+                }
+            },
+
+            async fetchQuestions() {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        throw new Error('No token found. Please log in.');
+                    }
+                    const userId = localStorage.getItem('userId');
+                    if (!userId) {
+                        throw new Error('User ID not found. Please log in again.');
+                    }
+                    const response = await fetch('http://127.0.0.1:3000/api/questions', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(`Failed to fetch questions: ${response.status} ${errorData.message || ''}`);
+                    }
+                    const questions = await response.json();
+                    return questions.filter(q => q.userId === parseInt(userId));
+                } catch (error) {
+                    console.error('Error fetching questions:', error.message);
+                    if (error.message.includes('No token found') || error.message.includes('User ID not found')) {
+                        window.location.href = 'login.html';
+                        return [];
+                    }
+                    return [];
+                }
+            },
+
+            async fetchAnswers() {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        throw new Error('No token found. Please log in.');
+                    }
+                    const userId = localStorage.getItem('userId');
+                    if (!userId) {
+                        throw new Error('User ID not found. Please log in again.');
+                    }
+                    console.log(`Fetching answers for userId: ${userId}`);
+
+                    const response = await fetch('http://127.0.0.1:3000/api/questions/user-answers', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(`Failed to fetch answers: ${response.status} ${errorData.message || ''}`);
+                    }
+                    const answers = await response.json();
+                    return answers.filter(q => q.userId === parseInt(userId));
+                } catch (error) {
+                    console.error('Error fetching answers:', error.message);
+                    if (error.message.includes('No token found') || error.message.includes('User ID not found')) {
+                        window.location.href = 'login.html';
+                        return [];
+                    }
+                    return [];
+                }
+            }
+        };
+
+        function formatDate(date) {
+            return `${date.getDate()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+        }
+
+        async function loadUserProfile() {
+            const usernameDisplay = document.getElementById('usernameDisplay');
+            usernameDisplay.classList.add('loading');
+
+            try {
+                const profile = await apiService.fetchUserProfile();
+                if (profile && profile.username) {
+                    usernameDisplay.classList.remove('loading');
+                    usernameDisplay.textContent = profile.username;
+                    localStorage.setItem('userId', profile.id);
+                    document.getElementById('bioDisplay').textContent = profile.bio || 'No bio available.';
+                    const skillsContainer = document.getElementById('skillsDisplay');
+                    skillsContainer.innerHTML = '<h3>Skills:</h3>';
+                    if (profile.skills && profile.skills.length > 0) {
+                        profile.skills.forEach(skill => {
+                            const skillSpan = document.createElement('span');
+                            skillSpan.textContent = skill;
+                            skillsContainer.appendChild(skillSpan);
+                        });
+                    } else {
+                        skillsContainer.innerHTML += '<span>No skills listed.</span>';
+                    }
+                } else {
+                    throw new Error('No profile data returned.');
+                }
+            } catch (error) {
+                usernameDisplay.classList.remove('loading');
+                usernameDisplay.innerHTML = `<span class="error-text">${error.message}</span><button class="retry-btn" onclick="loadUserProfile()">Retry</button>`;
+                document.getElementById('bioDisplay').textContent = 'Error loading bio';
+                document.getElementById('skillsDisplay').innerHTML = '<h3>Skills:</h3><span>Error loading skills</span>';
+            }
+        }
+
+        async function loadQuestions() {
+            const questionsContainer = document.getElementById('questions');
+            questionsContainer.innerHTML = '<p>Loading...</p>';
+
+            try {
+                const questions = await apiService.fetchQuestions();
+                questionsContainer.innerHTML = '';
+                document.getElementById('mainQuestionsCount').textContent = questions.length;
+
+                if (questions.length === 0) {
+                    questionsContainer.innerHTML = '<p>No questions asked yet.</p>';
+                    return questions;
+                }
+
+                questions.forEach(question => {
+                    const createdAt = new Date(question.createdAt);
+                    const formattedDate = formatDate(createdAt);
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.innerHTML = `
+                        <p>${question.title || 'Untitled'}</p>
+                        <p>${question.description || 'Untitled'}</p>
+                        <div class="question-meta">
+                            <span><i class="fas fa-clock"></i>${formattedDate}</span>
+                        </div>
+                    `;
+                    questionsContainer.appendChild(questionDiv);
+                });
+                return questions;
+            } catch (error) {
+                questionsContainer.innerHTML = `<p class="error-text">Failed to load questions: ${error.message}</p>`;
+                return [];
+            }
+        }
+
+        async function loadAnswers() {
+            const answersContainer = document.getElementById('answers');
+            answersContainer.innerHTML = '<p>Loading...</p>';
+
+            try {
+                const answers = await apiService.fetchAnswers();
+                answersContainer.innerHTML = '';
+                document.getElementById('mainAnswersCount').textContent = answers.length;
+
+                if (answers.length === 0) {
+                    answersContainer.innerHTML = '<p>No answers provided yet.</p>';
+                    return answers;
+                }
+
+                answers.forEach(answer => {
+                    const createdAt = new Date(answer.createdAt);
+                    const formattedDate = formatDate(createdAt);
+                    const answerDiv = document.createElement('div');
+                    answerDiv.className = 'answer';
+                    answerDiv.innerHTML = `
+                        <p>${answer.content || 'No content'}</p>
+                        <div class="answer-meta">
+                            <span><i class="fas fa-clock"></i>${formattedDate}</span>
+                        </div>
+                    `;
+                    answersContainer.appendChild(answerDiv);
+                });
+                return answers;
+            } catch (error) {
+                answersContainer.innerHTML = `<p class="error-text">Failed to load answers: ${error.message}</p>`;
+                return [];
+            }
+        }
+
+        function loadPerformanceChart(questions, answers) {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    datasets: [
+                        {
+                            label: 'Questions Asked',
+                            data: [questions.length, 2, 3, 1, questions.length],
+                            backgroundColor: '#63b3ed',
+                            borderColor: '#3182ce',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Answers Provided',
+                            data: [answers.length, 1, 4, 2, answers.length],
+                            backgroundColor: '#f6ad55',
+                            borderColor: '#dd6b20',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#666',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: '#e0e0e0',
+                                borderDash: [3, 3]
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#666',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#666',
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -505,10 +869,6 @@
             });
         });
 
-        
-        
-
-        // Contact modal functionality
         const contactBtn = document.getElementById('contactBtn');
         const contactModal = document.getElementById('contactModal');
         const closeContactModal = document.getElementById('closeContactModal');
@@ -527,19 +887,25 @@
             }
         });
 
-        // Edit profile modal functionality
         const editProfileBtn = document.getElementById('editProfileBtn');
         const editProfileModal = document.getElementById('editProfileModal');
         const closeEditProfileModal = document.getElementById('closeEditProfileModal');
         const editBioInput = document.getElementById('editBio');
         const editSkillsInput = document.getElementById('editSkills');
 
-        editProfileBtn.addEventListener('click', () => {
-            editBioInput.value = document.getElementById('bioDisplay').textContent;
-            editSkillsInput.value = Array.from(document.querySelectorAll('#skillsDisplay span'))
-                .map(span => span.textContent)
-                .join(', ');
-            editProfileModal.style.display = 'flex';
+        editProfileBtn.addEventListener('click', async () => {
+            try {
+                const profile = await apiService.fetchUserProfile();
+                if (profile) {
+                    editBioInput.value = profile.bio || '';
+                    editSkillsInput.value = profile.skills ? profile.skills.join(', ') : '';
+                    editProfileModal.style.display = 'flex';
+                } else {
+                    alert('Failed to load profile data. Please try again.');
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
         });
 
         closeEditProfileModal.addEventListener('click', () => {
@@ -552,51 +918,50 @@
             }
         });
 
-        function saveProfile() {
+        async function saveProfile() {
             const newBio = editBioInput.value.trim();
             const newSkills = editSkillsInput.value.split(',').map(skill => skill.trim()).filter(skill => skill);
 
-            if (newBio) {
-                document.getElementById('bioDisplay').textContent = newBio;
+            try {
+                const success = await apiService.updateUserProfile(newBio, newSkills);
+                if (success) {
+                    document.getElementById('bioDisplay').textContent = newBio || 'No bio available.';
+                    const skillsContainer = document.getElementById('skillsDisplay');
+                    skillsContainer.innerHTML = '<h3>Skills:</h3>';
+                    if (newSkills.length > 0) {
+                        newSkills.forEach(skill => {
+                            const skillSpan = document.createElement('span');
+                            skillSpan.textContent = skill;
+                            skillsContainer.appendChild(skillSpan);
+                        });
+                    } else {
+                        skillsContainer.innerHTML += '<span>No skills listed.</span>';
+                    }
+                    editProfileModal.style.display = 'none';
+                    alert('Profile updated successfully!');
+                } else {
+                    throw new Error('Failed to update profile.');
+                }
+            } catch (error) {
+                alert(`Error updating profile: ${error.message}`);
             }
-
-            const skillsContainer = document.getElementById('skillsDisplay');
-            skillsContainer.innerHTML = '<h3>Skills</h3>';
-            newSkills.forEach(skill => {
-                const skillSpan = document.createElement('span');
-                skillSpan.textContent = skill;
-                skillsContainer.appendChild(skillSpan);
-            });
-
-            editProfileModal.style.display = 'none';
         }
 
-        
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', () => {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const questions = document.querySelectorAll('.question');
-            const answers = document.querySelectorAll('.answer');
-            const activities = document.querySelectorAll('.activity');
-
-            questions.forEach(question => {
-                const text = question.textContent.toLowerCase();
-                question.style.display = text.includes(searchInput) ? 'block' : 'none';
-            });
-
-            answers.forEach(answer => {
-                const text = answer.textContent.toLowerCase();
-                answer.style.display = text.includes(searchInput) ? 'block' : 'none';
-            });
-
-            activities.forEach(activity => {
-                const text = activity.textContent.toLowerCase();
-                activity.style.display = text.includes(searchInput) ? 'block' : 'none';
-            });
+        document.querySelector('.logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            window.location.href = 'login.html';
         });
 
-       
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadUserProfile();
+            const questions = await loadQuestions();
+            const answers = await loadAnswers();
+            document.getElementById('badgesCount').textContent = 5;
+            loadPerformanceChart(questions, answers);
+        });
     </script>
 </body>
+
 </html>

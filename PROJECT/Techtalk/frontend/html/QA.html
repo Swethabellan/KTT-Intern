@@ -7,6 +7,8 @@
     <title>TechTalk - Q&A Forum</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -43,15 +45,6 @@
         .question-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .vote-btn {
-            transition: color 0.3s, transform 0.3s;
-        }
-
-        .vote-btn:hover {
-            color: #3182ce;
-            transform: scale(1.2);
         }
 
         .btn-primary {
@@ -191,6 +184,29 @@
         .all-answers.visible {
             display: block;
         }
+        .sidebar button {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            color: #a0aec0;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.3s;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar button:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .log button i {
+            margin-right: 8px;
+        }
     </style>
 </head>
 
@@ -201,17 +217,15 @@
         </div>
         <a href="./QA.html" class="flex items-center mb-4"><span class="material-icons mr-2">home</span> Home</a>
         <a href="./userprof.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User Profile</a>
-        <a href="#" class="flex items-center mb-4 chat-menu" id="chatMenu"><span class="material-icons mr-2">chat</span> Chat</a>
+        <a href="#" class="flex items-center mb-4 chat-menu" id="chatMenu"><span class="material-icons mr-2">chat</span> All Answers</a>
         <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">label</span> Tags</a>
         <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">star</span> Badges</a>
         <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">people</span> Users</a>
-        <div class="settings-container">
-            <a href="#" class="settings-btn"><span class="material-icons mr-2">settings</span> Settings</a>
-            <ul class="dropdown-menu">
-                <li><a href="#" class="settings-option logout-btn" style="margin-left: 50px;margin-top: 30px;align-self: auto;">Logout</a></li>
-            </ul>
-        </div>
+         <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+
     </div>
+    
+
 
     <div class="flex-1 p-8">
         <div class="flex justify-between items-center mb-8">
@@ -225,7 +239,7 @@
         </div>
 
         <div id="questions-list">
-            <!-- Questions will be dynamically loaded here -->
+
         </div>
     </div>
 
@@ -255,36 +269,8 @@
                 </div>
             </div>
         </div>
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Activities</h3>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>CSS is mainly used for ...</span>
-            </div>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>Why Html is important...</span>
-            </div>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>How to handle errors while coding...</span>
-            </div>
-        </div>
-        <div>
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Top Members</h3>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>Ajith <span class="text-blue-500">-261 Points</span> <span class="text-yellow-500"></span></span>
-            </div>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>Yashwanth<span class="text-blue-500">- 234 Points</span> <span class="text-purple-500"></span></span>
-            </div>
-            <div class="text-gray-600 mb-2 flex items-center">
-                <img src="" alt="User" class="w-8 h-8 rounded-full mr-2">
-                <span>Aruna <span class="text-blue-500">-230 Points</span></span>
-            </div>
-        </div>
+       
+        
     </div>
 
     <div class="popup-overlay" id="popupOverlay">
@@ -303,7 +289,7 @@
         <div class="popup-content">
             <h2>All Answers</h2>
             <div id="answersPopupContent">
-                <!-- Answers will be dynamically loaded here -->
+                
             </div>
             <button class="btn-cancel" onclick="closeAnswersPopup()">Close</button>
         </div>
@@ -487,7 +473,7 @@
                         }).join('');
                     }
 
-                    // Display all answers in a toggleable section
+                    
                     let allAnswersHtml = '';
                     if (answers.length > 0) {
                         allAnswersHtml = answers.map(answer => {
@@ -517,11 +503,7 @@
                                     <div class="text-sm text-gray-500">Asked: ${formattedDate}</div>
                                 </div>
                             </div>
-                            <div class="flex space-x-4">
-                                <button class="vote-btnup"><span class="material-icons">thumb_up</span></button>
-                                <span class="text-gray-600">${question.likes || 0}</span>
-                                <button class="vote-btndown"><span class="material-icons">thumb_down</span></button>
-                            </div>
+                            
                         </div>
                         <h2 class="text-xl font-semibold text-gray-800 mt-4">${question.title || 'Untitled'}</h2>
                         <p class="text-gray-600 mt-2" id="text">${question.description || ''}</p>
@@ -642,7 +624,7 @@
 
             if (submittedAnswer) {
                 input.value = '';
-                await loadQuestions(); // Reload questions to update answers
+                await loadQuestions(); 
                 await updateCommentCounts();
                 await updateCounts();
             } else {
@@ -858,9 +840,10 @@
             }
         });
 
-        document.querySelector('.logout-btn').addEventListener('click', (e) => {
+         document.querySelector('.logout-btn').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('token');
+            localStorage.removeItem('userId'); 
             window.location.href = 'login.html';
         });
     </script>
