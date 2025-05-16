@@ -63,7 +63,7 @@
           window.location.href = 'QA.html';
         } else {
           errorMessage.textContent = data.error || 'Login failed';
-          document.getElementById('loginForm').reset();
+          document.getElementById('loginForm')
         }
       } catch (error) {
         errorMessage.textContent = 'An error occurred. Please try again.';

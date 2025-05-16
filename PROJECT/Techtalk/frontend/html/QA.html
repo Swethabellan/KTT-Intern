@@ -207,6 +207,8 @@
         .log button i {
             margin-right: 8px;
         }
+
+       
     </style>
 </head>
 
@@ -216,11 +218,11 @@
             <span class="material-icons mr-2">forum</span> TechTalk
         </div>
         <a href="./QA.html" class="flex items-center mb-4"><span class="material-icons mr-2">home</span> Home</a>
-        <a href="./userprof.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User Profile</a>
+        <a href="./demo.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User Profile</a>
         <a href="#" class="flex items-center mb-4 chat-menu" id="chatMenu"><span class="material-icons mr-2">chat</span> All Answers</a>
-        <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">label</span> Tags</a>
-        <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">star</span> Badges</a>
-        <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">people</span> Users</a>
+        <!-- <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">label</span> Tags</a> -->
+        <!-- <a href="#" class="flex items-center mb-4"><span class="material-icons mr-2">star</span> Badges</a> -->
+        <a href="./users.html" class="flex items-center mb-4"><span class="material-icons mr-2">people</span> Users</a>
          <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
 
     </div>
@@ -233,7 +235,6 @@
             <div class="flex space-x-4">
                 <button class="text-gray-600 font-medium">Recent Questions</button>
                 <button class="text-gray-600 font-medium">Most Answered</button>
-                <button class="text-gray-600 font-medium">Answers</button>
                 <button class="text-gray-600 font-large">Unanswered</button>
             </div>
         </div>
@@ -244,8 +245,8 @@
     </div>
 
     <div class="w-80 p-8">
-        <div class="flex justify-between items-center mb-6">
-            <button class="btn-primary px-4 py-2 rounded-lg" onclick="openPopup()">Ask a Question</button>
+        <div class="flex justify-between items-center mb-6" id="add-btn">
+            <button class="btn-primary px-4 py-2  rounded-lg"  id="add-btn" onclick="openPopup()">Ask a Question</button>
         </div>
         <div class="user-profile p-4 mb-6">
             <div class="flex justify-between mb-4">
@@ -427,121 +428,246 @@
         };
 
         function formatDate(date) {
-            return `${date.getDate()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-        }
+    const day = date.getDate();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    
+    hours = hours % 12;
+    hours = hours ? hours : 12; 
+    hours = hours.toString().padStart(2, '0');
+    
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+}
+        // async function loadQuestions() {
+        //     try {
+        //         const token = localStorage.getItem('token');
+        //         if (!token) {
+        //             window.location.href = 'login.html';
+        //             return;
+        //         }
+        //         const questions = await apiService.fetchQuestions();
+        //         const questionsList = document.getElementById('questions-list');
+        //         questionsList.innerHTML = '';
 
-        async function loadQuestions() {
-            try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-                const questions = await apiService.fetchQuestions();
-                const questionsList = document.getElementById('questions-list');
-                questionsList.innerHTML = '';
+        //         for (const question of questions) {
+        //             const answers = await apiService.fetchAnswers(question.id);
+        //             const questionDiv = document.createElement('div');
+        //             questionDiv.className = 'question-card p-6 mb-6';
+        //             questionDiv.setAttribute('data-question-id', question.id);
 
-                for (const question of questions) {
-                    const answers = await apiService.fetchAnswers(question.id);
-                    const questionDiv = document.createElement('div');
-                    questionDiv.className = 'question-card p-6 mb-6';
-                    questionDiv.setAttribute('data-question-id', question.id);
+        //             const createdAt = new Date(question.createdAt);
+        //             const formattedDate = formatDate(createdAt);
 
-                    const createdAt = new Date(question.createdAt);
-                    const formattedDate = formatDate(createdAt);
-
-                    // Display first two answers (if any)
-                    let answersPreviewHtml = '';
-                    if (answers.length > 0) {
-                        const firstTwoAnswers = answers.slice(0, 2);
-                        answersPreviewHtml = firstTwoAnswers.map(answer => {
-                            const answerCreatedAt = new Date(answer.createdAt);
-                            const formattedAnswerDate = formatDate(answerCreatedAt);
-                            return `
-                                <div class="answer-item">
-                                    <div class="answer-content">
-                                        <div class="flex items-center">
-                                            <div>
-                                                <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
-                                                <p class="text-gray-600">${answer.content}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="answer-timestamp">${formattedAnswerDate}</span>
-                                </div>
-                            `;
-                        }).join('');
-                    }
+        //             // Display first two answers (if any)
+        //             let answersPreviewHtml = '';
+        //             if (answers.length > 0) {
+        //                 const firstTwoAnswers = answers.slice(0, 2);
+        //                 answersPreviewHtml = firstTwoAnswers.map(answer => {
+        //                     const answerCreatedAt = new Date(answer.createdAt);
+        //                     const formattedAnswerDate = formatDate(answerCreatedAt);
+        //                     return `
+        //                         <div class="answer-item">
+        //                             <div class="answer-content">
+        //                                 <div class="flex items-center">
+        //                                     <div>
+        //                                         <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
+        //                                         <p class="text-gray-600">${answer.content}</p>
+        //                                     </div>
+        //                                 </div>
+        //                             </div>
+        //                             <span class="answer-timestamp">${formattedAnswerDate}</span>
+        //                         </div>
+        //                     `;
+        //                 }).join('');
+        //             }
 
                     
-                    let allAnswersHtml = '';
-                    if (answers.length > 0) {
-                        allAnswersHtml = answers.map(answer => {
-                            const answerCreatedAt = new Date(answer.createdAt);
-                            const formattedAnswerDate = formatDate(answerCreatedAt);
-                            return `
-                                <div class="answer-item">
-                                    <div class="answer-content">
-                                        <div class="flex items-center">
-                                            <div>
-                                                <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
-                                                <p class="text-gray-600">${answer.content}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="answer-timestamp">${formattedAnswerDate}</span>
-                                </div>
-                            `;
-                        }).join('');
-                    }
+        //             let allAnswersHtml = '';
+        //             if (answers.length > 0) {
+        //                 allAnswersHtml = answers.map(answer => {
+        //                     const answerCreatedAt = new Date(answer.createdAt);
+        //                     const formattedAnswerDate = formatDate(answerCreatedAt);
+        //                     return `
+        //                         <div class="answer-item">
+        //                             <div class="answer-content">
+        //                                 <div class="flex items-center">
+        //                                     <div>
+        //                                         <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
+        //                                         <p class="text-gray-600">${answer.content}</p>
+        //                                     </div>
+        //                                 </div>
+        //                             </div>
+        //                             <span class="answer-timestamp">${formattedAnswerDate}</span>
+        //                         </div>
+        //                     `;
+        //                 }).join('');
+        //             }
 
-                    questionDiv.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div>
-                                    <div class="font-semibold text-gray-800">${question.User?.username || 'Unknown User'}</div>
-                                    <div class="text-sm text-gray-500">Asked: ${formattedDate}</div>
+        //             questionDiv.innerHTML = `
+        //                 <div class="flex items-center justify-between">
+        //                     <div class="flex items-center">
+        //                         <div>
+        //                             <div class="font-semibold text-gray-800">${question.User?.username || 'Unknown User'}</div>
+        //                             <div class="text-sm text-gray-500">Asked: ${formattedDate}</div>
+        //                         </div>
+        //                     </div>
+                            
+        //                 </div>
+        //                 <h2 class="text-xl font-semibold text-gray-800 mt-4">${question.title || 'Untitled'}</h2>
+        //                 <p class="text-gray-600 mt-2" id="text">${question.description || ''}</p>
+        //                 <div class="answers-preview">
+        //                     ${answersPreviewHtml}
+        //                 </div>
+        //                 <div class="all-answers" id="all-answers-${question.id}">
+        //                     ${allAnswersHtml}
+        //                 </div>
+        //                 <div style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
+        //                     <div style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+        //                         <button class="text-gray-600 comment-toggle" data-question-id="${question.id}">
+        //                             <span class="material-icons mr-1">chat</span>
+        //                             <span class="comment-count">${answers.length}</span>
+        //                         </button>
+        //                     </div>
+                           
+        //                     <div style="position: relative; flex: 1;">
+        //                         <input type="text" placeholder="Type your answer..." style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
+        //                         <button style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;" onclick="submitAnswer(${question.id}, this)">Answer</button>
+        //                     </div>
+        //                 </div>
+        //             `;
+        //             questionsList.appendChild(questionDiv);
+        //         }
+
+        //         document.querySelectorAll('.comment-toggle').forEach(button => {
+        //             button.addEventListener('click', () => {
+        //                 const questionId = button.getAttribute('data-question-id');
+        //                 const allAnswersDiv = document.getElementById(`all-answers-${questionId}`);
+        //                 allAnswersDiv.classList.toggle('visible');
+        //             });
+        //         });
+        //     } catch (error) {
+        //         console.error('Error loading questions:', error.message);
+        //         document.getElementById('questions-list').innerHTML = '<p>Error loading questions. Please try again later.</p>';
+        //     }
+        // }
+        async function loadQuestions() {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+        const questions = await apiService.fetchQuestions();
+        const questionsList = document.getElementById('questions-list');
+        questionsList.innerHTML = '';
+
+        for (const question of questions) {
+            const answers = await apiService.fetchAnswers(question.id);
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-card p-6 mb-6';
+            questionDiv.setAttribute('data-question-id', question.id);
+
+            const createdAt = new Date(question.createdAt);
+            const formattedDate = formatDate(createdAt);
+
+            // Display first two answers in the preview (if any)
+            let answersPreviewHtml = '';
+            const previewAnswersCount = 2; // Number of answers to show in preview
+            const previewAnswers = answers.slice(0, previewAnswersCount);
+            if (previewAnswers.length > 0) {
+                answersPreviewHtml = previewAnswers.map(answer => {
+                    const answerCreatedAt = new Date(answer.createdAt);
+                    const formattedAnswerDate = formatDate(answerCreatedAt);
+                    return `
+                        <div class="answer-item">
+                            <div class="answer-content">
+                                <div class="flex items-center">
+                                    <div>
+                                        <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
+                                        <p class="text-gray-600">${answer.content}</p>
+                                    </div>
                                 </div>
                             </div>
-                            
-                        </div>
-                        <h2 class="text-xl font-semibold text-gray-800 mt-4">${question.title || 'Untitled'}</h2>
-                        <p class="text-gray-600 mt-2" id="text">${question.description || ''}</p>
-                        <div class="answers-preview">
-                            ${answersPreviewHtml}
-                        </div>
-                        <div class="all-answers" id="all-answers-${question.id}">
-                            ${allAnswersHtml}
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
-                            <div style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
-                                <button class="text-gray-600 comment-toggle" data-question-id="${question.id}">
-                                    <span class="material-icons mr-1">chat</span>
-                                    <span class="comment-count">${answers.length}</span>
-                                </button>
-                            </div>
-                           
-                            <div style="position: relative; flex: 1;">
-                                <input type="text" placeholder="Type your answer..." style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
-                                <button style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;" onclick="submitAnswer(${question.id}, this)">Answer</button>
-                            </div>
+                            <span class="answer-timestamp">${formattedAnswerDate}</span>
                         </div>
                     `;
-                    questionsList.appendChild(questionDiv);
-                }
-
-                document.querySelectorAll('.comment-toggle').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const questionId = button.getAttribute('data-question-id');
-                        const allAnswersDiv = document.getElementById(`all-answers-${questionId}`);
-                        allAnswersDiv.classList.toggle('visible');
-                    });
-                });
-            } catch (error) {
-                console.error('Error loading questions:', error.message);
-                document.getElementById('questions-list').innerHTML = '<p>Error loading questions. Please try again later.</p>';
+                }).join('');
             }
+
+            // Display remaining answers in the "All Answers" section (excluding the previewed ones)
+            let allAnswersHtml = '';
+            const remainingAnswers = answers.slice(previewAnswersCount); // Answers beyond the first two
+            if (remainingAnswers.length > 0) {
+                allAnswersHtml = remainingAnswers.map(answer => {
+                    const answerCreatedAt = new Date(answer.createdAt);
+                    const formattedAnswerDate = formatDate(answerCreatedAt);
+                    return `
+                        <div class="answer-item">
+                            <div class="answer-content">
+                                <div class="flex items-center">
+                                    <div>
+                                        <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
+                                        <p class="text-gray-600">${answer.content}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="answer-timestamp">${formattedAnswerDate}</span>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                allAnswersHtml = '<p class="text-gray-500">No additional answers to show.</p>';
+            }
+
+            questionDiv.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div>
+                            <div class="font-semibold text-gray-800">${question.User?.username || 'Unknown User'}</div>
+                            <div class="text-sm text-gray-500">Asked: ${formattedDate}</div>
+                        </div>
+                    </div>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-800 mt-4">${question.title || 'Untitled'}</h2>
+                <p class="text-gray-600 mt-2" id="text">${question.description || ''}</p>
+                <div class="answers-preview">
+                    ${answersPreviewHtml}
+                </div>
+                <div class="all-answers" id="all-answers-${question.id}">
+                    ${allAnswersHtml}
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; background: #f5f5f5; padding: 10px; border-radius: 6px;">
+                    <div style="display: flex; align-items: center; padding: 6px 12px; border-radius: 4px; background: white;">
+                        <button class="text-gray-600 comment-toggle" data-question-id="${question.id}">
+                            <span class="material-icons mr-1">chat</span>
+                            <span class="comment-count">${answers.length}</span>
+                        </button>
+                    </div>
+                    <div style="position: relative; flex: 1;">
+                        <input type="text" placeholder="Type your answer..." style="width: 100%; padding: 8px 80px 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
+                        <button style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 6px 12px; border-radius: 4px;" onclick="submitAnswer(${question.id}, this)">Answer</button>
+                    </div>
+                </div>
+            `;
+            questionsList.appendChild(questionDiv);
         }
+
+        document.querySelectorAll('.comment-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const questionId = button.getAttribute('data-question-id');
+                const allAnswersDiv = document.getElementById(`all-answers-${questionId}`);
+                allAnswersDiv.classList.toggle('visible');
+            });
+        });
+    } catch (error) {
+        console.error('Error loading questions:', error.message);
+        document.getElementById('questions-list').innerHTML = '<p>Error loading questions. Please try again later.</p>';
+    }
+}
 
         async function openAnswersPopup() {
             try {
@@ -826,26 +952,13 @@
             }
         });
 
-        const settingsBtn = document.querySelector('.settings-btn');
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-
-        settingsBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-        });
-
-        window.addEventListener('click', (e) => {
-            if (!settingsBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                dropdownMenu.style.display = 'none';
-            }
-        });
-
-         document.querySelector('.logout-btn').addEventListener('click', (e) => {
+       document.querySelector('.logout-btn').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('token');
-            localStorage.removeItem('userId'); 
+            localStorage.removeItem('userId');
             window.location.href = 'login.html';
         });
+     
     </script>
 </body>
 </html>

@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const userRoute = require('./routes/Userroute');
 const questionRoute = require('./routes/questionroute');
+const profileRoutes = require('./routes/profileroute');
+
 const db = require('./models'); // Sequelize instance with models
 const sequelize = db.sequelize;
 require('dotenv').config();
@@ -18,6 +20,7 @@ app.use(express.json());
 // Mount routes
 app.use('/api/users', userRoute);
 app.use('/api/questions', questionRoute);
+app.use('/api/profiles', profileRoutes);
 
 // Setup Sequelize associations
 const { User, Question, Answer } = db;
