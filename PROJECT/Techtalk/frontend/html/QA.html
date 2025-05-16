@@ -58,7 +58,7 @@
         }
 
         .right-panel {
-            width: 300px;
+            width: 320px;
             padding: 2rem;
             background: #f7fafc;
             overflow-y: auto;
@@ -274,6 +274,17 @@
         .sub-answer-content {
             flex: 1;
         }
+
+        .username-link {
+            color: #3182ce;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .username-link:hover {
+            color: #2b6cb0;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -283,9 +294,8 @@
             <span class="material-icons mr-2">forum</span> TechTalk
         </div>
         <a href="./QA.html" class="flex items-center mb-4"><span class="material-icons mr-2">home</span> Home</a>
-        <a href="./demo.html" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User Profile</a>
+        <a href="#" id="userProfileLink" class="flex items-center mb-4"><span class="material-icons mr-2">person</span> User Profile</a>
         <a href="#" class="flex items-center mb-4 chat-menu" id="chatMenu"><span class="material-icons mr-2">chat</span> All Answers</a>
-  <!-- <a href="./users.html" class="flex items-center mb-4"><span class="material-icons mr-2">people</span> Users</a> -->
         <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
 
@@ -554,7 +564,7 @@
                                     <div class="answer-content">
                                         <div class="flex items-center">
                                             <div>
-                                                <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
+                                                <a href="demo.html?userId=${answer.User?.id || 'unknown'}" class="username-link font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</a>
                                                 <p class="text-gray-600">${answer.content}</p>
                                             </div>
                                         </div>
@@ -569,7 +579,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div>
-                                    <div class="font-semibold text-gray-800">${question.User?.username || 'Unknown User'}</div>
+                                    <a href="demo.html?userId=${question.User?.id || 'unknown'}" class="username-link font-semibold text-gray-800">${question.User?.username || 'Unknown User'}</a>
                                     <div class="text-sm text-gray-500">Asked: ${formattedDate}</div>
                                 </div>
                             </div>
@@ -610,7 +620,38 @@
                 document.getElementById('questions-list').innerHTML = '<p>Error loading questions. Please try again later.</p>';
             }
         }
+async function loadUserProfile() {
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        usernameDisplay.classList.add('loading');
 
+        try {
+            const profile = await apiService.fetchUserProfile();
+            if (profile && profile.username) {
+                usernameDisplay.classList.remove('loading');
+                usernameDisplay.textContent = profile.username;
+                localStorage.setItem('userId', profile.id);
+                document.getElementById('bioDisplay').textContent = profile.bio || 'No bio available.';
+                const skillsContainer = document.getElementById('skillsDisplay');
+                skillsContainer.innerHTML = '<h3>Skills:</h3>';
+                if (profile.skills && profile.skills.length > 0) {
+                    profile.skills.forEach(skill => {
+                        const skillSpan = document.createElement('span');
+                        skillSpan.textContent = skill;
+                        skillsContainer.appendChild(skillSpan);
+                    });
+                } else {
+                    skillsContainer.innerHTML += '<span>No skills listed.</span>';
+                }
+            } else {
+                throw new Error('No profile data returned.');
+            }
+        } catch (error) {
+            usernameDisplay.classList.remove('loading');
+            usernameDisplay.innerHTML = `<span class="error-text">${error.message}</span><button class="retry-btn" onclick="loadUserProfile()">Retry</button>`;
+            document.getElementById('bioDisplay').textContent = 'Error loading bio';
+            document.getElementById('skillsDisplay').innerHTML = '<h3>Skills:</h3><span>Error loading skills</span>';
+        }
+    }
         async function openRecentQuestionsPopup() {
             try {
                 const questions = await apiService.fetchQuestions();
@@ -629,7 +670,7 @@
                         questionDiv.innerHTML = `
                             <span class="serial-number">${index + 1}.</span>
                             <div class="popup-question-content">
-                                <div class="font-bold capitalize text-xl text-gray-800">${question.User?.username || 'Unknown User'}</div>
+                                <a href="demo.html?userId=${question.User?.id || 'unknown'}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username || 'Unknown User'}</a>
                                 <h3 class="text-lg font-semibold text-gray-700 mt-1">Q: ${question.title || 'Untitled'}</h3>
                                 <p class="text-gray-600 mt-1">${question.description || ''}</p>
                             </div>
@@ -689,7 +730,7 @@
                                       <div class="sub-answer-item">
                                           <span class="sub-answer-number">${ansIndex + 1}.</span>
                                           <div class="sub-answer-content">
-                                              <div class="font-semibold text-gray-700">${answer.User?.username || 'Unknown User'}</div>
+                                              <a href="demo.html?userId=${answer.User?.id || 'unknown'}" class="username-link font-semibold text-gray-700">${answer.User?.username || 'Unknown User'}</a>
                                               <p class="text-gray-600">${answer.content}</p>
                                               <span class="answer-timestamp mt-1">${formattedAnswerDate}</span>
                                           </div>
@@ -703,7 +744,7 @@
                         questionDiv.innerHTML = `
                             <span class="serial-number">${index + 1}.</span>
                             <div class="popup-question-content">
-                                <div class="font-bold capitalize text-xl text-gray-800">${question.User?.username || 'Unknown User'}</div>
+                                <a href="demo.html?userId=${question.User?.id || 'unknown'}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username || 'Unknown User'}</a>
                                 <h3 class="text-lg font-semibold text-gray-700 mt-1">Q: ${question.title || 'Untitled'}</h3>
                                 <p class="text-gray-600 mt-1">${question.description || ''}</p>
                                 <div class="text-sm text-gray-500 mt-2">Total Answers: ${answers.length}</div>
@@ -761,7 +802,7 @@
                         questionDiv.innerHTML = `
                             <span class="serial-number">${index + 1}.</span>
                             <div class="popup-question-content">
-                                <div class="font-bold capitalize text-xl text-gray-800">${question.User?.username || 'Unknown User'}</div>
+                                <a href="demo.html?userId=${question.User?.id || 'unknown'}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username || 'Unknown User'}</a>
                                 <h3 class="text-lg font-semibold text-gray-700 mt-1">Q: ${question.title || 'Untitled'}</h3>
                                 <p class="text-gray-600 mt-1">${question.description || ''}</p>
                             </div>
@@ -806,7 +847,7 @@
                                     <div class="answer-content">
                                         <div class="flex items-center">
                                             <div>
-                                                <div class="font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</div>
+                                                <a href="demo.html?userId=${answer.User?.id || 'unknown'}" class="username-link font-semibold text-gray-800">${answer.User?.username || 'Unknown User'}</a>
                                                 <p class="text-gray-600">${answer.content}</p>
                                             </div>
                                         </div>
@@ -1045,6 +1086,15 @@
         let pollingInterval;
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Dynamically set the User Profile link to the logged-in user's profile
+            const userId = localStorage.getItem('userId');
+            const userProfileLink = document.getElementById('userProfileLink');
+            if (userId) {
+                userProfileLink.href = `demo.html?userId=${userId}`;
+            } else {
+                userProfileLink.href = 'demo.html'; // Fallback if no userId is found
+            }
+
             fetchTotalUsers();
             fetchTotalQuestions();
             fetchAnsweredQuestions();
