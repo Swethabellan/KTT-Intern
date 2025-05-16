@@ -4,7 +4,46 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { User } = require('../models');
 const authenticateToken = require('../middleware/auth');
+router.get('/', authenticateToken, async (req, res) => {
+    try {
+        const users = await User.findAll({
+            attributes: ['id', 'username']
+        });
+        res.json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ message: 'Server error while fetching users' });
+    }
+});
+router.get('/:userId/stats', authenticateToken, async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const [questions] = await db.query('SELECT COUNT(*) as count FROM Questions WHERE userId = ?', [userId]);
+        const [answers] = await db.query('SELECT COUNT(*) as count FROM Answers WHERE userId = ?', [userId]);
+        res.json({
+            questionsCount: questions[0].count,
+            answersCount: answers[0].count
+        });
+    } catch (error) {
+        console.error('Error fetching user stats:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
+router.get('/:userId/skills', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const skills = await Skill.findAll({
+            where: { userId },
+            attributes: ['skill']
+        });
+        const skillList = skills.map(skill => skill.skill);
+        res.json(skillList);
+    } catch (error) {
+        console.error('Error fetching user skills:', error);
+        res.status(500).json({ message: 'Server error while fetching user skills' });
+    }
+});
 router.post('/signup', async (req, res) => {
   try {
     const { name, username, email, password, role } = req.body;

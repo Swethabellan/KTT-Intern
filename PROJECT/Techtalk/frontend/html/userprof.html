@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
+    <title>TechTalk - User Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -29,12 +29,32 @@
         }
 
         .sidebar {
-            width: 320px;
-            background-color: #1a202c;
-            padding: 20px;
+            background: #1a202c;
+            color: white;
+            min-height: 100vh;
+            padding: 1.5rem;
+            border-radius: 0 20px 20px 0;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            width: 256px;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
+        }
+
+        .sidebar a {
+            color: #a0aec0;
+            padding: 8px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .sidebar a.active {
+            color: #ffffff;
+            font-weight: bold;
         }
 
         .sidebar button {
@@ -62,499 +82,351 @@
         }
 
         .main-content {
-            margin-left: 310px;
+            margin-left: 256px;
             flex: 1;
-            border-right: 1px solid #e0e0e0;
-            padding: 20px;
+            padding: 15px;
             overflow-y: auto;
             height: 100vh;
         }
 
-        .profile-container {
+        .user-container {
             background-color: #fff;
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: all 0.3s ease;
             margin-bottom: 10px;
-        }
-
-        .profile-header {
+            margin-left: 2px;
             padding: 20px;
-            border-bottom: 2px solid #242121a1;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            position: relative;
         }
 
-        .profile-info h2 {
-            font-size: 32px;
+        .user-container h2 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 26px;
             color: #1f1e1e;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             font-weight: 700;
-            margin-left: 40px;
             text-transform: uppercase;
-            font-family:'Times New Roman', Times, serif;
             letter-spacing: 1px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
-        .stats {
-            margin-top: 15px;
-            font-size: 16px;
-            color: #333;
+        .activity-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .activity-item {
             background-color: #f9f9f9;
-            padding: 10px 15px;
             border-radius: 10px;
-            display: flex;
-            gap: 22px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .stats span {
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .stats i {
-            color: #19181893;
-        }
-
-        .bio {
-            margin-top: 20px;
-            font-size: 15px;
-            color: #444;
-            line-height: 1.6;
-            background-color: #fff;
             padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #0e0e0e;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #1a202c;
         }
 
-        .skills {
-            margin-top: 20px;
-        }
-
-        .skills h3 {
+        .activity-item h3 {
             font-size: 18px;
             color: #221f1f;
             margin-bottom: 10px;
             font-weight: 600;
-            letter-spacing: 0.5px;
         }
 
-        .skills span {
+        .activity-item p {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .bio-section, .skills-section {
+            margin-top: 20px;
+        }
+
+        .bio-section p, .skills-section p {
+            font-size: 16px;
+            color: #a0aec0;
+            line-height: 1.5;
+        }
+
+        .skills-tags span {
             display: inline-block;
-            background-color: #1312129e;
-            color: #fff;
-            padding: 8px 15px;
-            border-radius: 20px;
-            margin: 5px;
-            font-size: 14px;
+            background-color: #ffffff;
+            color: #1a202c;
+            padding: 6px 12px;
+            border-radius: 15px;
+            margin: 4px;
+            font-size: 13px;
             font-weight: 500;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .skills span:hover {
-            transform: translateY(-3px);
+        .skills-tags span:hover {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
-        .action-buttons {
-            position: absolute;
-            right: 20px;
-            top: 20px;
+        .username {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .stats-section {
             display: flex;
-            gap: 10px;
-            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            color: #a0aec0;
+            font-size: 16px;
         }
 
-        .contact-btn,
         .edit-profile-btn {
-            background-color: #e74c3c;
-            color: #fff;
-            border: none;
+            display: inline-block;
+            background: linear-gradient(90deg, #3182ce, #63b3ed);
+            color: white;
             padding: 8px 16px;
-            border-radius: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
             cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-        }
-
-        .contact-btn {
-            background-color: #3a3935;
-        }
-
-        .contact-btn:hover {
-            background-color: #2a25258c;
-        }
-
-        .edit-profile-btn {
-            background-color: #3498db;
+            transition: background 0.3s;
         }
 
         .edit-profile-btn:hover {
-            background-color: #2980b9;
+            background: linear-gradient(90deg, #2b6cb0, #4a90e2);
         }
 
-        .search-bar {
-            padding: 15px 15px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .search-bar input {
-            width: 50%;
-            padding: 10px;
-            align-items: center;
-            border: 1px solid #0c0c0c;
-            border-radius: 20px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 15px;
-            font-size: 16px;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .tab.active {
-            color: #1a202c;
-            border-bottom: 2px solid #1a202c;
-            font-weight: bold;
-        }
-
-        .tab:hover {
-            background-color: #f9f9f9;
-        }
-
-        .tab-content {
-            padding: 20px;
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .question,
-        .answer,
-        .activity {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .question p,
-        .answer p,
-        .activity p {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .question-meta,
-        .answer-meta,
-        .activity-meta {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .question-meta i,
-        .answer-meta i,
-        .activity-meta i {
-            margin-right: 5px;
-        }
-
-        .question-meta span,
-        .answer-meta span,
-        .activity-meta span {
-            margin-right: 10px;
-        }
-
-        .modal {
+        .popup-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            z-index: 100;
         }
 
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
+        .popup-content {
+            background: white;
+            padding: 2rem;
             border-radius: 10px;
-            width: 400px;
-            position: relative;
+            width: 600px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .modal-content h3 {
-            font-size: 20px;
+        .popup-content h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
             color: #333;
-            margin-bottom: 15px;
         }
 
-        .modal-content label {
-            display: block;
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .modal-content input,
-        .modal-content textarea {
+        .popup-content input,
+        .popup-content textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 14px;
-            outline: none;
         }
 
-        .modal-content button {
-            background-color: #1b1919;
-            color: #fff;
+        .popup-content button {
+            padding: 0.5rem 1rem;
             border: none;
-            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
         }
 
-        .modal-content button:hover {
-            background-color: #2f2c2cc4;
+        .popup-content .btn-submit {
+            background: #3182ce;
+            color: white;
         }
 
-        .modal-content button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .error-text {
-            color: #e74c3c;
-            font-size: 14px;
-            font-style: italic;
-        }
-
-        .retry-btn {
-            color: #3498db;
-            background: none;
-            border: none;
-            text-decoration: underline;
-            cursor: pointer;
-            font-size: 14px;
-            margin-left: 5px;
-        }
-
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #ccc;
-            border-top: 2px solid #666;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 8px;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        .popup-content .btn-cancel {
+            background: #e53e3e;
+            color: white;
+            margin-left: 1rem;
         }
     </style>
 </head>
-
 <body>
     <div class="profile-wrapper">
         <div class="sidebar">
-            <div class="profile-container">
-                <div class="profile-header">
-                    <div class="profile-info">
-                        <h2 id="usernameDisplay">Loading...</h2>
-                        <div class="stats">
-                            <span><i class="fas fa-question-circle"></i> Questions: <span
-                                    id="questionsCount">0</span></span>
-                            <span><i class="fas fa-comment"></i> Answers: <span id="answersCount">0</span></span>
-                        </div>
-                        <br>
-                        <h3>Bio:</h3>
-                        <div class="bio" id="bioDisplay">Loading...</div>
-                        <div class="skills" id="skillsDisplay">
-                            <h3>Skills:</h3>
-                            <span>Loading...</span>
-                        </div>
-                    </div>
+            <div class="text-2xl font-bold text-white mb-8 flex items-center">
+                <span class="material-icons mr-2">forum</span> TechTalk
+            </div>
+            <div class="username" id="username">Username</div>
+            <div class="bio-section">
+                <p id="bio">Bio not set</p>
+            </div>
+            <div class="skills-section">
+                <strong>Skills:</strong>
+                <div class="skills-tags" id="skills">
+                    <span>No skills listed</span>
                 </div>
             </div>
+            <div class="stats-section">
+                <div>Questions: <span id="questions-count">0</span></div>
+                <div>Answers: <span id="answers-count">0</span></div>
+            </div>
+            <div class="edit-profile-btn" onclick="openEditProfileModal()">Edit Profile</div>
+            <a href="./QA.html" class="nav-link flex items-center mb-4" data-page="QA.html"><span class="material-icons mr-2">home</span> Home</a>
+            <a href="./demo.html" class="nav-link flex items-center mb-4" data-page="userprof.html"><span class="material-icons mr-2">person</span> User Profile</a>
+            <a href="#" class="nav-link flex items-center mb-4 chat-menu" id="chatMenu" data-page="chatMenu"><span class="material-icons mr-2">chat</span> All Answers</a>
+            <a href="./users.html" class="nav-link flex items-center mb-4" data-page="users.html"><span class="material-icons mr-2">people</span> Users</a>
             <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
 
         <div class="main-content">
-            <div class="profile-container">
-                <div class="profile-header">
-                    <h2 style="margin-left: 20px;">Profile</h2>
-                    <div class="action-buttons">
-                        <button class="contact-btn" id="contactBtn">Contact Me</button>
-                        <a href="#" class="edit-profile-btn" id="editProfileBtn">Edit Profile</a>
-                    </div>
-                </div>
-
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Search questions or activity...">
-                </div>
-
-                <div class="tabs">
-                    <div class="tab active" data-tab="questions">Questions Asked</div>
-                    <div class="tab" data-tab="answers">Answers Provided</div>
-                    <div class="tab" data-tab="activity">Recent Activity</div>
-                </div>
-
-                <div class="tab-content active" id="questions">
-                    <div class="question">
-                        <p>Loading...</p>
-                        <div class="question-meta">
-                            <span><i class="fas fa-clock"></i>Loading...</span>
-                            <span><i class="fas fa-eye"></i>0 views</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="answers">
-                    <div class="answer">
-                        <p>Loading...</p>
-                        <div class="answer-meta">
-                            <span><i class="fas fa-clock"></i>Loading...</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="activity">
-                    <div class="activity">
-                        <p>Loading...</p>
-                        <div class="activity-meta">
-                            <span><i class="fas fa-clock"></i>Loading...</span>
-                        </div>
-                    </div>
+            <div class="user-container">
+                <h2>Your Activity</h2>
+                <div class="activity-section" id="activity-list">
+                    <!-- Activity will be dynamically loaded here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal" id="contactModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeContactModal">×</span>
-            <h3>Contact User</h3>
-            <label for="name">Name</label>
-            <input type="text" id="name" placeholder="Your Name">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Your Email">
-            <label for="message">Message</label>
-            <textarea id="message" rows="4" placeholder="Your Message"></textarea>
-            <button onclick="alert('Message sent! (This is a demo)')">Send Message</button>
-        </div>
-    </div>
-
-    <div class="modal" id="editProfileModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeEditProfileModal">×</span>
-            <h3>Edit Profile</h3>
-            <label for="editBio">Bio</label>
-            <textarea id="editBio" rows="4" placeholder="Enter your bio"></textarea>
-            <label for="editSkills">Skills (comma-separated)</label>
-            <input type="text" id="editSkills" placeholder="e.g., Html,Css,Js">
-            <button id="saveProfileBtn" onclick="saveProfile()">Save Changes</button>
+    <div class="popup-overlay" id="editProfileModal">
+        <div class="popup-content">
+            <h2>Edit Profile</h2>
+            <input type="text" id="editBio" placeholder="Enter your bio">
+            <input type="text" id="editSkills" placeholder="Enter skills (comma-separated)">
+            <button class="btn-submit" onclick="saveProfile()">Save</button>
+            <button class="btn-cancel" onclick="closeEditProfileModal()">Cancel</button>
         </div>
     </div>
 
     <script>
         const apiService = {
-            async fetchUserProfile(attempt = 1, maxAttempts = 3) {
+            async fetchUserProfile() {
                 try {
                     const token = localStorage.getItem('token');
-                    if (!token) {
-                        throw new Error('No token found. Please log in.');
+                    const userId = localStorage.getItem('userId');
+                    if (!token || !userId) {
+                        console.error('No token or userId found. Redirecting to login.html');
+                        window.location.href = 'login.html';
+                        return null;
                     }
-                    const response = await fetch('http://127.0.0.1:3000/api/users/profile', {
+                    console.log(`Fetching profile for user ${userId}`);
+                    const response = await fetch(`http://127.0.0.1:3000/api/users/users/${userId}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`
                         }
                     });
+                    console.log('Fetch profile response status:', response.status);
                     if (!response.ok) {
-                        if (response.status === 401) {
-                            localStorage.removeItem('token');
-                            throw new Error('Session expired. Please log in again.');
-                        }
                         const errorData = await response.json().catch(() => ({}));
-                        throw new Error(`Failed to fetch profile: ${response.status} ${errorData.message || ''}`);
+                        console.error('Fetch profile failed with status:', response.status, 'Error data:', errorData);
+                        throw new Error(`Failed to fetch user profile: ${response.status} ${errorData.message || ''}`);
                     }
-                    const profile = await response.json();
-                    console.log('Fetched user profile:', profile);
-                    return profile;
+                    const data = await response.json();
+                    console.log('Fetched user profile:', data);
+                    return data;
                 } catch (error) {
-                    console.error(`Attempt ${attempt}/${maxAttempts} - Error fetching profile:`, error.message);
-                    if (error.message.includes('Session expired') || error.message.includes('No token found')) {
-                        window.location.href = 'login.html';
-                        return null;
-                    }
-                    if (attempt < maxAttempts) {
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                        return await this.fetchUserProfile(attempt + 1, maxAttempts);
-                    }
-                    throw new Error(error.message);
+                    console.error('Error fetching user profile:', error.message);
+                    return null;
                 }
             },
 
-            async updateUserProfile(bio, skills, attempt = 1, maxAttempts = 3) {
+            async fetchUserStats(userId) {
                 try {
                     const token = localStorage.getItem('token');
                     if (!token) {
-                        throw new Error('No token found. Please log in.');
+                        console.error('No token found. Redirecting to login.html');
+                        window.location.href = 'login.html';
+                        return { questionsCount: 0, answersCount: 0 };
                     }
-                    const saveProfileBtn = document.getElementById('saveProfileBtn');
-                    saveProfileBtn.disabled = true;
-                    saveProfileBtn.classList.add('loading');
+                    console.log(`Fetching stats for user ${userId}`);
+                    const response = await fetch(`http://127.0.0.1:3000/api/users/users/${userId}/stats`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    console.log(`Stats fetch response status for user ${userId}:`, response.status);
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        console.error(`Failed to fetch stats for user ${userId}:`, { status: response.status, message: errorData.message || 'Unknown error' });
+                        throw new Error(`Failed to fetch user stats: ${response.status} ${errorData.message || ''}`);
+                    }
+                    const data = await response.json();
+                    console.log(`Stats for user ${userId}:`, data);
+                    return {
+                        questionsCount: parseInt(data.questionsCount, 10) || 0,
+                        answersCount: parseInt(data.answersCount, 10) || 0
+                    };
+                } catch (error) {
+                    console.error(`Error fetching user stats for user ${userId}:`, error.message);
+                    return { questionsCount: 0, answersCount: 0 };
+                }
+            },
 
-                    console.log('Sending profile update:', { bio, skills });
-                    const response = await fetch('http://127.0.0.1:3000/api/users/profile', {
+            async fetchUserActivity(userId) {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        console.error('No token found. Redirecting to login.html');
+                        window.location.href = 'login.html';
+                        return { questions: [], answers: [] };
+                    }
+                    console.log(`Fetching activity for user ${userId}`);
+                    const questionsResponse = await fetch(`http://127.0.0.1:3000/api/users/users/${userId}/questions`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!questionsResponse.ok) {
+                        const errorData = await questionsResponse.json().catch(() => ({}));
+                        console.error('Failed to fetch questions:', errorData);
+                        throw new Error(`Failed to fetch questions: ${questionsResponse.status}`);
+                    }
+                    const questions = await questionsResponse.json();
+
+                    const answersResponse = await fetch(`http://127.0.0.1:3000/api/users/users/${userId}/answers`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!answersResponse.ok) {
+                        const errorData = await answersResponse.json().catch(() => ({}));
+                        console.error('Failed to fetch answers:', errorData);
+                        throw new Error(`Failed to fetch answers: ${answersResponse.status}`);
+                    }
+                    const answers = await answersResponse.json();
+
+                    console.log(`Activity for user ${userId}:`, { questions, answers });
+                    return { questions, answers };
+                } catch (error) {
+                    console.error('Error fetching user activity:', error.message);
+                    return { questions: [], answers: [] };
+                }
+            },
+
+            async updateUserProfile(bio, skills) {
+                try {
+                    const token = localStorage.getItem('token');
+                    const userId = localStorage.getItem('userId');
+                    if (!token || !userId) {
+                        console.error('No token or userId found. Redirecting to login.html');
+                        window.location.href = 'login.html';
+                        return false;
+                    }
+                    console.log(`Updating profile for user ${userId}:`, { bio, skills });
+                    const response = await fetch(`http://127.0.0.1:3000/api/users/users/${userId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -562,400 +434,166 @@
                         },
                         body: JSON.stringify({ bio, skills })
                     });
-
+                    console.log('Update profile response status:', response.status);
                     if (!response.ok) {
-                        if (response.status === 401) {
-                            localStorage.removeItem('token');
-                            throw new Error('Session expired. Please log in again.');
-                        }
                         const errorData = await response.json().catch(() => ({}));
-                        throw new Error(`Failed to update profile: ${response.status} ${errorData.message || 'Unknown error'}`);
+                        console.error('Update profile failed with status:', response.status, 'Error data:', errorData);
+                        throw new Error(`Failed to update user profile: ${response.status} ${errorData.message || ''}`);
                     }
-
-                    const result = await response.json();
-                    console.log('Profile update response:', result);
-
-                    const updatedProfile = await this.fetchUserProfile();
-                    console.log('Fetched updated profile after save:', updatedProfile);
-
+                    console.log('Profile updated successfully');
                     return true;
                 } catch (error) {
-                    console.error(`Attempt ${attempt}/${maxAttempts} - Error updating profile:`, error.message);
-                    if (error.message.includes('Session expired') || error.message.includes('No token found')) {
-                        window.location.href = 'login.html';
-                        return false;
-                    }
-                    if (attempt < maxAttempts) {
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                        return await this.updateUserProfile(bio, skills, attempt + 1, maxAttempts);
-                    }
-                    throw new Error(error.message);
-                } finally {
-                    const saveProfileBtn = document.getElementById('saveProfileBtn');
-                    saveProfileBtn.disabled = false;
-                    saveProfileBtn.classList.remove('loading');
-                }
-            },
-
-            async fetchQuestions() {
-                try {
-                    const token = localStorage.getItem('token');
-                    if (!token) {
-                        throw new Error('No token found. Please log in.');
-                    }
-                    const userId = localStorage.getItem('userId');
-                    if (!userId) {
-                        throw new Error('User ID not found. Please log in again.');
-                    }
-                    const response = await fetch('http://127.0.0.1:3000/api/questions', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        throw new Error(`Failed to fetch questions: ${response.status} ${errorData.message || ''}`);
-                    }
-                    const questions = await response.json();
-                    return questions.filter(q => q.userId === parseInt(userId));
-                } catch (error) {
-                    console.error('Error fetching questions:', error.message);
-                    if (error.message.includes('No token found') || error.message.includes('User ID not found')) {
-                        window.location.href = 'login.html';
-                        return [];
-                    }
-                    return [];
-                }
-            },
-
-
-            async fetchAnswers() {
-                try {
-                    const token = localStorage.getItem('token');
-                    if (!token) {
-                        throw new Error('No token found. Please log in.');
-                    }
-                    const userId = localStorage.getItem('userId');
-                    if (!userId) {
-                        throw new Error('User ID not found. Please log in again.');
-                    }
-                    console.log(`Fetching answers for userId: ${userId}`);
-
-                    const response = await fetch('http://127.0.0.1:3000/api/questions/user-answers', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        throw new Error(`Failed to fetch answers: ${response.status} ${errorData.message || ''}`);
-                    }
-                    const answers = await response.json();
-                    return answers.filter(q => q.userId === parseInt(userId)); 
-                } catch (error) {
-                    console.error('Error fetching answers:', error.message);
-                    if (error.message.includes('No token found') || error.message.includes('User ID not found')) {
-                        window.location.href = 'login.html';
-                        return [];
-                    }
-                    return [];
-                }
-            },
-
-            async fetchRecentActivity() {
-                try {
-                    const token = localStorage.getItem('token');
-                    if (!token) {
-                        throw new Error('No token found. Please log in.');
-                    }
-                    const response = await fetch('http://127.0.0.1:3000/api/users/activity', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        throw new Error(`Failed to fetch activity: ${response.status} ${errorData.message || ''}`);
-                    }
-                    return await response.json();
-                } catch (error) {
-                    console.error('Error fetching recent activity:', error.message);
-                    if (error.message.includes('No token found')) {
-                        window.location.href = 'login.html';
-                        return [];
-                    }
-                    return [];
+                    console.error('Error updating user profile:', error.message);
+                    return false;
                 }
             }
         };
 
-        function formatDate(date) {
-            return `${date.getDate()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-        }
-
         async function loadUserProfile() {
-            const usernameDisplay = document.getElementById('usernameDisplay');
-            usernameDisplay.classList.add('loading');
-
             try {
                 const profile = await apiService.fetchUserProfile();
-                if (profile && profile.username) {
-                    usernameDisplay.classList.remove('loading');
-                    usernameDisplay.textContent = profile.username;
-                    localStorage.setItem('userId', profile.id);
-                    document.getElementById('bioDisplay').textContent = profile.bio || 'No bio available.';
-                    const skillsContainer = document.getElementById('skillsDisplay');
-                    skillsContainer.innerHTML = '<h3>Skills:</h3>';
-                    if (profile.skills && profile.skills.length > 0) {
-                        profile.skills.forEach(skill => {
-                            const skillSpan = document.createElement('span');
-                            skillSpan.textContent = skill;
-                            skillsContainer.appendChild(skillSpan);
-                        });
-                    } else {
-                        skillsContainer.innerHTML += '<span>No skills listed.</span>';
-                    }
-                } else {
-                    throw new Error('No profile data returned.');
-                }
-            } catch (error) {
-                usernameDisplay.classList.remove('loading');
-                usernameDisplay.innerHTML = `<span class="error-text">${error.message}</span><button class="retry-btn" onclick="loadUserProfile()">Retry</button>`;
-                document.getElementById('bioDisplay').textContent = 'Error loading bio';
-                document.getElementById('skillsDisplay').innerHTML = '<h3>Skills:</h3><span>Error loading skills</span>';
-            }
-        }
-
-        async function loadQuestions() {
-            const questionsContainer = document.getElementById('questions');
-            questionsContainer.innerHTML = '<p>Loading...</p>';
-
-            try {
-                const questions = await apiService.fetchQuestions();
-                questionsContainer.innerHTML = '';
-                document.getElementById('questionsCount').textContent = questions.length;
-
-                if (questions.length === 0) {
-                    questionsContainer.innerHTML = '<p>No questions asked yet.</p>';
+                if (!profile) {
+                    document.getElementById('username').textContent = 'Error loading username';
+                    document.getElementById('bio').textContent = 'Error loading bio';
+                    document.getElementById('skills').innerHTML = '<span>Error loading skills</span>';
                     return;
                 }
 
-                questions.forEach(question => {
-                    const createdAt = new Date(question.createdAt);
-                    const formattedDate = formatDate(createdAt);
-                    const questionDiv = document.createElement('div');
-                    questionDiv.className = 'question';
-                    questionDiv.innerHTML = `
-            <p>${question.title || 'Untitled'}</p>
-            <p>${question.description || 'Untitled'}</p>
+                document.getElementById('username').textContent = profile.username || 'Unknown User';
+                document.getElementById('bio').textContent = profile.bio || 'Bio not set';
 
-            <div class="question-meta">
-              <span><i class="fas fa-clock"></i>${formattedDate}</span>
-            </div>
-          `;
-                    questionsContainer.appendChild(questionDiv);
-                });
-            } catch (error) {
-                questionsContainer.innerHTML = `<p class="error-text">Failed to load questions: ${error.message}</p>`;
-            }
-        }
+                const skills = profile.skills ? profile.skills.split(',').map(skill => skill.trim()) : [];
+                document.getElementById('skills').innerHTML = skills.length > 0
+                    ? skills.map(skill => `<span>${skill}</span>`).join('')
+                    : '<span>No skills listed</span>';
 
-        async function loadAnswers() {
-            const answersContainer = document.getElementById('answers');
-            answersContainer.innerHTML = '<p>Loading...</p>';
+                const userId = localStorage.getItem('userId');
+                const stats = await apiService.fetchUserStats(userId);
+                document.getElementById('questions-count').textContent = stats.questionsCount;
+                document.getElementById('answers-count').textContent = stats.answersCount;
 
-            try {
-                const answers = await apiService.fetchAnswers();
-                answersContainer.innerHTML = '';
-                document.getElementById('answersCount').textContent = answers.length;
+                const activity = await apiService.fetchUserActivity(userId);
+                const activityList = document.getElementById('activity-list');
+                activityList.innerHTML = '';
 
-                if (answers.length === 0) {
-                    answersContainer.innerHTML = '<p>No answers provided yet.</p>';
+                if (activity.questions.length === 0 && activity.answers.length === 0) {
+                    activityList.innerHTML = '<p>No activity found.</p>';
                     return;
                 }
 
-                answers.forEach(answer => {
-                    const createdAt = new Date(answer.createdAt);
-                    const formattedDate = formatDate(createdAt);
-                    const answerDiv = document.createElement('div');
-                    answerDiv.className = 'answer';
-                    answerDiv.innerHTML = `
-            <p>${answer.content || 'No content'}</p>
-            <div class="answer-meta">
-              <span><i class="fas fa-clock"></i>${formattedDate}</span>
-            </div>
-          `;
-                    answersContainer.appendChild(answerDiv);
+                activity.questions.forEach(question => {
+                    const item = document.createElement('div');
+                    item.className = 'activity-item';
+                    item.innerHTML = `
+                        <h3>Question: ${question.title || 'Untitled'}</h3>
+                        <p>${question.description || 'No description'}</p>
+                        <p><strong>Asked on:</strong> ${new Date(question.createdAt).toLocaleString()}</p>
+                    `;
+                    activityList.appendChild(item);
+                });
+
+                activity.answers.forEach(answer => {
+                    const item = document.createElement('div');
+                    item.className = 'activity-item';
+                    item.innerHTML = `
+                        <h3>Answer to: ${answer.Question?.title || 'Unknown Question'}</h3>
+                        <p>${answer.content || 'No content'}</p>
+                        <p><strong>Answered on:</strong> ${new Date(answer.createdAt).toLocaleString()}</p>
+                    `;
+                    activityList.appendChild(item);
                 });
             } catch (error) {
-                answersContainer.innerHTML = `<p class="error-text">Failed to load answers: ${error.message}</p>`;
+                console.error('Error loading user profile:', error.message);
+                document.getElementById('activity-list').innerHTML = '<p>Error loading activity. Please try again later.</p>';
             }
         }
 
-        async function loadRecentActivity() {
-            const activityContainer = document.getElementById('activity');
-            activityContainer.innerHTML = '<p>Loading...</p>';
-
-            try {
-                const activities = await apiService.fetchRecentActivity();
-                activityContainer.innerHTML = '';
-
-                if (activities.length === 0) {
-                    activityContainer.innerHTML = '<p>No recent activity.</p>';
-                    return;
+        function setActiveNavLink() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                const page = link.getAttribute('data-page');
+                if (page === currentPage || (page === 'chatMenu' && currentPage === '')) {
+                    link.classList.add('active');
                 }
-
-                activities.forEach(activity => {
-                    const createdAt = new Date(activity.createdAt);
-                    const formattedDate = formatDate(createdAt);
-                    const activityDiv = document.createElement('div');
-                    activityDiv.className = 'activity';
-                    activityDiv.innerHTML = `
-            <p>${activity.description || 'No description'}</p>
-            <div class="activity-meta">
-              <span><i class="fas fa-clock"></i>${formattedDate}</span>
-            </div>
-          `;
-                    activityContainer.appendChild(activityDiv);
-                });
-            } catch (error) {
-                activityContainer.innerHTML = `<p class="error-text">Failed to load activity: ${error.message}</p>`;
-            }
-        }
-
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-
-                tab.classList.add('active');
-                const tabId = tab.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
             });
-        });
+        }
 
-        const contactBtn = document.getElementById('contactBtn');
-        const contactModal = document.getElementById('contactModal');
-        const closeContactModal = document.getElementById('closeContactModal');
+        function openEditProfileModal() {
+            const modal = document.getElementById('editProfileModal');
+            const currentBio = document.getElementById('bio').textContent;
+            const currentSkills = Array.from(document.getElementById('skills').children)
+                .map(span => span.textContent)
+                .filter(skill => skill !== 'No skills listed')
+                .join(', ');
 
-        contactBtn.addEventListener('click', () => {
-            contactModal.style.display = 'flex';
-        });
+            document.getElementById('editBio').value = currentBio !== 'Bio not set' ? currentBio : '';
+            document.getElementById('editSkills').value = currentSkills;
+            modal.style.display = 'flex';
+        }
 
-        closeContactModal.addEventListener('click', () => {
-            contactModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === contactModal) {
-                contactModal.style.display = 'none';
-            }
-        });
-
-        const editProfileBtn = document.getElementById('editProfileBtn');
-        const editProfileModal = document.getElementById('editProfileModal');
-        const closeEditProfileModal = document.getElementById('closeEditProfileModal');
-        const editBioInput = document.getElementById('editBio');
-        const editSkillsInput = document.getElementById('editSkills');
-
-        editProfileBtn.addEventListener('click', async () => {
-            try {
-                const profile = await apiService.fetchUserProfile();
-                if (profile) {
-                    editBioInput.value = profile.bio || '';
-                    editSkillsInput.value = profile.skills ? profile.skills.join(', ') : '';
-                    editProfileModal.style.display = 'flex';
-                } else {
-                    alert('Failed to load profile data. Please try again.');
-                }
-            } catch (error) {
-                alert(`Error: ${error.message}`);
-            }
-        });
-
-        closeEditProfileModal.addEventListener('click', () => {
-            editProfileModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === editProfileModal) {
-                editProfileModal.style.display = 'none';
-            }
-        });
+        function closeEditProfileModal() {
+            document.getElementById('editProfileModal').style.display = 'none';
+            document.getElementById('editBio').value = '';
+            document.getElementById('editSkills').value = '';
+        }
 
         async function saveProfile() {
-            const newBio = editBioInput.value.trim();
-            const newSkills = editSkillsInput.value.split(',').map(skill => skill.trim()).filter(skill => skill);
+            const bio = document.getElementById('editBio').value.trim();
+            const skills = document.getElementById('editSkills').value.trim();
 
-            try {
-                const success = await apiService.updateUserProfile(newBio, newSkills);
-                if (success) {
-                    document.getElementById('bioDisplay').textContent = newBio || 'No bio available.';
-                    const skillsContainer = document.getElementById('skillsDisplay');
-                    skillsContainer.innerHTML = '<h3>Skills:</h3>';
-                    if (newSkills.length > 0) {
-                        newSkills.forEach(skill => {
-                            const skillSpan = document.createElement('span');
-                            skillSpan.textContent = skill;
-                            skillsContainer.appendChild(skillSpan);
-                        });
-                    } else {
-                        skillsContainer.innerHTML += '<span>No skills listed.</span>';
-                    }
-                    editProfileModal.style.display = 'none';
-                    alert('Profile updated successfully!');
-                } else {
-                    throw new Error('Failed to update profile.');
-                }
-            } catch (error) {
-                alert(`Error updating profile: ${error.message}`);
+            const success = await apiService.updateUserProfile(bio, skills);
+            if (success) {
+                closeEditProfileModal();
+                await loadUserProfile();
+            } else {
+                alert('Failed to update profile. Check the console for details and try again.');
             }
         }
 
-        document.getElementById('searchInput').addEventListener('keyup', () => {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const questions = document.querySelectorAll('.question');
-            const answers = document.querySelectorAll('.answer');
-            const activities = document.querySelectorAll('.activity');
+        let pollingInterval;
 
-            questions.forEach(question => {
-                const text = question.textContent.toLowerCase();
-                question.style.display = text.includes(searchInput) ? 'block' : 'none';
-            });
-
-            answers.forEach(answer => {
-                const text = answer.textContent.toLowerCase();
-                answer.style.display = text.includes(searchInput) ? 'block' : 'none';
-            });
-
-            activities.forEach(activity => {
-                const text = activity.textContent.toLowerCase();
-                activity.style.display = text.includes(searchInput) ? 'block' : 'none';
-            });
-        });
-
-        document.querySelector('.logout-btn').addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('token');
-            localStorage.removeItem('userId'); 
-            window.location.href = 'login.html';
-        });
         document.addEventListener('DOMContentLoaded', async () => {
+            setActiveNavLink();
             await loadUserProfile();
-            await loadQuestions();
-            await loadAnswers();
-            await loadRecentActivity();
+
+            pollingInterval = setInterval(async () => {
+                console.log('Polling for updated user profile at', new Date().toISOString());
+                await loadUserProfile();
+            }, 5000);
+
+            const logoutBtn = document.querySelector('.logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Logout button clicked');
+                    try {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('userId');
+                        console.log('localStorage cleared');
+                        const loginPage = 'login.html';
+                        console.log(`Redirecting to ${loginPage}`);
+                        window.location.href = loginPage;
+
+                        setTimeout(() => {
+                            if (window.location.pathname !== '/login.html') {
+                                console.warn('Primary redirection failed, attempting fallback');
+                                window.location.assign(loginPage);
+                            }
+                        }, 500);
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                        alert('Failed to log out. Please check the console for details and try again.');
+                    }
+                });
+            }
+        });
+
+        window.addEventListener('beforeunload', () => {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
         });
     </script>
 </body>
-
 </html>
