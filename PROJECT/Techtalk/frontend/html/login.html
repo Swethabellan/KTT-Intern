@@ -37,18 +37,21 @@
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
       const errorMessage = document.getElementById('error-message');
       errorMessage.textContent = '';
 
+      // Input validation
       if (!username || !password) {
-        errorMessage.textContent = 'Please fill in all fields.';
+        errorMessage.textContent = 'Please fill in both username and password.';
         return;
       }
 
       try {
-        const response = await fetch('http://127.0.0.1:3000/api/users/login', {
+        // Step 1: Login to get token
+        console.log('Attempting login:', { username });
+        const loginResponse = await fetch('http://127.0.0.1:3000/api/users/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -56,20 +59,66 @@
           body: JSON.stringify({ username, password })
         });
 
-        const data = await response.json();
+        const loginData = await loginResponse.json();
+        console.log('Login response:', { status: loginResponse.status, data: loginData });
 
-        if (response.ok) {
-          localStorage.setItem('token', data.token);
-          window.location.href = 'QA.html';
+        if (!loginResponse.ok) {
+          errorMessage.textContent = loginData.error || 'Invalid username or password.';
+          return;
+        }
+
+        // Store token
+        const token = loginData.token;
+        if (!token) {
+          errorMessage.textContent = 'No token received from server.';
+          return;
+        }
+        localStorage.setItem('token', token);
+        console.log('Token stored:', token);
+
+        // Step 2: Fetch user profile to get role
+        console.log('Fetching user profile...');
+        const profileResponse = await fetch('http://127.0.0.1:3000/api/users/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const profileData = await profileResponse.json();
+        console.log('Profile response:', { status: profileResponse.status, data: profileData });
+
+        if (!profileResponse.ok) {
+          errorMessage.textContent = profileData.error || 'Failed to fetch user profile.';
+          localStorage.removeItem('token');
+          return;
+        }
+
+        // Step 3: Validate role
+        const role = profileData.role;
+        console.log('User role:', role);
+
+        if (!role || !['admin', 'user'].includes(role)) {
+          errorMessage.textContent = `Invalid user role: ${role || 'undefined'}. Please check your account settings.`;
+          localStorage.removeItem('token');
+          return;
+        }
+
+        // Step 4: Redirect based on role
+        if (role === 'admin') {
+          console.log('Redirecting to admin.html');
+          window.location.href = 'admin.html';
         } else {
-          errorMessage.textContent = data.error || 'Login failed';
-          document.getElementById('loginForm')
+          console.log('Redirecting to QA.html');
+          window.location.href = 'QA.html';
         }
       } catch (error) {
-        errorMessage.textContent = 'An error occurred. Please try again.';
-        console.error('Login error:', error);
-        document.getElementById('loginForm').reset();
-      }
+        errorMessage.textContent = 'An error occurred. Please try again later.';
+        console.error('Login error:', error.message, error.stack);
+        localStorage.removeItem('token');
+       }
+       // finally {
+      //   document.getElementById('loginForm').reset();
+      // }
     });
   </script>
 </body>

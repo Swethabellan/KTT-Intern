@@ -30,7 +30,19 @@ router.get('/:userId/stats', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-
+router.get('/users/:id', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id, {
+      attributes: ['id', 'username', 'bio', 'skills']
+    });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 router.get('/:userId/skills', authenticateToken, async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -56,9 +68,13 @@ router.get('/users/:id', async (req, res) => {
 router.post('/signup', async (req, res) => {
   try {
     const { name, username, email, password, role } = req.body;
-    if (!username || !email || !password || !name) {
-      return res.status(400).json({ error: 'Name, username, email, password are required' });
+    if (!username || !email || !password || !name || !role) {
+      return res.status(400).json({ error: 'Name, username, email, password,role are required' });
     }
+    if (!['user', 'admin'].includes(role)) {
+            return res.status(400).json({ error: 'Invalid role' });
+        }
+
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(409).json({ error: 'Email already exists' });
@@ -70,7 +86,7 @@ router.post('/signup', async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      role: role || 'user',
+      role
     });
     res.status(201).json({ message: 'User created', user });
   } catch (error) {
@@ -92,8 +108,13 @@ router.post('/login', async (req, res) => {
     const isMatched = await bcrypt.compare(password, user.password);
     if (!isMatched) return res.status(401).json({ error: 'Invalid password' });
 
+    if (!user.role || !['user', 'admin'].includes(user.role)) {
+            console.log('Invalid user role:', user.role);
+            return res.status(403).json({ error: `Invalid user role: ${user.role || 'undefined'}` });
+        }
+
     const token = jwt.sign(
-      { id: user.id, username: user.username },
+      { id: user.id, username: user.username ,role:user.role},
       process.env.JWT_SECRET,
       { expiresIn: '24d' }
     );
@@ -130,7 +151,9 @@ router.get('/profile', authenticateToken, async (req, res) => {
     res.status(200).json({
       id: user.id,
       username: user.username,
+      role:user.role,
       bio: user.bio || '',
+
       skills: skillsArray
     });
   } catch (error) {
