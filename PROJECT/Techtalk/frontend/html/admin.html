@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TechTalk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            background: #1a202c;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0 20px 20px 0;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            width: 256px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .sidebar a, .sidebar button {
+            color: #a0aec0;
+            padding: 8px;
+            transition: color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+        .sidebar a:hover, .sidebar button:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+        .sidebar button i {
+            margin-right: 8px;
+        }
+        .main-content {
+            margin-left: 256px;
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn-danger {
+            background: #e53e3e;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-danger:hover {
+            background: #c53030;
+        }
+        .search-input {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background: #f7fafc;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        th:hover {
+            background: #edf2f7;
+        }
+        .error {
+            color: #e53e3e;
+            padding: 1rem;
+            background: #fee2e2;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        .charts-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .chart-card {
+            flex: 1;
+            min-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="text-2xl font-bold text-white mb-8 flex items-center">
+            <span class="material-icons mr-2">forum</span> TechTalk
+        </div>
+        <a href="./admin.html"><span class="material-icons mr-2">admin_panel_settings</span> Admin Dashboard</a>
+        <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+    <div class="main-content">
+        <div class="card">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Question Statistics</h2>
+            <div class="charts-container">
+                <div class="chart-card">
+                    <canvas id="questionPieChart" height="100"></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="questionBarChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-gray-800">All Questions</h2>
+                <input type="text" id="searchInput" placeholder="Search by title or username" class="search-input">
+            </div>
+            <div id="errorMessage" class="error" style="display: none;"></div>
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-sort="id">ID</th>
+                            <th data-sort="title">Title</th>
+                            <th data-sort="description">Description</th>
+                            <th data-sort="username">Asked By</th>
+                            <th data-sort="status">Status</th>
+                            <th data-sort="createdAt">Timestamp</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="questionTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        const apiService = {
+            async fetchQuestions() {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) throw new Error('No token found. Please log in.');
+                    const response = await fetch('http://127.0.0.1:3000/api/admin/questions', {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.message || 'Failed to fetch questions');
+                    }
+                    return await response.json();
+                } catch (error) {
+                    showError(error.message);
+                    return [];
+                }
+            },
+            async fetchQuestionStats() {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) throw new Error('No token found. Please log in.');
+                    const response = await fetch('http://127.0.0.1:3000/api/admin/questions/stats', {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.message || 'Failed to fetch stats');
+                    }
+                    return await response.json();
+                } catch (error) {
+                    showError(error.message);
+                    return { total: 0, answered: 0, unanswered: 0 };
+                }
+            },
+            async deleteQuestion(questionId) {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) throw new Error('No token found. Please log in.');
+                    const response = await fetch(`http://127.0.0.1:3000/api/admin/questions/${questionId}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.message || 'Failed to delete question');
+                    }
+                    return true;
+                } catch (error) {
+                    showError(error.message);
+                    return false;
+                }
+            }
+        };
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
+        }
+
+        function formatDate(date) {
+            const d = new Date(date);
+            const day = d.getDate();
+            const month = (d.getMonth() + 1).toString().padStart(2, '0');
+            const year = d.getFullYear();
+            let hours = d.getHours();
+            const minutes = d.getMinutes().toString().padStart(2, '0');
+            const seconds = d.getSeconds().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            hours = hours.toString().padStart(2, '0');
+            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+
+        async function loadQuestions() {
+            const questions = await apiService.fetchQuestions();
+            const tbody = document.getElementById('questionTable');
+            tbody.innerHTML = questions.map(q => `
+                <tr>
+                    <td>${q.id}</td>
+                    <td>${q.title || 'Untitled'}</td>
+                    <td>${q.description?.substring(0, 50) || ''}${q.description?.length > 50 ? '...' : ''}</td>
+                    <td><a href="demo.html?userId=${q.userId}" class="text-blue-600 hover:underline">${q.User?.username || 'Unknown'}</a></td>
+                    <td>${q.answerCount > 0 ? 'Answered' : 'Unanswered'}</td>
+                    <td>${formatDate(q.createdAt)}</td>
+                    <td><button class="btn-danger" onclick="deleteQuestion(${q.id})">Delete</button></td>
+                </tr>
+            `).join('');
+            return questions;
+        }
+
+        async function deleteQuestion(questionId) {
+            if (confirm('Are you sure you want to delete this question?')) {
+                const success = await apiService.deleteQuestion(questionId);
+                if (success) {
+                    loadQuestions();
+                    loadCharts();
+                }
+            }
+        }
+
+        async function loadCharts() {
+            const stats = await apiService.fetchQuestionStats();
+            const pieCtx = document.getElementById('questionPieChart').getContext('2d');
+            const barCtx = document.getElementById('questionBarChart').getContext('2d');
+
+            new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Total', 'Answered', 'Unanswered'],
+                    datasets: [{
+                        data: [stats.total, stats.answered, stats.unanswered],
+                        backgroundColor: ['#3182ce', '#10b981', '#ef4444'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Question Status Distribution' }
+                    }
+                }
+            });
+
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Questions'],
+                    datasets: [
+                        { label: 'Total', data: [stats.total], backgroundColor: '#3182ce' },
+                        { label: 'Answered', data: [stats.answered], backgroundColor: '#10b981' },
+                        { label: 'Unanswered', data: [stats.unanswered], backgroundColor: '#ef4444' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Question Statistics' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function filterQuestions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#questionTable tr');
+            rows.forEach(row => {
+                const title = row.cells[1].textContent.toLowerCase();
+                const username = row.cells[3].textContent.toLowerCase();
+                row.style.display = (title.includes(searchTerm) || username.includes(searchTerm)) ? '' : 'none';
+            });
+        }
+
+        function sortQuestions(key, isNumeric = false) {
+            const tbody = document.getElementById('questionTable');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const ascending = tbody.dataset.sortOrder !== 'asc';
+            tbody.dataset.sortOrder = ascending ? 'asc' : 'desc';
+
+            rows.sort((a, b) => {
+                let aValue = a.cells[key === 'id' ? 0 : key === 'title' ? 1 : key === 'description' ? 2 : key === 'username' ? 3 : key === 'status' ? 4 : 5].textContent;
+                let bValue = b.cells[key === 'id' ? 0 : key === 'title' ? 1 : key === 'description' ? 2 : key === 'username' ? 3 : key === 'status' ? 4 : 5].textContent;
+
+                if (key === 'createdAt') {
+                    aValue = new Date(a.cells[5].textContent.split(' ').slice(0, 2).join(' ').replace(/\//g, '-')).getTime();
+                    bValue = new Date(b.cells[5].textContent.split(' ').slice(0, 2).join(' ').replace(/\//g, '-')).getTime();
+                } else if (isNumeric) {
+                    aValue = parseInt(aValue);
+                    bValue = parseInt(bValue);
+                }
+
+                return ascending ? (aValue > bValue ? 1 : -1) : (aValue < bValue ? 1 : -1);
+            });
+
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+            loadQuestions();
+            loadCharts();
+            document.getElementById('searchInput').addEventListener('input', filterQuestions);
+            document.querySelectorAll('th[data-sort]').forEach(th => {
+                th.addEventListener('click', () => {
+                    const key = th.dataset.sort;
+                    const isNumeric = key === 'id';
+                    sortQuestions(key, isNumeric);
+                });
+            });
+            document.querySelector('.logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('userId');
+                window.location.href = 'login.html';
+            });
+        });
+    </script>
+</body>
+</html>
