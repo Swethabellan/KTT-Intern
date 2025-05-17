@@ -15,14 +15,6 @@ module.exports = (sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-        likes: {
-            type: Sequelize.INTEGER,
-            defaultValue: 0
-        },
-        dislikes: {
-            type: Sequelize.INTEGER,
-            defaultValue: 0
-        },
         comments: {
             type: Sequelize.INTEGER,
             defaultValue: 0
@@ -30,7 +22,10 @@ module.exports = (sequelize) => {
         userId: {
             type: Sequelize.INTEGER,
             allowNull: false
-        }
+        },
+        flagged: { 
+            type: Sequelize.BOOLEAN, 
+            defaultValue: false }
 
 	}, {
 		timestamps: true,

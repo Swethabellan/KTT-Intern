@@ -7,6 +7,7 @@ const AnswerModel = require('./Answer');
 const sequelize = new Sequelize(`postgres://postgres:SwethaBellan@localhost:5432/techtalk`, {
     dialect: 'postgres',
     logging: true,
+    alter:true
 });
 const models = {
     Question: QuestionModel(sequelize),

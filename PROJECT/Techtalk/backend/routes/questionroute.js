@@ -11,7 +11,7 @@ router.get('/', authenticateToken, async (req, res) => {
                 { model: User, attributes: ['username'] },
                 { model: Answer, include: [{ model: User, attributes: ['username'] }] }
             ],
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'ASC']]
         });
         res.json(questions);
     } catch (error) {

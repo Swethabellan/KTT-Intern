@@ -41,15 +41,11 @@ module.exports = (sequelize) => {
 			defaultValue: '',
 			allowNull:true
 		},
-		badges: {
-			type: DataTypes.STRING,
-			defaultValue: ''
-		},
-		score: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			defaultValue: 0
-		}
+		isActive: { 
+			type: DataTypes.BOOLEAN, 
+			defaultValue: true,
+	 		field: 'isActive', 
+            allowNull: false }
 
 	}, { timestamps: true, 
 		tableName: 'Users' 

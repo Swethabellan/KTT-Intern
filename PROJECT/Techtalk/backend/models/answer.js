@@ -23,7 +23,10 @@ module.exports = (sequelize) => {
             type: Sequelize.DATE,
             allowNull: false,
             defaultValue: Sequelize.NOW // Automatically set to the current date/time
-        }
+        },
+        flagged: { 
+            type: Sequelize.BOOLEAN,
+             defaultValue: false }
     }, {
         timestamps: true,
         tableName: 'Answers'

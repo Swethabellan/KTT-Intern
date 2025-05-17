@@ -18,12 +18,13 @@ app.use(express.json());
 
 app.use('/api/users', userRoute);
 app.use('/api/questions', questionRoute);
-app.use('/api/admin',adminRoute);
+app.use('/api/admins',adminRoute);
 
 const { User, Question, Answer } = db;
 User.associate(db);
 Question.associate(db);
 Answer.associate(db);
+
 
 const PORT = process.env.PORT || 3000;
 
