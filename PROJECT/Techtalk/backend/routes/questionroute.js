@@ -12,20 +12,35 @@ const verifyAdmin = (req, res, next) => {
 
 router.get('/', authenticateToken, async (req, res) => {
     try {
+        const { filter, sortBy = 'createdAt', order = 'DESC' } = req.query;
+        const userRole = req.user.role;
+
+        let whereClause = {};
+        if (filter === 'answered') {
+            whereClause.answerCount = { [Op.gt]: 0 };
+        } else if (filter === 'unanswered') {
+            whereClause.answerCount = 0;
+        }
+
+        if (userRole !== 'admin') {
+            whereClause.isActive = true;
+        }
+
         const questions = await Question.findAll({
+            where: whereClause,
             include: [
-                { model: User, attributes: ['username'] },
-                { model: Answer, include: [{ model: User, attributes: ['username'] }] }
+                { model: User, attributes: ['id', 'username'] },
+                { model: Answer, include: [{ model: User, attributes: ['id', 'username'] }] }
             ],
-            order: [['createdAt', 'ASC']]
+            order: [[sortBy, order]]
         });
+
         res.json(questions);
     } catch (error) {
-        console.error('Error fetching questions:', error.message);
-        res.status(500).json({ message: 'Error fetching questions', error: error.message });
+        console.error('Error fetching questions:', error);
+        res.status(500).json({ message: 'Error fetching questions' });
     }
 });
-
 router.post('/', authenticateToken, async (req, res) => {
     try {
         if (!req.user || !req.user.id) {
@@ -219,21 +234,51 @@ router.get('/answers', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Error fetching answers', error: error.message });
     }
 });
-router.delete('/answers/:id', authenticateToken, verifyAdmin, async (req, res) => {
+
+// Toggle question active status
+router.put('/questions/:id/toggle-active', authenticateToken, verifyAdmin, async (req, res) => {
+  try {
+    const question = await Question.findById(req.params.id);
+    if (!question) {
+      return res.status(404).json({ message: 'Question not found' });
+    }
+    question.isActive = !question.isActive;
+    await question.save();
+    res.json({ isActive: question.isActive });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Toggle answer active status
+router.put('/answers/:id/toggle-active',authenticateToken,verifyAdmin, async (req, res) => {
+  try {
+    const answer = await Answer.findById(req.params.id);
+    if (!answer) {
+      return res.status(404).json({ message: 'Answer not found' });
+    }
+    answer.isActive = !answer.isActive;
+    await answer.save();
+    res.json({ isActive: answer.isActive });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+router.put('/answers/:id/mark-correct', authenticateToken, verifyAdmin, async (req, res) => {
     try {
-        const answerId = parseInt(req.params.id);
-        const answer = await Answer.findByPk(answerId, { include: [Question] });
-        if (!answer) return res.status(404).json({ message: 'Answer not found' });
-        const question = answer.Question;
-        await answer.destroy();
-        await Question.update(
-            { comments: Math.max((question.comments || 0) - 1, 0) },
-            { where: { id: question.id } }
-        );
-        res.json({ message: 'Answer deleted' });
+        const answerId = req.params.id;
+        const answer = await Answer.findByPk(answerId);
+        if (!answer) {
+            return res.status(404).json({ message: 'Answer not found' });
+        }
+        answer.isCorrect = !answer.isCorrect;
+        await answer.save();
+        res.json({ id: answer.id, isCorrect: answer.isCorrect });
     } catch (error) {
-        console.error('Error deleting answer:', error);
-        res.status(500).json({ message: 'Error deleting answer' });
+        console.error('Error marking answer as correct:', error);
+        res.status(500).json({ message: 'Error marking answer as correct' });
     }
 });
 module.exports = router;

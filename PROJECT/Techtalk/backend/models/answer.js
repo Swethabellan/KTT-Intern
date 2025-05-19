@@ -24,13 +24,22 @@ module.exports = (sequelize) => {
             allowNull: false,
             defaultValue: Sequelize.NOW 
         },
-        flagged: { 
+        isActive: {
             type: Sequelize.BOOLEAN,
-             defaultValue: false }
-    }, {
+            defaultValue: true
+        },
+        isCorrect: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
+        }
+    },{
+         
         timestamps: true,
         tableName: 'Answers'
     });
+        
+    
+
 
     Answer.associate = (models) => {
         Answer.belongsTo(models.Question, { foreignKey: 'questionId' });

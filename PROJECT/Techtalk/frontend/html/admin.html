@@ -7,201 +7,245 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
-        display: flex;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+      display: flex;
     }
 
     /* Sidebar */
     .sidebar {
-        background: #1c1d1e;
-        color: white;
-        width: 250px;
-        min-height: 100vh;
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
+      background: #1c1d1e;
+      color: white;
+      width: 250px;
+      min-height: 100vh;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
     }
+
     .sidebar-header {
-        display: flex;
-        align-items: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
     }
+
     .sidebar-header .material-icons {
-        margin-right: 0.5rem;
+      margin-right: 0.5rem;
     }
+
     .sidebar-link {
-        color: white;
-        text-decoration: none;
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: center;
-        padding: 0.5rem;
-        border-radius: 5px;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 5px;
     }
+
     .sidebar-link .material-icons {
-        margin-right: 0.5rem;
+      margin-right: 0.5rem;
     }
+
     .sidebar-link:hover {
-        background: #2b6cb0;
+      background: #2b6cb0;
     }
+
     .logout-btn {
-        background: #1c1b1b;
-        color: white;
-        border: none;
-        padding: 0.5rem;
-        border-radius: 5px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
+      background: #1c1b1b;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
     }
+
     .logout-btn .material-icons {
-        margin-right: 0.5rem;
+      margin-right: 0.5rem;
     }
+
     .logout-btn:hover {
-        background: #c53030;
+      background: #c53030;
     }
 
     /* Main Content */
     .main-content {
-        flex: 1;
-        padding: 2rem;
+      flex: 1;
+      padding: 2rem;
     }
+
     .header {
-        text-align: center;
-        margin-bottom: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
     }
+
     .header h1 {
-        font-size: 2rem;
-        color: #2d3748;
-        margin-bottom: 0.5rem;
+      font-size: 2rem;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
     }
+
     .header hr {
-        border: 0;
-        border-top: 2px solid #e2e8f0;
-        margin: 0.5rem 0;
+      border: 0;
+      border-top: 2px solid #e2e8f0;
+      margin: 0.5rem 0;
     }
+
     .header h2 {
-        font-size: 1.5rem;
-        color: #4a5568;
+      font-size: 1.5rem;
+      color: #4a5568;
     }
+
     .error {
-        color: #dc2626;
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
-        min-height: 1.2rem;
+      color: #dc2626;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      min-height: 1.2rem;
     }
 
     /* Tabs */
     .tabs {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 1rem;
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
+
     .tab {
-        padding: 0.5rem 1rem;
-        background: #e2e8f0;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s;
+      padding: 0.5rem 1rem;
+      background: #e2e8f0;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
     }
-    .tab:hover, .tab.active {
-        background: #2b6cb0;
-        color: white;
+
+    .tab:hover,
+    .tab.active {
+      background: #2b6cb0;
+      color: white;
     }
 
     /* Stats */
     .stats-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.5rem;
     }
+
     .stat-card {
-        background: white;
-        padding: 0;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        flex: 1 1 150px;
-        text-align: center;
-        cursor: pointer;
-        transition: background 0.3s;
+      background: white;
+      padding: 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      flex: 1 1 150px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.3s;
     }
+
     .stat-card:hover {
-        background: #f0f4f8;
+      background: #f0f4f8;
     }
+
     .stat-card h3 {
-        font-size: 1.1rem;
-        color: #4a5568;
-        margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #4a5568;
+      margin-bottom: 0.5rem;
     }
+
     .stat-card p {
-        font-size: 1.5rem;
-        color: #2d3748;
+      font-size: 1.5rem;
+      color: #2d3748;
     }
 
     /* Table */
     .table-container {
-        background: white;
-        padding: 1rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1rem;
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1rem;
     }
+
     .table-container h3 {
-        font-size: 1.2rem;
-        color: #4a5568;
-        margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: #4a5568;
+      margin-bottom: 1rem;
     }
+
     table {
-        width: 100%;
-        border-collapse: collapse;
+      width: 100%;
+      border-collapse: collapse;
     }
-    th, td {
-        padding: 0.75rem;
-        text-align: left;
-        border-bottom: 1px solid #e2e8f0;
+
+    th,
+    td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
     }
+
     th {
-        background: #f0f4f8;
-        color: #4a5568;
-        font-weight: 600;
-        cursor: pointer;
+      background: #f0f4f8;
+      color: #4a5568;
+      font-weight: 600;
+      cursor: pointer;
     }
+
     th:hover {
-        background: #e2e8f0;
+      background: #e2e8f0;
     }
-    .delete-btn, .toggle-btn {
-        background: #1c1b1b;
-        color: white;
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-right: 0.5rem;
+
+    .toggle-btn {
+      background: #1c1b1b;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 0.5rem;
     }
-    .delete-btn:hover  {
-        background: #c53030;
-    }
-    /* .toggle-btn {
-        background: #2b6cb0;
-    } */
+
     .toggle-btn:hover {
-        background: #3182ce;
+      background: #3182ce;
     }
+
     .details {
-        margin: 1rem 0;
-        padding: 1rem;
-        background: #f9fafb;
-        border-radius: 5px;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 5px;
     }
+
     .answer {
-        margin: 0.5rem 0;
-        padding: 0.5rem;
-        border-left: 3px solid #2b6cb0;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border-left: 3px solid #2b6cb0;
+    }
+
+    .correct-btn {
+      background: #28a745;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 0.5rem;
+    }
+
+    .correct-btn:hover {
+      background: #218838;
+    }
+
+    .checkmark {
+      color: #28a745;
+      font-weight: bold;
+      margin-left: 0.5rem;
     }
   </style>
 </head>
@@ -254,7 +298,6 @@
         <h3>Active Users</h3>
         <p id="activeUsers">0</p>
       </div>
-      
     </div>
 
     <!-- Questions Tab -->
@@ -267,7 +310,6 @@
               <th data-sort="id">ID</th>
               <th data-sort="title">Question title</th>
               <th data-sort="description">Questions</th>
-
               <th data-sort="username">Asked By</th>
               <th data-sort="answerCount">Answers</th>
               <th data-sort="createdAt">Date</th>
@@ -298,8 +340,6 @@
         </table>
       </div>
     </div>
-
-    
   </div>
 
   <script>
@@ -318,7 +358,8 @@
       else if (tabName === 'users') fetchUsers();
     }
 
-    let currentQuestionSort = { sortBy: 'createdAt', order: 'DESC' };
+    let currentQuestionSort = { sortBy: 'createdAt', order: 'ASC' };
+
     async function fetchQuestions(filter = '') {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -342,25 +383,25 @@
               <td>${q.answerCount || 0}</td>
               <td>${new Date(q.createdAt).toLocaleDateString()}</td>
               <td>
-                <button class="delete-btn" data-id="${q.id}" data-type="question">Delete</button>
-                <button class="toggle-details" data-id="${q.id}">Details</button>
+                <button class="toggle-btn" data-id="${q.id}" data-type="question">${q.isActive ? 'Deactivate' : 'Activate'}</button>
+                <button class="toggle-details" data-id="${q.id}">Answers</button>
               </td>
             `;
             tableBody.appendChild(row);
 
-            // Add details section
+            // Add details section for answers
             const detailsRow = document.createElement('tr');
             detailsRow.classList.add('details-row');
             detailsRow.style.display = 'none';
             detailsRow.innerHTML = `
-              <td colspan="6">
+              <td colspan="7">
                 <div class="details">
                   <h4>Answers:</h4>
                   ${q.Answers && q.Answers.length > 0 ? q.Answers.map(a => `
                     <div class="answer">
-                        
-                      <p>${a.content}  (Posted on ${new Date(a.createdAt).toLocaleDateString()})</p>
-                      <button class="delete-btn" data-id="${a.id}" data-type="answer">Delete Answer</button>
+                      <p>${a.content} (Posted on ${new Date(a.createdAt).toLocaleDateString()})${a.isCorrect ? '<span class="checkmark">✔</span>' : ''}</p>
+                      <button class="toggle-btn" data-id="${a.id}" data-type="answer">${a.isActive ? 'Deactivate' : 'Activate'}</button>
+                      <button class="correct-btn" data-id="${a.id}">${a.isCorrect ? 'Unmark Correct' : 'Mark Correct'}</button>
                     </div>
                   `).join('') : '<p>No answers yet.</p>'}
                 </div>
@@ -369,36 +410,112 @@
             tableBody.appendChild(detailsRow);
           });
 
-          // Add event listeners
-          document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const id = btn.getAttribute('data-id');
-              const type = btn.getAttribute('data-type');
-              if (confirm(`Delete this ${type}?`)) {
-                const deleteResponse = await fetch(`http://127.0.0.1:3000/api/admins/${type}s/${id}`, {
-                  method: 'DELETE',
-                  headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (deleteResponse.ok) {
-                  btn.closest('tr').remove();
-                  if (type === 'question') {
-                    btn.closest('tr').nextElementSibling?.remove();
-                    fetchStats(); // Update stats
-                  }
-                } else {
-                  showError(`Failed to delete ${type}.`);
-                }
-              }
-            });
-          });
+          // // Unified toggle event listener for questions and answers
+          // document.querySelectorAll('.toggle-btn').forEach(btn => {
+          //   btn.addEventListener('click', async () => {
+          //     const id = btn.getAttribute('data-id');
+          //     const type = btn.getAttribute('data-type');
+          //     const endpoint = type === 'question' 
+          //       ? `http://127.0.0.1:3000/api/questions/questions/${id}/toggle-active`
+          //       : `http://127.0.0.1:3000/api/questions/answers/${id}/toggle-active`;
 
-          
+          //     if (confirm(`${btn.textContent} this ${type}?`)) {
+          //       try {
+          //         const toggleResponse = await fetch(endpoint, {
+          //           method: 'PUT',
+          //           headers: { 'Authorization': `Bearer ${token}` }
+          //         });
+          //         if (!toggleResponse.ok) {
+          //           const errorData = await toggleResponse.json();
+          //           throw new Error(`Failed to toggle ${type} status: ${errorData.message || toggleResponse.statusText}`);
+          //         }
+          //         const result = await toggleResponse.json();
+          //         btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
+          //         if (type === 'question') {
+          //           fetchStats(); // Update stats after toggling a question
+          //           fetchQuestions(filter); // Refresh questions to reflect status
+          //         }
+          //       } catch (error) {
+          //         console.error(`Error toggling ${type}:`, error);
+          //         showError(`Failed to toggle ${type} status: ${error.message}`);
+          //       }
+          //     }
+          //   });
+          // });
 
+          document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const id = btn.getAttribute('data-id');
+    const type = btn.getAttribute('data-type');
+    const endpoint = type === 'question' 
+      ? `http://127.0.0.1:3000/api/questions/question/${id}/toggle-active`
+      : `http://127.0.0.1:3000/api/questions/answer/${id}/toggle-active`;
+
+    if (confirm(`${btn.textContent} this ${type}?`)) {
+      try {
+        const toggleResponse = await fetch(endpoint, {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!toggleResponse.ok) {
+          const errorData = await toggleResponse.json();
+          throw new Error(`Failed to toggle ${type} status: ${errorData.message || toggleResponse.statusText}`);
+        }
+        const result = await toggleResponse.json();
+        btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
+        if (type === 'question') {
+          fetchStats();
+          fetchQuestions(filter);
+        }
+      } catch (error) {
+        console.error(`Error toggling ${type}:`, error);
+        showError(`Failed to toggle ${type} status: ${error.message}`);
+      }
+    }
+  });
+});
+
+          // Event listener for toggling details visibility
           document.querySelectorAll('.toggle-details').forEach(btn => {
             btn.addEventListener('click', () => {
               const detailsRow = btn.closest('tr').nextElementSibling;
               detailsRow.style.display = detailsRow.style.display === 'none' ? 'table-row' : 'none';
-              btn.textContent = detailsRow.style.display === 'none' ? 'Details' : 'Hide Details';
+              btn.textContent = detailsRow.style.display === 'none' ? 'Answers' : 'Hide ';
+            });
+          });
+
+          // Event listener for marking answers as correct
+          document.querySelectorAll('.correct-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const id = btn.getAttribute('data-id');
+              if (confirm(`${btn.textContent} this answer?`)) {
+                try {
+                  const response = await fetch(`http://127.0.0.1:3000/api/questions/answers/${id}/mark-correct`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                  });
+                  if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Failed to mark answer as correct: ${errorData.message || response.statusText}`);
+                  }
+                  const result = await response.json();
+                  btn.textContent = result.isCorrect ? 'Unmark Correct' : 'Mark Correct';
+                  const answerDiv = btn.closest('.answer');
+                  const paragraph = answerDiv.querySelector('p');
+                  let checkmark = paragraph.querySelector('.checkmark');
+                  if (result.isCorrect && !checkmark) {
+                    checkmark = document.createElement('span');
+                    checkmark.className = 'checkmark';
+                    checkmark.textContent = '✔';
+                    paragraph.appendChild(checkmark);
+                  } else if (!result.isCorrect && checkmark) {
+                    checkmark.remove();
+                  }
+                } catch (error) {
+                  console.error('Error marking answer as correct:', error);
+                  showError(`Failed to mark answer as correct: ${error.message}`);
+                }
+              }
             });
           });
 
@@ -413,8 +530,7 @@
       }
     }
 
-    // Fetch and display users
-    let currentUserSort = { sortBy: 'username', order: 'ASC' };
+    let currentUserSort = { sortBy: 'createdAt', order: 'ASC' };
     async function fetchUsers() {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -436,7 +552,7 @@
               <td>${user.role}</td>
               <td>${user.isActive ? 'Active' : 'Inactive'}</td>
               <td>
-                <button class="toggle-btn" data-id="${user.id}">${user.isActive ? 'Activate' : 'Deactivate'}</button>
+                <button class="toggle-btn" data-id="${user.id}" data-type="user">${user.isActive ? 'Deactivate' : 'Activate'}</button>
               </td>
             `;
             tableBody.appendChild(row);
@@ -445,18 +561,24 @@
           document.querySelectorAll('.toggle-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
               const id = btn.getAttribute('data-id');
-              if (confirm(`${btn.textContent} this user?`)) {
-                const toggleResponse = await fetch(`http://127.0.0.1:3000/api//users/users/${id}/toggle-active`, {
-                  method: 'PUT',
-                  headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const result = await toggleResponse.json();
-                if (toggleResponse.ok) {
-                  btn.textContent = result.isActive ? 'Activate' : 'Deactivate';
+              const type = btn.getAttribute('data-type');
+              if (confirm(`${btn.textContent} this ${type}?`)) {
+                try {
+                  const toggleResponse = await fetch(`http://127.0.0.1:3000/api/users/users/${id}/toggle-active`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                  });
+                  if (!toggleResponse.ok) {
+                    const errorData = await toggleResponse.json();
+                    throw new Error(`Failed to toggle user status: ${errorData.message || toggleResponse.statusText}`);
+                  }
+                  const result = await toggleResponse.json();
+                  btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
                   btn.closest('tr').children[4].textContent = result.isActive ? 'Active' : 'Inactive';
-                  fetchStats(); 
-                } else {
-                  showError('Failed to toggle user status.');
+                  fetchStats();
+                } catch (error) {
+                  console.error('Error toggling user:', error);
+                  showError(`Failed to toggle user status: ${error.message}`);
                 }
               }
             });
@@ -470,143 +592,101 @@
       }
     }
 
-   
-
-          document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const id = btn.getAttribute('data-id');
-              const type = btn.getAttribute('data-type');
-              if (confirm(`Delete this ${type}?`)) {
-                const deleteResponse = await fetch(`http://127.0.0.1:3000/api/users/${type}s/${id}`, {
-                  method: 'DELETE',
-                  headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (deleteResponse.ok) {
-                  btn.closest('tr').remove();
-                  fetchStats(); // Update stats
-                } else {
-                  showError(`Failed to delete ${type}.`);
-                }
-              }
-            });
-          });
-
-        
-
-async function fetchStats() {
-    try {
+    async function fetchStats() {
+      try {
         const token = localStorage.getItem('token');
         if (!token) {
-            throw new Error('No token found. Please log in.');
+          throw new Error('No token found. Please log in.');
         }
-        const response = await fetch('http://127.0.0.1:3000/api/questions/stats', {
-            headers: { 'Authorization': `Bearer ${token}` }
+        const response = await fetch('http://127.0.0.1:3000/api/users/stats', {
+          headers: { 'Authorization': `Bearer ${token}` }
         });
-        const statsData=await statsResponse.json();
-        if (statsResponse.ok) {
-            const data = await response.json();
-            document.getElementById('totalQuestions').textContent = statsData.total || 0;
-            document.getElementById('answeredQuestions').textContent = statsData.answered || 0;
-            document.getElementById('unansweredQuestions').textContent = statsData.unanswered || 0;
-            document.getElementById('activeUsers').textContent = statsData.activeUsers || 0;
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('totalQuestions').textContent = data.total || 0;
+          document.getElementById('answeredQuestions').textContent = data.answered || 0;
+          document.getElementById('unansweredQuestions').textContent = data.unanswered || 0;
+          document.getElementById('activeUsers').textContent = data.activeUsers || 0;
         } else {
-            const errorData = await response.json().catch(() => ({}));
-            console.error('Fetch stats failed:', response.status, errorData);
-            showError(`Failed to fetch stats: ${errorData.message || response.statusText || 'Unknown error'}`);
+          const errorData = await response.json().catch(() => ({}));
+          console.error('Fetch stats failed:', response.status, errorData);
+          showError(`Failed to fetch stats: ${errorData.message || response.statusText || 'Unknown error'}`);
         }
-    } catch (error) {
+      } catch (error) {
         console.error('Error fetching stats:', error.message);
         showError(`Error fetching stats: ${error.message}`);
-    }
-}
- document.addEventListener('DOMContentLoaded', async () => {
-    const token = localStorage.getItem('token');
-    const role = localStorage.getItem('role');
-    console.log('Token:', token);
-    console.log('Role:', role);
-
-    if (!token || role !== 'admin') {
-        console.log('Redirecting to login: Invalid token or role');
-        showError('No admin session found. Redirecting to login...');
-        setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-        return;
+      }
     }
 
-    try {
-        // Verify admin role via API (optional, since role is in localStorage)
+    document.addEventListener('DOMContentLoaded', async () => {
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+      console.log('Token:', token);
+      console.log('Role:', role);
+
+      try {
         const profileResponse = await fetch('http://127.0.0.1:3000/api/users/profile', {
-            headers: { 'Authorization': `Bearer ${token}` }
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         const profileData = await profileResponse.json();
         console.log('Admin profile:', profileData);
 
         if (!profileResponse.ok || profileData.role !== 'admin') {
-            showError('Admin access required. Redirecting to login...');
-            setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-            return;
+          showError('Admin access required. Redirecting to login...');
+          // setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+          return;
         }
 
-        // Show admin link
         document.getElementById('adminLink').style.display = 'flex';
 
-        // Initial fetch
         await fetchStats();
         await fetchQuestions('all');
 
-        // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabName = tab.getAttribute('data-tab');
-                switchTab(tabName);
-            });
+          tab.addEventListener('click', () => {
+            const tabName = tab.getAttribute('data-tab');
+            switchTab(tabName);
+          });
         });
 
-        // Stat card filters
         document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const filter = card.getAttribute('data-filter');
-                if (filter) {
-                    switchTab('questions');
-                    fetchQuestions(filter);
-                }
-            });
+          card.addEventListener('click', () => {
+            const filter = card.getAttribute('data-filter');
+            if (filter) {
+              switchTab('questions');
+              fetchQuestions(filter);
+            }
+          });
         });
 
-        // Sorting for questions
         document.querySelectorAll('#questions-tab th[data-sort]').forEach(header => {
-            header.addEventListener('click', () => {
-                const sortBy = header.getAttribute('data-sort');
-                currentQuestionSort.order = currentQuestionSort.sortBy === sortBy && currentQuestionSort.order === 'ASC' ? 'DESC' : 'ASC';
-                currentQuestionSort.sortBy = sortBy;
-                fetchQuestions(document.querySelector('.table-container h3').textContent.includes('All') ? 'all' : document.querySelector('.table-container h3').textContent.includes('Answered') ? 'answered' : 'unanswered');
-            });
+          header.addEventListener('click', () => {
+            const sortBy = header.getAttribute('data-sort');
+            currentQuestionSort.order = currentQuestionSort.sortBy === sortBy && currentQuestionSort.order === 'ASC' ? 'DESC' : 'ASC';
+            currentQuestionSort.sortBy = sortBy;
+            fetchQuestions(document.querySelector('.table-container h3').textContent.includes('All') ? 'all' : document.querySelector('.table-container h3').textContent.includes('Answered') ? 'answered' : 'unanswered');
+          });
         });
 
-        // Sorting for users
         document.querySelectorAll('#users-tab th[data-sort]').forEach(header => {
-            header.addEventListener('click', () => {
-                const sortBy = header.getAttribute('data-sort');
-                currentUserSort.order = currentUserSort.sortBy === sortBy && currentUserSort.order === 'ASC' ? 'DESC' : 'ASC';
-                currentUserSort.sortBy = sortBy;
-                fetchUsers();
-            });
+          header.addEventListener('click', () => {
+            const sortBy = header.getAttribute('data-sort');
+            currentUserSort.order = currentUserSort.sortBy === sortBy && currentUserSort.order === 'ASC' ? 'DESC' : 'ASC';
+            currentUserSort.sortBy = sortBy;
+            fetchUsers();
+          });
         });
-    } catch (error) {
+      } catch (error) {
         console.error('Admin error:', error);
         showError('Error loading dashboard. Redirecting to login...');
-        setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-    }
-});
+        // setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+      }
+    });
 
-// Logout
-document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role'); // Clear role on logout
-    localStorage.removeItem('userId');
-    window.location.href = 'login.html';
-});
-   
-
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+    });
   </script>
 </body>
 </html>
