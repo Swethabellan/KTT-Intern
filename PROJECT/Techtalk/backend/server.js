@@ -28,10 +28,11 @@ Answer.associate(db);
 
 const PORT = process.env.PORT || 3000;
 
+
 sequelize.authenticate()
     .then(() => {
         console.log('Database connection established successfully.');
-        return sequelize.sync();
+        return sequelize.sync({alter:true});
     })
     .then(() => {
         console.log('Tables synced!');

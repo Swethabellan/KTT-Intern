@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
         date: {
             type: Sequelize.DATE,
             allowNull: false,
-            defaultValue: Sequelize.NOW // Automatically set to the current date/time
+            defaultValue: Sequelize.NOW 
         },
         flagged: { 
             type: Sequelize.BOOLEAN,

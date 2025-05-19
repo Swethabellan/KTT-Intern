@@ -420,7 +420,7 @@
       if (!token) return;
 
       try {
-        const usersResponse = await fetch(`http://127.0.0.1:3000/api/users?sortBy=${currentUserSort.sortBy}&order=${currentUserSort.order}`, {
+        const usersResponse = await fetch(`http://127.0.0.1:3000/api/users/users?sortBy=${currentUserSort.sortBy}&order=${currentUserSort.order}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const users = await usersResponse.json();
@@ -446,7 +446,7 @@
             btn.addEventListener('click', async () => {
               const id = btn.getAttribute('data-id');
               if (confirm(`${btn.textContent} this user?`)) {
-                const toggleResponse = await fetch(`http://127.0.0.1:3000/api/admins/users/${id}/toggle-active`, {
+                const toggleResponse = await fetch(`http://127.0.0.1:3000/api//users/users/${id}/toggle-active`, {
                   method: 'PUT',
                   headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -477,7 +477,7 @@
               const id = btn.getAttribute('data-id');
               const type = btn.getAttribute('data-type');
               if (confirm(`Delete this ${type}?`)) {
-                const deleteResponse = await fetch(`http://127.0.0.1:3000/api/admins/${type}s/${id}`, {
+                const deleteResponse = await fetch(`http://127.0.0.1:3000/api/users/${type}s/${id}`, {
                   method: 'DELETE',
                   headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -493,51 +493,57 @@
 
         
 
-    // Fetch stats
-    async function fetchStats() {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-
-      try {
-        const statsResponse = await fetch('http://127.0.0.1:3000/api/admins/questions/stats', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const statsData = await statsResponse.json();
-        if (statsResponse.ok) {
-          document.getElementById('totalQuestions').textContent = statsData.total;
-          document.getElementById('answeredQuestions').textContent = statsData.answered;
-          document.getElementById('unansweredQuestions').textContent = statsData.unanswered;
-          document.getElementById('activeUsers').textContent = statsData.activeUsers;
-         
-        } else {
-        //   showError('Failed to load stats.');
+async function fetchStats() {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('No token found. Please log in.');
         }
-      } catch (error) {
-        console.error('Error fetching stats:', error);
-        showError('Error loading stats.');
-      }
+        const response = await fetch('http://127.0.0.1:3000/api/questions/stats', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const statsData=await statsResponse.json();
+        if (statsResponse.ok) {
+            const data = await response.json();
+            document.getElementById('totalQuestions').textContent = statsData.total || 0;
+            document.getElementById('answeredQuestions').textContent = statsData.answered || 0;
+            document.getElementById('unansweredQuestions').textContent = statsData.unanswered || 0;
+            document.getElementById('activeUsers').textContent = statsData.activeUsers || 0;
+        } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Fetch stats failed:', response.status, errorData);
+            showError(`Failed to fetch stats: ${errorData.message || response.statusText || 'Unknown error'}`);
+        }
+    } catch (error) {
+        console.error('Error fetching stats:', error.message);
+        showError(`Error fetching stats: ${error.message}`);
     }
+}
+ document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    console.log('Token:', token);
+    console.log('Role:', role);
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
+    if (!token || role !== 'admin') {
+        console.log('Redirecting to login: Invalid token or role');
         showError('No admin session found. Redirecting to login...');
         setTimeout(() => { window.location.href = 'login.html'; }, 2000);
         return;
-      }
+    }
 
-      try {
-        // Verify admin role
+    try {
+        // Verify admin role via API (optional, since role is in localStorage)
         const profileResponse = await fetch('http://127.0.0.1:3000/api/users/profile', {
-          headers: { 'Authorization': `Bearer ${token}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
         const profileData = await profileResponse.json();
         console.log('Admin profile:', profileData);
 
         if (!profileResponse.ok || profileData.role !== 'admin') {
-          showError('Admin access required. Redirecting to login...');
-          setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-          return;
+            showError('Admin access required. Redirecting to login...');
+            setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+            return;
         }
 
         // Show admin link
@@ -549,54 +555,58 @@
 
         // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
-          tab.addEventListener('click', () => {
-            const tabName = tab.getAttribute('data-tab');
-            switchTab(tabName);
-          });
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
+                switchTab(tabName);
+            });
         });
 
         // Stat card filters
         document.querySelectorAll('.stat-card').forEach(card => {
-          card.addEventListener('click', () => {
-            const filter = card.getAttribute('data-filter');
-            if (filter) {
-              switchTab('questions');
-              fetchQuestions(filter);
-            }
-          });
+            card.addEventListener('click', () => {
+                const filter = card.getAttribute('data-filter');
+                if (filter) {
+                    switchTab('questions');
+                    fetchQuestions(filter);
+                }
+            });
         });
 
         // Sorting for questions
         document.querySelectorAll('#questions-tab th[data-sort]').forEach(header => {
-          header.addEventListener('click', () => {
-            const sortBy = header.getAttribute('data-sort');
-            currentQuestionSort.order = currentQuestionSort.sortBy === sortBy && currentQuestionSort.order === 'ASC' ? 'DESC' : 'ASC';
-            currentQuestionSort.sortBy = sortBy;
-            fetchQuestions(document.querySelector('.table-container h3').textContent.includes('All') ? 'all' : document.querySelector('.table-container h3').textContent.includes('Answered') ? 'answered' : 'unanswered');
-          });
+            header.addEventListener('click', () => {
+                const sortBy = header.getAttribute('data-sort');
+                currentQuestionSort.order = currentQuestionSort.sortBy === sortBy && currentQuestionSort.order === 'ASC' ? 'DESC' : 'ASC';
+                currentQuestionSort.sortBy = sortBy;
+                fetchQuestions(document.querySelector('.table-container h3').textContent.includes('All') ? 'all' : document.querySelector('.table-container h3').textContent.includes('Answered') ? 'answered' : 'unanswered');
+            });
         });
 
         // Sorting for users
         document.querySelectorAll('#users-tab th[data-sort]').forEach(header => {
-          header.addEventListener('click', () => {
-            const sortBy = header.getAttribute('data-sort');
-            currentUserSort.order = currentUserSort.sortBy === sortBy && currentUserSort.order === 'ASC' ? 'DESC' : 'ASC';
-            currentUserSort.sortBy = sortBy;
-            fetchUsers();
-          });
+            header.addEventListener('click', () => {
+                const sortBy = header.getAttribute('data-sort');
+                currentUserSort.order = currentUserSort.sortBy === sortBy && currentUserSort.order === 'ASC' ? 'DESC' : 'ASC';
+                currentUserSort.sortBy = sortBy;
+                fetchUsers();
+            });
         });
-      } catch (error) {
+    } catch (error) {
         console.error('Admin error:', error);
         showError('Error loading dashboard. Redirecting to login...');
         setTimeout(() => { window.location.href = 'login.html'; }, 2000);
-      }
-    });
+    }
+});
 
-    // Logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('token');
-      window.location.href = 'login.html';
-    });
+// Logout
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role'); // Clear role on logout
+    localStorage.removeItem('userId');
+    window.location.href = 'login.html';
+});
+   
+
   </script>
 </body>
 </html>

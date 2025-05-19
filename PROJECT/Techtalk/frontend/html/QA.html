@@ -485,6 +485,29 @@
                     return null;
                 }
             },
+            async fetchUserProfile() {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No token found. Please log in.');
+            }
+            const response = await fetch('http://127.0.0.1:3000/api/users/profile', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(`Failed to fetch profile: ${response.status} ${errorData.message || ''}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching user profile:', error.message);
+            throw error;
+        }
+    },
             async submitQuestion(title, description) {
                 try {
                     const token = localStorage.getItem('token');
@@ -1085,15 +1108,18 @@ async function loadUserProfile() {
 
         let pollingInterval;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const userId = localStorage.getItem('userId');
-            const userProfileLink = document.getElementById('userProfileLink');
-            if (userId) {
-                userProfileLink.href = `demo.html?userId=<userId>`;
-             }
-            //  else {
-            //     // userProfileLink.href = 'demo.html'; 
-            // }
+       document.addEventListener('DOMContentLoaded', () => {
+    const userId = localStorage.getItem('userId');
+    const userProfileLink = document.getElementById('userProfileLink');
+    if (userId) {
+        userProfileLink.href = `demo.html?userId=${userId}`; // Correctly interpolate userId
+    } else {
+        userProfileLink.href = '#'; // Fallback if no userId
+        userProfileLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Please log in to view your profile.');
+        });
+    }
 
             fetchTotalUsers();
             fetchTotalQuestions();

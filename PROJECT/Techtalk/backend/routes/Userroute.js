@@ -3,6 +3,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { User } = require('../models');
+const verifyAdmin = (req, res, next) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required' });
+    }
+    next();
+};
 
 const authenticateToken = require('../middleware/auth');
 router.get('/', authenticateToken, async (req, res) => {
@@ -14,6 +20,20 @@ router.get('/', authenticateToken, async (req, res) => {
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).json({ message: 'Server error while fetching users' });
+    }
+});
+router.get('/users', authenticateToken, verifyAdmin, async (req, res) => {
+    try {
+        const sortBy = req.query.sortBy || 'username';
+        const order = req.query.order || 'ASC';
+        const users = await User.findAll({
+            attributes: ['id', 'username', 'email', 'role', 'isActive'],
+            order: [[sortBy, order]]
+        });
+        res.json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ message: 'Error fetching users' });
     }
 });
 router.get('/:userId/stats', authenticateToken, async (req, res) => {
@@ -30,18 +50,46 @@ router.get('/:userId/stats', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-router.get('/users/:id', authenticateToken, async (req, res) => {
-  try {
-    const user = await User.findByPk(req.params.id, {
-      attributes: ['id', 'username', 'bio', 'skills']
-    });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+router.put('/users/:id/toggle-active', authenticateToken, verifyAdmin, async (req, res) => {
+    try {
+        const userId = parseInt(req.params.id);
+        const user = await User.findByPk(userId);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        if (user.id === req.user.id) return res.status(403).json({ message: 'Cannot deactivate yourself' });
+        user.isActive = !user.isActive;
+        await user.save();
+        res.json({ message: `User ${user.isActive ? 'activated' : 'deactivated'}`, isActive: user.isActive });
+    } catch (error) {
+        console.error('Error toggling user status:', error);
+        res.status(500).json({ message: 'Error toggling user status' });
     }
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+});
+
+
+router.get('/users/stats', verifyAdmin,authenticateToken, async (req, res) => {
+    try {
+        const stats = await User.groupBy('role', {
+            attributes: ['role', [User.sequelize.fn('COUNT', '*'), 'count']],
+            group: 'role'
+        });
+        res.json(stats);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching stats' });
+    }
+});
+router.get('/users/:id', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id, {
+            attributes: ['id', 'username', 'bio', 'skills', 'role']
+        });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(user);
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
 });
 router.get('/:userId/skills', authenticateToken, async (req, res) => {
     try {
@@ -57,14 +105,14 @@ router.get('/:userId/skills', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Server error while fetching user skills' });
     }
 });
-router.get('/users/:id', async (req, res) => {
-    const userId = req.params.id;
-    const user = await db.query('SELECT id, username, bio, skills FROM users WHERE id = $1', [userId]);
-    if (!user.rows[0]) {
-        return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(user.rows[0]);
-});
+// router.get('/users/:id', async (req, res) => {
+//     const userId = req.params.id;
+//     const user = await db.query('SELECT id, username, bio, skills FROM users WHERE id = $1', [userId]);
+//     if (!user.rows[0]) {
+//         return res.status(404).json({ message: 'User not found' });
+//     }
+//     res.json(user.rows[0]);
+// });
 router.post('/signup', async (req, res) => {
   try {
     const { name, username, email, password, role } = req.body;
@@ -96,6 +144,21 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+
+router.delete('/users/:id', verifyAdmin,authenticateToken, async (req, res) => {
+    try {
+        const userId = parseInt(req.params.id);
+        if (userId === req.user.id) return res.status(400).json({ message: 'Cannot delete own account' });
+        const user = await User.findByPk(userId);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        await user.destroy();
+        res.json({ message: 'User deleted' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting user' });
+    }
+});
+
+
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -106,11 +169,6 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ where: { username } });
     if (!user) return res.status(404).json({ error: 'User not found' });
      
-    if (user.isActive === undefined) {
-                console.log('isActive column missing for user:', username);
-                return res.status(500).json({ error: 'Server configuration error: isActive column missing' });
-            }
-
     if (!user.isActive) {
                 console.log('User is inactive:', username);
                 return res.status(403).json({ error: 'Account is inactive. Contact an admin.' });
@@ -164,7 +222,6 @@ router.get('/profile', authenticateToken, async (req, res) => {
       username: user.username,
       role:user.role,
       bio: user.bio || '',
-
       skills: skillsArray
     });
   } catch (error) {
@@ -246,5 +303,18 @@ router.get('/activity', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
-
+router.put('/:id/toggle-active', authenticateToken, verifyAdmin, async (req, res) => {
+    try {
+        const userId = parseInt(req.params.id);
+        const user = await User.findByPk(userId);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        if (user.id === req.user.id) return res.status(403).json({ message: 'Cannot deactivate yourself' });
+        user.isActive = !user.isActive;
+        await user.save();
+        res.json({ message: `User ${user.isActive ? 'activated' : 'deactivated'}`, isActive: user.isActive });
+    } catch (error) {
+        console.error('Error toggling user status:', error);
+        res.status(500).json({ message: 'Error toggling user status' });
+    }
+});
 module.exports = router;
