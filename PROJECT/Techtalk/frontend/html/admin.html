@@ -201,7 +201,9 @@
       background: #e2e8f0;
     }
 
-    .toggle-btn {
+    .toggle-btn,
+    .question-toggle-btn,
+    .answer-toggle-btn {
       background: #1c1b1b;
       color: white;
       padding: 0.5rem 1rem;
@@ -211,7 +213,9 @@
       margin-right: 0.5rem;
     }
 
-    .toggle-btn:hover {
+    .toggle-btn:hover,
+    .question-toggle-btn:hover,
+    .answer-toggle-btn:hover {
       background: #3182ce;
     }
 
@@ -383,7 +387,7 @@
               <td>${q.answerCount || 0}</td>
               <td>${new Date(q.createdAt).toLocaleDateString()}</td>
               <td>
-                <button class="toggle-btn" data-id="${q.id}" data-type="question">${q.isActive ? 'Deactivate' : 'Activate'}</button>
+                <button class="question-toggle-btn" data-id="${q.id}" data-type="question">${q.isActive ? 'Deactivate' : 'Activate'}</button>
                 <button class="toggle-details" data-id="${q.id}">Answers</button>
               </td>
             `;
@@ -400,7 +404,7 @@
                   ${q.Answers && q.Answers.length > 0 ? q.Answers.map(a => `
                     <div class="answer">
                       <p>${a.content} (Posted on ${new Date(a.createdAt).toLocaleDateString()})${a.isCorrect ? '<span class="checkmark">✔</span>' : ''}</p>
-                      <button class="toggle-btn" data-id="${a.id}" data-type="answer">${a.isActive ? 'Deactivate' : 'Activate'}</button>
+                      <button class="answer-toggle-btn" data-id="${a.id}" data-type="answer">${a.isActive ? 'Deactivate' : 'Activate'}</button>
                       <button class="correct-btn" data-id="${a.id}">${a.isCorrect ? 'Unmark Correct' : 'Mark Correct'}</button>
                     </div>
                   `).join('') : '<p>No answers yet.</p>'}
@@ -410,77 +414,69 @@
             tableBody.appendChild(detailsRow);
           });
 
-          // // Unified toggle event listener for questions and answers
-          // document.querySelectorAll('.toggle-btn').forEach(btn => {
-          //   btn.addEventListener('click', async () => {
-          //     const id = btn.getAttribute('data-id');
-          //     const type = btn.getAttribute('data-type');
-          //     const endpoint = type === 'question' 
-          //       ? `http://127.0.0.1:3000/api/questions/questions/${id}/toggle-active`
-          //       : `http://127.0.0.1:3000/api/questions/answers/${id}/toggle-active`;
+          // Event listener for toggling questions
+          document.querySelectorAll('.question-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const id = btn.getAttribute('data-id');
+              const type = btn.getAttribute('data-type');
+              const endpoint = `http://127.0.0.1:3000/api/questions/${id}/toggle-active`;
 
-          //     if (confirm(`${btn.textContent} this ${type}?`)) {
-          //       try {
-          //         const toggleResponse = await fetch(endpoint, {
-          //           method: 'PUT',
-          //           headers: { 'Authorization': `Bearer ${token}` }
-          //         });
-          //         if (!toggleResponse.ok) {
-          //           const errorData = await toggleResponse.json();
-          //           throw new Error(`Failed to toggle ${type} status: ${errorData.message || toggleResponse.statusText}`);
-          //         }
-          //         const result = await toggleResponse.json();
-          //         btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
-          //         if (type === 'question') {
-          //           fetchStats(); // Update stats after toggling a question
-          //           fetchQuestions(filter); // Refresh questions to reflect status
-          //         }
-          //       } catch (error) {
-          //         console.error(`Error toggling ${type}:`, error);
-          //         showError(`Failed to toggle ${type} status: ${error.message}`);
-          //       }
-          //     }
-          //   });
-          // });
+              if (confirm(`${btn.textContent} this ${type}?`)) {
+                try {
+                  const toggleResponse = await fetch(endpoint, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                  });
+                  if (!toggleResponse.ok) {
+                    const errorData = await toggleResponse.json();
+                    throw new Error(`Failed to toggle ${type} status: ${errorData.message || toggleResponse.statusText}`);
+                  }
+                  const result = await toggleResponse.json();
+                  btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
+                  fetchStats();
+                  fetchQuestions(filter);
+                } catch (error) {
+                  console.error(`Error toggling ${type}:`, error);
+                  showError(`Failed to toggle ${type} status: ${error.message}`);
+                }
+              }
+            });
+          });
 
-          document.querySelectorAll('.toggle-btn').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const id = btn.getAttribute('data-id');
-    const type = btn.getAttribute('data-type');
-    const endpoint = type === 'question' 
-      ? `http://127.0.0.1:3000/api/questions/question/${id}/toggle-active`
-      : `http://127.0.0.1:3000/api/questions/answer/${id}/toggle-active`;
+          // Event listener for toggling answers
+          document.querySelectorAll('.answer-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const id = btn.getAttribute('data-id');
+              const type = btn.getAttribute('data-type');
+              const endpoint = `http://127.0.0.1:3000/api/answers/${id}/toggle-active`;
 
-    if (confirm(`${btn.textContent} this ${type}?`)) {
-      try {
-        const toggleResponse = await fetch(endpoint, {
-          method: 'PUT',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!toggleResponse.ok) {
-          const errorData = await toggleResponse.json();
-          throw new Error(`Failed to toggle ${type} status: ${errorData.message || toggleResponse.statusText}`);
-        }
-        const result = await toggleResponse.json();
-        btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
-        if (type === 'question') {
-          fetchStats();
-          fetchQuestions(filter);
-        }
-      } catch (error) {
-        console.error(`Error toggling ${type}:`, error);
-        showError(`Failed to toggle ${type} status: ${error.message}`);
-      }
-    }
-  });
-});
+              if (confirm(`${btn.textContent} this ${type}?`)) {
+                try {
+                  const toggleResponse = await fetch(endpoint, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                  });
+                  if (!toggleResponse.ok) {
+                    const errorData = await toggleResponse.json();
+                    throw new Error(`Failed to toggle ${type} status: ${errorData.message || toggleResponse.statusText}`);
+                  }
+                  const result = await toggleResponse.json();
+                  btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
+                  fetchQuestions(filter); // Refresh the questions table to reflect the updated answer status
+                } catch (error) {
+                  console.error(`Error toggling ${type}:`, error);
+                  showError(`Failed to toggle ${type} status: ${error.message}`);
+                }
+              }
+            });
+          });
 
           // Event listener for toggling details visibility
           document.querySelectorAll('.toggle-details').forEach(btn => {
             btn.addEventListener('click', () => {
               const detailsRow = btn.closest('tr').nextElementSibling;
               detailsRow.style.display = detailsRow.style.display === 'none' ? 'table-row' : 'none';
-              btn.textContent = detailsRow.style.display === 'none' ? 'Answers' : 'Hide ';
+              btn.textContent = detailsRow.style.display === 'none' ? 'Answers' : 'Hide';
             });
           });
 
@@ -511,6 +507,7 @@
                   } else if (!result.isCorrect && checkmark) {
                     checkmark.remove();
                   }
+                  fetchQuestions(filter); // Refresh the table to reflect the updated answer status
                 } catch (error) {
                   console.error('Error marking answer as correct:', error);
                   showError(`Failed to mark answer as correct: ${error.message}`);
@@ -562,9 +559,10 @@
             btn.addEventListener('click', async () => {
               const id = btn.getAttribute('data-id');
               const type = btn.getAttribute('data-type');
+              const endpoint = `http://127.0.0.1:3000/api/users/${id}/toggle-active`; // Adjusted endpoint
               if (confirm(`${btn.textContent} this ${type}?`)) {
                 try {
-                  const toggleResponse = await fetch(`http://127.0.0.1:3000/api/users/users/${id}/toggle-active`, {
+                  const toggleResponse = await fetch(endpoint, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}` }
                   });
@@ -576,6 +574,7 @@
                   btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
                   btn.closest('tr').children[4].textContent = result.isActive ? 'Active' : 'Inactive';
                   fetchStats();
+                  fetchUsers(); // Refresh the users table
                 } catch (error) {
                   console.error('Error toggling user:', error);
                   showError(`Failed to toggle user status: ${error.message}`);
