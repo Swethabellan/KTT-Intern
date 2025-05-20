@@ -27,7 +27,6 @@ router.get('/', authenticateToken, async (req, res) => {
         }
 
         const questions = await Question.findAll({
-            where: whereClause,
             include: [
                 { model: User, attributes: ['id', 'username'] },
                 { model: Answer, include: [{ model: User, attributes: ['id', 'username'] }] }
@@ -38,9 +37,12 @@ router.get('/', authenticateToken, async (req, res) => {
         res.json(questions);
     } catch (error) {
         console.error('Error fetching questions:', error);
-        res.status(500).json({ message: 'Error fetching questions' });
-    }
+        res.status(500).json({ message: 'Error fetching questions' });
+    }
 });
+       
+
+    
 router.post('/', authenticateToken, async (req, res) => {
     try {
         if (!req.user || !req.user.id) {
