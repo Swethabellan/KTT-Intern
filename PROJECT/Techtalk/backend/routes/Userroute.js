@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const { User } = require('../models');
+const { User,Question,Answer } = require('../models');
 const verifyAdmin = (req, res, next) => {
     if (req.user.role !== 'admin') {
         return res.status(403).json({ message: 'Admin access required' });
@@ -74,6 +74,24 @@ router.get('/users/stats', verifyAdmin,authenticateToken, async (req, res) => {
         });
         res.json(stats);
     } catch (error) {
+        res.status(500).json({ message: 'Error fetching stats' });
+    }
+});
+router.get('/stats', authenticateToken, async (req, res) => {
+  try {
+    if (req.user && req.user.role != 'admin') {
+       return res.status(403).json({ message: 'Admin access required' });
+    }
+        const total = await Question.count();
+        const answered = await Question.count({
+            include: [{ model: Answer, required: true }]
+        });
+        const unanswered = total - answered;
+         const activeUsers = await User.count({ where: { isActive: true } });
+       
+        res.json({ total, answered, unanswered, activeUsers});
+    } catch (error) {
+        console.error('Error fetching stats:', error);
         res.status(500).json({ message: 'Error fetching stats' });
     }
 });
