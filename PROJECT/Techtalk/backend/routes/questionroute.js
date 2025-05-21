@@ -9,39 +9,6 @@ const verifyAdmin = (req, res, next) => {
     }
     next();
 };
-
-router.get('/', authenticateToken, async (req, res) => {
-    try {
-        const { filter, sortBy = 'createdAt', order = 'DESC' } = req.query;
-        const userRole = req.user.role;
-
-        let whereClause = {};
-        if (filter === 'answered') {
-            whereClause.answerCount = { [Op.gt]: 0 };
-        } else if (filter === 'unanswered') {
-            whereClause.answerCount = 0;
-        }
-
-        if (userRole !== 'admin') {
-            whereClause.isActive = true;
-        }
-
-        const questions = await Question.findAll({
-            include: [
-                { model: User, attributes: ['id', 'username'] },
-                { model: Answer, include: [{ model: User, attributes: ['id', 'username'] }] }
-            ],
-            order: [[sortBy, order]]
-        });
-
-        res.json(questions);
-    } catch (error) {
-        console.error('Error fetching questions:', error);
-        res.status(500).json({ message: 'Error fetching questions' });
-    }
-});
-       
-
     
 router.post('/', authenticateToken, async (req, res) => {
     try {
@@ -65,6 +32,40 @@ router.post('/', authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'Failed to create question', details: error.message });
     }
 });
+
+router.get('/', authenticateToken, async (req, res) => {
+    try {
+        const { filter = '', sortBy = 'createdAt', order = 'DESC' } = req.query;
+        const userRole = req.user.role;
+
+        let whereClause = {}, ansRequired = false;
+        if (filter == 'answered') {
+            ansRequired = true;
+        } else if (filter == 'unanswered') {
+            ansRequired = false;
+        }
+
+        if (userRole !== 'admin') {
+            whereClause.isActive = true;
+        }
+
+        const questions = await Question.findAll({
+            where: whereClause,
+            include: [
+                { model: User, attributes: ['id', 'username'] },
+                { model: Answer, include: [{ model: User, attributes: ['id', 'username'] }] ,required:ansRequired}
+            ],
+            order: [[sortBy, order]]
+        });
+        res.status(200).json(questions);
+    } catch (error) {
+        console.error('Error fetching questions:', error);
+        res.status(500).json({ message: 'Error fetching questions' });
+    }
+});
+       
+
+
 router.get('/questions', verifyAdmin,authenticateToken, async (req, res) => {
    try {
         const filter = req.query.filter || 'all';
