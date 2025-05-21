@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -298,7 +299,7 @@
         <h3>Unanswered</h3>
         <p id="unansweredQuestions">0</p>
       </div>
-      <div class="stat-card">
+      <div class="stat-card" data-filter="activeusers">
         <h3>Active Users</h3>
         <p id="activeUsers">0</p>
       </div>
@@ -352,19 +353,42 @@
       errorMessage.textContent = message;
     }
 
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
-      document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
-      document.querySelector(`#${tabName}-tab`).style.display = 'block';
+    // function switchTab(tabName) {
+    //   document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    //   document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+    //   document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+    //   document.querySelector(`#${tabName}-tab`).style.display = 'block';
 
-      if (tabName === 'questions') fetchQuestions();
-      else if (tabName === 'users') fetchUsers();
+    //   if (['answered', 'unanswered', 'all'].includes(tabName)) fetchQuestions(tabName);
+    //   else if (tabName === 'users') fetchUsers();
+    // }
+    function switchTab(tabName) {
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+
+  if (['all', 'answered', 'unanswered'].includes(tabName)) {
+    document.querySelector('.tab[data-tab="questions"]').classList.add('active');
+    document.querySelector('#questions-tab').style.display = 'block';
+    fetchQuestions(tabName);
+  } else if (tabName === 'activeusers') {
+    document.querySelector('.tab[data-tab="users"]').classList.add('active');
+    document.querySelector('#users-tab').style.display = 'block';
+    fetchUsers('activeusers');
+  }else {
+    document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+    document.querySelector(`#${tabName}-tab`).style.display = 'block';
+
+    if (tabName === 'users') {
+      fetchUsers();
+    } else if (tabName === 'questions') {
+      fetchQuestions('all'); 
     }
+  }
+}
 
     let currentQuestionSort = { sortBy: 'createdAt', order: 'ASC' };
 
-    async function fetchQuestions(filter = '') {
+    async function fetchQuestions(filter) {
       const token = localStorage.getItem('token');
       if (!token) return;
 
@@ -373,8 +397,15 @@
         const questionsResponse = await fetch(url, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        const questions = await questionsResponse.json();
+        let questions = await questionsResponse.json();
         if (questionsResponse.ok) {
+          if (filter == 'answered') {
+            questions = questions.filter(q => q.Answers?.length > 0);
+          } else if (filter == 'unanswered') {
+            questions = questions.filter(q => !q.Answers || q.Answers.length === 0);
+          }else if (filter=='activeusers'){
+            users = users.filter(u => u.isActive === true);
+          }
           const tableBody = document.getElementById('questionsTable');
           tableBody.innerHTML = '';
           questions.forEach(q => {
@@ -384,7 +415,7 @@
               <td>${q.title}</td>
               <td>${q.description}</td>
               <td>${q.User?.username || 'Unknown'}</td>
-              <td>${q.answerCount || 0}</td>
+              <td>${q.Answers?.length || 0}</td>
               <td>${new Date(q.createdAt).toLocaleDateString()}</td>
               <td>
                 <button class="question-toggle-btn" data-id="${q.id}" data-type="question">${q.isActive ? 'Deactivate' : 'Activate'}</button>
@@ -393,7 +424,6 @@
             `;
             tableBody.appendChild(row);
 
-            // Add details section for answers
             const detailsRow = document.createElement('tr');
             detailsRow.classList.add('details-row');
             detailsRow.style.display = 'none';
@@ -414,7 +444,6 @@
             tableBody.appendChild(detailsRow);
           });
 
-          // Event listener for toggling questions
           document.querySelectorAll('.question-toggle-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
               const id = btn.getAttribute('data-id');
@@ -443,7 +472,6 @@
             });
           });
 
-          // Event listener for toggling answers
           document.querySelectorAll('.answer-toggle-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
               const id = btn.getAttribute('data-id');
@@ -471,7 +499,6 @@
             });
           });
 
-          // Event listener for toggling details visibility
           document.querySelectorAll('.toggle-details').forEach(btn => {
             btn.addEventListener('click', () => {
               const detailsRow = btn.closest('tr').nextElementSibling;
@@ -480,7 +507,6 @@
             });
           });
 
-          // Event listener for marking answers as correct
           document.querySelectorAll('.correct-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
               const id = btn.getAttribute('data-id');
@@ -507,7 +533,7 @@
                   } else if (!result.isCorrect && checkmark) {
                     checkmark.remove();
                   }
-                  fetchQuestions(filter); // Refresh the table to reflect the updated answer status
+                  fetchQuestions(filter); 
                 } catch (error) {
                   console.error('Error marking answer as correct:', error);
                   showError(`Failed to mark answer as correct: ${error.message}`);
@@ -528,16 +554,20 @@
     }
 
     let currentUserSort = { sortBy: 'createdAt', order: 'ASC' };
-    async function fetchUsers() {
+    async function fetchUsers(filter) {
       const token = localStorage.getItem('token');
       if (!token) return;
 
       try {
-        const usersResponse = await fetch(`http://127.0.0.1:3000/api/users/users?sortBy=${currentUserSort.sortBy}&order=${currentUserSort.order}`, {
+        const usersResponse = await fetch(`http://127.0.0.1:3000/api/users/users?sortBy=${currentUserSort.sortBy}&order=${currentUserSort.order}&filter=${filter}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        const users = await usersResponse.json();
+        let users = await usersResponse.json();
         if (usersResponse.ok) {
+          
+        if (filter === 'activeusers') {
+            users = users.filter(u => u.isActive === true || u.isActive === 'true');
+          }
           const tableBody = document.getElementById('usersTable');
           tableBody.innerHTML = '';
           users.forEach(user => {
@@ -574,7 +604,7 @@
                   btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
                   btn.closest('tr').children[4].textContent = result.isActive ? 'Active' : 'Inactive';
                   fetchStats();
-                  fetchUsers(); // Refresh the users table
+                  fetchUsers(filter); 
                 } catch (error) {
                   console.error('Error toggling user:', error);
                   showError(`Failed to toggle user status: ${error.message}`);
@@ -582,6 +612,8 @@
               }
             });
           });
+          const tableHeader = document.querySelector('#users-tab .table-container h3');
+          tableHeader.textContent = filter === 'activeusers' ? 'Active Users' : 'Users';
         } else {
           showError('Failed to load users.');
         }
@@ -598,10 +630,28 @@
           throw new Error('No token found. Please log in.');
         }
         const response = await fetch('http://127.0.0.1:3000/api/users/stats', {
-          headers: { 'Authorization': `Bearer ${token}` }
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token} `
+          }
         });
         if (response.ok) {
+
           const data = await response.json();
+          const questionsResponse = await fetch('http://127.0.0.1:3000/api/questions?filter=all', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!questionsResponse.ok) {
+      const errorData = await questionsResponse.json().catch(() => ({}));
+      console.error('Fetch questions failed:', questionsResponse.status, errorData);
+      showError(`Failed to fetch questions: ${errorData.message || questionsResponse.statusText || 'Unknown error'}`);
+      return;
+    }
+    const questions = await questionsResponse.json();
+    const total = questions.length;
+    const answered = questions.filter(q => q.Answers?.length > 0).length; 
+    const unanswered = total - answered;
           document.getElementById('totalQuestions').textContent = data.total || 0;
           document.getElementById('answeredQuestions').textContent = data.answered || 0;
           document.getElementById('unansweredQuestions').textContent = data.unanswered || 0;
@@ -652,8 +702,7 @@
           card.addEventListener('click', () => {
             const filter = card.getAttribute('data-filter');
             if (filter) {
-              switchTab('questions');
-              fetchQuestions(filter);
+              switchTab(filter);
             }
           });
         });
@@ -688,4 +737,5 @@
     });
   </script>
 </body>
+
 </html>

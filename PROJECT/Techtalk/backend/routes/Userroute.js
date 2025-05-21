@@ -26,7 +26,13 @@ router.get('/users', authenticateToken, verifyAdmin, async (req, res) => {
     try {
         const sortBy = req.query.sortBy || 'username';
         const order = req.query.order || 'ASC';
+        const filter=req.query.filter || '';
+        let where={};
+        if(filter =='activeusers'){
+          where.isActive=true;
+        }
         const users = await User.findAll({
+          where,
             attributes: ['id', 'username', 'email', 'role', 'isActive'],
             order: [[sortBy, order]]
         });
@@ -82,12 +88,18 @@ router.get('/stats', authenticateToken, async (req, res) => {
     if (req.user && req.user.role != 'admin') {
        return res.status(403).json({ message: 'Admin access required' });
     }
-        const total = await Question.count();
-        const answered = await Question.count({
-            include: [{ model: Answer, required: true }]
-        });
-        const unanswered = total - answered;
-         const activeUsers = await User.count({ where: { isActive: true } });
+    const questions = await Question.findAll({
+      include: [
+        {
+          model: Answer,
+          required: false,
+        },
+      ],
+    });
+    const total = questions.length;
+    const answered = questions.filter(q => q.Answers && q.Answers.length > 0).length;
+    const unanswered = total - answered;
+    const activeUsers = await User.count({ where: { isActive: true } });
        
         res.json({ total, answered, unanswered, activeUsers});
     } catch (error) {
