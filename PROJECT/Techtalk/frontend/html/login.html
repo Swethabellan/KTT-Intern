@@ -42,14 +42,12 @@
       const errorMessage = document.getElementById('error-message');
       errorMessage.textContent = '';
 
-      // Input validation
       if (!username || !password) {
         errorMessage.textContent = 'Please fill in both username and password.';
         return;
       }
 
       try {
-        // Step 1: Login to get token
         console.log('Attempting login:', { username });
         const loginResponse = await fetch('http://127.0.0.1:3000/api/users/login', {
           method: 'POST',
@@ -67,7 +65,6 @@
           return;
         }
 
-        // Store token
         const token = loginData.token;
         if (!token) {
           errorMessage.textContent = 'No token received from server.';
@@ -76,7 +73,6 @@
         localStorage.setItem('token', token);
         console.log('Token stored:', token);
 
-        // Step 2: Fetch user profile to get role
         console.log('Fetching user profile...');
         const profileResponse = await fetch('http://127.0.0.1:3000/api/users/profile', {
           headers: {
@@ -93,7 +89,6 @@
           return;
         }
 
-        // Step 3: Validate role
         const role = profileData.role;
         console.log('User role:', role);
 
@@ -103,7 +98,6 @@
           return;
         }
 
-        // Step 4: Redirect based on role
         if (role === 'admin') {
           console.log('Redirecting to admin.html');
           window.location.href = 'admin.html';
@@ -113,7 +107,6 @@
         }
       } catch (error) {
         errorMessage.textContent = 'An error occurred. Please try again later.';
-        console.error('Login error:', error.message, error.stack);
         localStorage.removeItem('token');
        }
        // finally {

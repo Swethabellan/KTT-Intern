@@ -23,6 +23,10 @@ module.exports = (sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false
         },
+        isActive: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: true
+        },
         flagged: { 
             type: Sequelize.BOOLEAN, 
             defaultValue: false }
