@@ -287,10 +287,18 @@
             text-decoration: underline;
         }
 
+        .checkmark-container {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 4px;
+        }
+
         .checkmark {
             color: #28a745;
             font-weight: bold;
             margin-left: 0.5rem;
+            font-size: 30px;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -301,7 +309,8 @@
             <span class="material-icons mr-2">forum</span> TechTalk
         </div>
         <a href="./QA.html" class="flex items-center mb-4"><span class="material-icons mr-2">home</span> Home</a>
-        <a href="#" id="userProfileLink" class="flex items-center mb-4"><span class="material-icons mr-2">person</span>
+        <a href="./demo.html" id="userProfileLink" class="flex items-center mb-4"><span
+                class="material-icons mr-2">person</span>
             User Profile</a>
         <a href="#" class="flex items-center mb-4 chat-menu" id="chatMenu"><span class="material-icons mr-2">chat</span>
             All Answers</a>
@@ -589,24 +598,29 @@
                     const previewAnswersCount = 2;
                     let answersHtml = '';
                     if (answers.length > 0) {
+                     const activeAnswers = answers.filter(answer => answer.isActive !== false);
                         answersHtml = answers.map((answer, index) => {
                             const answerCreatedAt = new Date(answer.createdAt);
                             const formattedAnswerDate = formatDate(answerCreatedAt);
+                            const checkmark = answer.isCorrect ? '<span class="checkmark-container"><span class="checkmark">✔</span></span>' : '';
                             const isHidden = index >= previewAnswersCount ? 'hidden' : '';
-                            const checkmark = answer.isCorrect ? '<span class="checkmark">✔</span>' : '';
                             return `
-                                <div class="answer-item ${isHidden}" data-answer-id="answer-${question.id}-${index}">
-                                    <div class="answer-content">
-                                        <div class="flex items-center">
-                                            <div>
-                                                <a href="demo.html?userId=${answer.User?.id}" class="username-link font-semibold text-gray-800">${answer.User?.username}</a>
-                                                <p class="text-gray-600">${answer.content}${checkmark}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="answer-timestamp">${formattedAnswerDate}</span>
-                                </div>
-                            `;
+        <div class="answer-item ${isHidden}" data-answer-id="answer-${question.id}-${index}">
+            <div class="answer-content">
+                <div class="flex items-center">
+                    <div>
+                        <a href="demo.html?userId=${answer.User?.id}" class="username-link font-semibold text-gray-800">${answer.User?.username}</a>
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-600">${answer.content}</p>
+            <div class="flex items-center">
+                ${checkmark}
+                <span class="answer-timestamp">${formattedAnswerDate}</span>
+                
+            </div>
+        </div>
+    `;
                         }).join('');
                     }
 
@@ -675,9 +689,11 @@
                             skillSpan.textContent = skill;
                             skillsContainer.appendChild(skillSpan);
                         });
+
                     } else {
                         skillsContainer.innerHTML += '<span>No skills listed.</span>';
                     }
+                    return profile;
                 } else {
                     throw new Error('No profile data returned.');
                 }
@@ -744,6 +760,7 @@
                 const questionsWithAnswers = await Promise.all(
                     questions.map(async (question) => {
                         const answers = await apiService.fetchAnswers(question.id);
+                        const activeAnswers = answers.filter(answer => answer.isActive !== false);
                         return { question, answers };
                     })
                 );
@@ -872,6 +889,7 @@
                     answersPopupContent.innerHTML = '<p class="text-gray-500">No answers yet.</p>';
                 } else {
                     answersData.forEach(data => {
+                            const activeAnswers = answers.filter(answer => answer.isActive !== false);
                         if (data.answers.length > 0) {
                             const questionGroup = document.createElement('div');
                             questionGroup.className = 'question-group';
@@ -917,6 +935,7 @@
                 const questions = await apiService.fetchQuestions();
                 for (const question of questions) {
                     const answers = await apiService.fetchAnswers(question.id);
+                    const activeAnswers = answers.filter(answer => answer.isActive !== false);
                     const questionCard = document.querySelector(`.question-card[data-question-id="${question.id}"]`);
                     if (questionCard) {
                         const commentCountSpan = questionCard.querySelector('.comment-count');
@@ -1128,12 +1147,11 @@
             const userId = localStorage.getItem('userId');
             const userProfileLink = document.getElementById('userProfileLink');
             if (userId) {
-                userProfileLink.href = `demo.html?userId=${userId}`; // Correctly interpolate userId
+                userProfileLink.href = `demo.html?userId=${userId}`;
             } else {
-                userProfileLink.href = '#'; // Fallback if no userId
+                userProfileLink.href = `demo.html?userId=${userId}`;
                 userProfileLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    alert('Please log in to view your profile.');
+                    userProfileLink.href = `demo.html?userId=${userId}`;
                 });
             }
 
@@ -1157,6 +1175,19 @@
                 localStorage.removeItem('userId');
                 window.location.href = 'login.html';
             });
+        document.addEventListener('click', (e) => {
+    const link = e.target.closest('.username-link');
+    if (link) {
+        e.preventDefault(); 
+        const href = link.getAttribute('href');
+        console.log('Username link clicked, href:', href); 
+        if (href && href !== '#' && href.includes('userId=')) {
+            window.location.href = href;
+        } else {
+            alert('User profile not available.');
+        }
+    }
+});
         });
 
         window.addEventListener('beforeunload', () => {
@@ -1166,4 +1197,5 @@
         });
     </script>
 </body>
+
 </html>

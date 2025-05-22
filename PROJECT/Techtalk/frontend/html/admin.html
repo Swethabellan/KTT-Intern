@@ -233,6 +233,16 @@
       border-left: 3px solid #2b6cb0;
     }
 
+    tr.inactive {
+      background-color: #f9f9f9;
+      opacity: 0.7;
+    }
+
+    .answer.inactive {
+      background-color: #f8d7da;
+      opacity: 0.7;
+    }
+
     .correct-btn {
       background: #28a745;
       color: white;
@@ -363,28 +373,28 @@
     //   else if (tabName === 'users') fetchUsers();
     // }
     function switchTab(tabName) {
-  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
 
-  if (['all', 'answered', 'unanswered'].includes(tabName)) {
-    document.querySelector('.tab[data-tab="questions"]').classList.add('active');
-    document.querySelector('#questions-tab').style.display = 'block';
-    fetchQuestions(tabName);
-  } else if (tabName === 'activeusers') {
-    document.querySelector('.tab[data-tab="users"]').classList.add('active');
-    document.querySelector('#users-tab').style.display = 'block';
-    fetchUsers('activeusers');
-  }else {
-    document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
-    document.querySelector(`#${tabName}-tab`).style.display = 'block';
+      if (['all', 'answered', 'unanswered'].includes(tabName)) {
+        document.querySelector('.tab[data-tab="questions"]').classList.add('active');
+        document.querySelector('#questions-tab').style.display = 'block';
+        fetchQuestions(tabName);
+      } else if (tabName === 'activeusers') {
+        document.querySelector('.tab[data-tab="users"]').classList.add('active');
+        document.querySelector('#users-tab').style.display = 'block';
+        fetchUsers('activeusers');
+      } else {
+        document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+        document.querySelector(`#${tabName}-tab`).style.display = 'block';
 
-    if (tabName === 'users') {
-      fetchUsers();
-    } else if (tabName === 'questions') {
-      fetchQuestions('all'); 
+        if (tabName === 'users') {
+          fetchUsers();
+        } else if (tabName === 'questions') {
+          fetchQuestions('all');
+        }
+      }
     }
-  }
-}
 
     let currentQuestionSort = { sortBy: 'createdAt', order: 'ASC' };
 
@@ -403,13 +413,16 @@
             questions = questions.filter(q => q.Answers?.length > 0);
           } else if (filter == 'unanswered') {
             questions = questions.filter(q => !q.Answers || q.Answers.length === 0);
-          }else if (filter=='activeusers'){
+          } else if (filter == 'activeusers') {
             users = users.filter(u => u.isActive === true);
           }
           const tableBody = document.getElementById('questionsTable');
           tableBody.innerHTML = '';
           questions.forEach(q => {
             const row = document.createElement('tr');
+            if (!q.isActive) {
+              row.classList.add('inactive');
+            }
             row.innerHTML = `
               <td>${q.id}</td>
               <td>${q.title}</td>
@@ -420,6 +433,7 @@
               <td>
                 <button class="question-toggle-btn" data-id="${q.id}" data-type="question">${q.isActive ? 'Deactivate' : 'Activate'}</button>
                 <button class="toggle-details" data-id="${q.id}">Answers</button>
+
               </td>
             `;
             tableBody.appendChild(row);
@@ -462,6 +476,12 @@
                   }
                   const result = await toggleResponse.json();
                   btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
+                  const row = btn.closest('tr');
+                  if (result.isActive) {
+                    row.classList.remove('inactive');
+                  } else {
+                    row.classList.add('inactive');
+                  }
                   fetchStats();
                   fetchQuestions(filter);
                 } catch (error) {
@@ -476,29 +496,41 @@
             btn.addEventListener('click', async () => {
               const id = btn.getAttribute('data-id');
               const type = btn.getAttribute('data-type');
-              const endpoint = `http://127.0.0.1:3000/api/answers/${id}/toggle-active`;
+              const endpoint = `http://127.0.0.1:3000/api/questions/answers/${id}/toggle-active`;
+
+              console.log(`Attempting to toggle answer ID: ${id}, Type: ${type}, Endpoint: ${endpoint}`); // Debug log
 
               if (confirm(`${btn.textContent} this ${type}?`)) {
                 try {
+                  console.log('Token:', token);
                   const toggleResponse = await fetch(endpoint, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}` }
                   });
+                  console.log('Response Status:', toggleResponse.status); // Debug log
                   if (!toggleResponse.ok) {
                     const errorData = await toggleResponse.json();
+                    console.error('Error Response:', errorData); // Debug log
                     throw new Error(`Failed to toggle ${type} status: ${errorData.message || toggleResponse.statusText}`);
                   }
                   const result = await toggleResponse.json();
+                  console.log('Toggle Result:', result); // Debug log
                   btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
-                  fetchQuestions(filter); // Refresh the questions table to reflect the updated answer status
+                  const answerDiv = btn.closest('.answer');
+                  if (result.isActive) {
+                    answerDiv.classList.remove('inactive');
+                  } else {
+                    answerDiv.classList.add('inactive');
+                  }
+                  fetchQuestions(filter);
                 } catch (error) {
                   console.error(`Error toggling ${type}:`, error);
-                  showError(`Failed to toggle ${type} status: ${error.message}`);
+                  showError(`Failed to toggle ${type} status: ${error.message} (Status: ${toggleResponse?.status || 'N/A'})`);
                 }
               }
             });
           });
-
+                  
           document.querySelectorAll('.toggle-details').forEach(btn => {
             btn.addEventListener('click', () => {
               const detailsRow = btn.closest('tr').nextElementSibling;
@@ -506,6 +538,7 @@
               btn.textContent = detailsRow.style.display === 'none' ? 'Answers' : 'Hide';
             });
           });
+
 
           document.querySelectorAll('.correct-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
@@ -533,7 +566,7 @@
                   } else if (!result.isCorrect && checkmark) {
                     checkmark.remove();
                   }
-                  fetchQuestions(filter); 
+                  fetchQuestions(filter);
                 } catch (error) {
                   console.error('Error marking answer as correct:', error);
                   showError(`Failed to mark answer as correct: ${error.message}`);
@@ -564,8 +597,8 @@
         });
         let users = await usersResponse.json();
         if (usersResponse.ok) {
-          
-        if (filter === 'activeusers') {
+
+          if (filter === 'activeusers') {
             users = users.filter(u => u.isActive === true || u.isActive === 'true');
           }
           const tableBody = document.getElementById('usersTable');
@@ -604,7 +637,7 @@
                   btn.textContent = result.isActive ? 'Deactivate' : 'Activate';
                   btn.closest('tr').children[4].textContent = result.isActive ? 'Active' : 'Inactive';
                   fetchStats();
-                  fetchUsers(filter); 
+                  fetchUsers(filter);
                 } catch (error) {
                   console.error('Error toggling user:', error);
                   showError(`Failed to toggle user status: ${error.message}`);
@@ -640,18 +673,18 @@
 
           const data = await response.json();
           const questionsResponse = await fetch('http://127.0.0.1:3000/api/questions?filter=all', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    if (!questionsResponse.ok) {
-      const errorData = await questionsResponse.json().catch(() => ({}));
-      console.error('Fetch questions failed:', questionsResponse.status, errorData);
-      showError(`Failed to fetch questions: ${errorData.message || questionsResponse.statusText || 'Unknown error'}`);
-      return;
-    }
-    const questions = await questionsResponse.json();
-    const total = questions.length;
-    const answered = questions.filter(q => q.Answers?.length > 0).length; 
-    const unanswered = total - answered;
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (!questionsResponse.ok) {
+            const errorData = await questionsResponse.json().catch(() => ({}));
+            console.error('Fetch questions failed:', questionsResponse.status, errorData);
+            showError(`Failed to fetch questions: ${errorData.message || questionsResponse.statusText || 'Unknown error'}`);
+            return;
+          }
+          const questions = await questionsResponse.json();
+          const total = questions.length;
+          const answered = questions.filter(q => q.Answers?.length > 0).length;
+          const unanswered = total - answered;
           document.getElementById('totalQuestions').textContent = data.total || 0;
           document.getElementById('answeredQuestions').textContent = data.answered || 0;
           document.getElementById('unansweredQuestions').textContent = data.unanswered || 0;

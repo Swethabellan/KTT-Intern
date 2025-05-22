@@ -56,7 +56,7 @@ router.get('/', authenticateToken, async (req, res) => {
                 { model: Answer, include: [{ model: User, attributes: ['id', 'username'] }] ,required:ansRequired}
             ],
             order: [[sortBy, order]]
-        });
+        });
         res.status(200).json(questions);
     } catch (error) {
         console.error('Error fetching questions:', error);
@@ -224,10 +224,10 @@ router.get('/answers', authenticateToken, async (req, res) => {
         if (!questionId) {
             return res.status(400).json({ error: 'Question ID is required' });
         }
-
+        
         const answers = await Answer.findAll({
-            where: { questionId: Number(questionId) },
-            include: [{ model: User, attributes: ['username'] }],
+            where: { questionId: Number(questionId) ,isActive:true},
+            include: [{ model: User, attributes: ['username','id'] }],
             order: [['createdAt', 'ASC']]
         });
 
@@ -238,25 +238,38 @@ router.get('/answers', authenticateToken, async (req, res) => {
     }
 });
 
-// Toggle question active status
-router.put('/questions/:id/toggle-active', authenticateToken, verifyAdmin, async (req, res) => {
+router.put('/:id/toggle-active', authenticateToken, verifyAdmin, async (req, res) => {
   try {
-    const question = await Question.findById(req.params.id);
+    const questionId = req.params.id;
+
+    if (!questionId || isNaN(questionId) || parseInt(questionId) <= 0) {
+      return res.status(400).json({ message: 'Invalid question ID format' });
+    }
+    const parsedId = parseInt(questionId);
+    const question = await Question.findByPk(parsedId);
     if (!question) {
       return res.status(404).json({ message: 'Question not found' });
     }
+
     question.isActive = !question.isActive;
     await question.save();
+
     res.json({ isActive: question.isActive });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error toggling question active status:', error); // Log the actual error
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
-// Toggle answer active status
 router.put('/answers/:id/toggle-active',authenticateToken,verifyAdmin, async (req, res) => {
   try {
-    const answer = await Answer.findById(req.params.id);
+     const answerId = req.params.id;
+
+    if (!answerId || isNaN(answerId) || parseInt(answerId) <= 0) {
+      return res.status(400).json({ message: 'Invalid question ID format' });
+    }
+    const parsedId = parseInt(answerId);
+    const answer = await Answer.findByPk(parsedId);
     if (!answer) {
       return res.status(404).json({ message: 'Answer not found' });
     }
