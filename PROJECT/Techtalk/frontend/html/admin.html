@@ -496,7 +496,7 @@
             btn.addEventListener('click', async () => {
               const id = btn.getAttribute('data-id');
               const type = btn.getAttribute('data-type');
-              const endpoint = `http://127.0.0.1:3000/api/questions/answers/${id}/toggle-active`;
+              const endpoint = `http://127.0.0.1:3000/api/answers/answers/${id}/toggle-active`;
 
               console.log(`Attempting to toggle answer ID: ${id}, Type: ${type}, Endpoint: ${endpoint}`); // Debug log
 
@@ -545,7 +545,7 @@
               const id = btn.getAttribute('data-id');
               if (confirm(`${btn.textContent} this answer?`)) {
                 try {
-                  const response = await fetch(`http://127.0.0.1:3000/api/questions/answers/${id}/mark-correct`, {
+                  const response = await fetch(`http://127.0.0.1:3000/api/answers/answers/${id}/mark-correct`, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}` }
                   });
