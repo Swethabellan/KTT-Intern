@@ -172,7 +172,6 @@
 
         .answer-content,
         .question-content {
-            /* display: flex; */
             flex: 1;
             margin-right: 1rem;
         }
@@ -304,10 +303,10 @@
         }
 
         .profile-popup-content {
-            background: white;
+             background: white;
             padding: 2rem;
             border-radius: 10px;
-            width: 400px;
+            width: 500px;
             max-width: 90%;
             max-height: 80vh;
             overflow-y: auto;
@@ -315,8 +314,8 @@
         }
 
         .profile-popup-content h2 {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
+           margin-bottom: 1rem;
+            font-size: 20px;
             color: #333;
         }
 
@@ -347,6 +346,18 @@
             color: #1f2937;
         }
 
+         .profile-popup-content button {
+            margin-top: 20px;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .profile-popup-content .btn-cancel{
+             background: #e53e3e;
+            color: white;
+            margin-left: 1rem;
+        }
         .profile-popup-content .error {
             color: #e53e3e;
             font-size: 0.9rem;
@@ -457,10 +468,10 @@
         </div>
     </div>
 
-    <!-- New Profile Popup -->
+    <!-- Profile Popup -->
     <div class="popup-overlay" id="profilePopupOverlay">
         <div class="profile-popup-content">
-            <h2>User Profile</h2>
+            <!-- <h2>User Profile</h2> -->
             <div id="profilePopupContent"></div>
             <button class="btn-cancel" onclick="closeProfilePopup()">Close</button>
         </div>
@@ -544,7 +555,7 @@
                         window.location.href = 'login.html';
                         return null;
                     }
-                    const response = await fetch('http://127.0.0.1:3000/api/questions/answers', {
+                    const response = await fetch('http://127.0.0.1:3000/api/answers/answers', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -567,28 +578,28 @@
                 }
             },
             async fetchUserStats(userId) {
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            throw new Error('No token found. Please log in.');
-        }
-        const response = await fetch(`http://127.0.0.1:3000/api/users/${userId}/stats`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(`Failed to fetch user stats: ${response.status} ${errorData.message || ''}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching user stats:', error.message);
-        throw error;
-    }
-},
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        throw new Error('No token found. Please log in.');
+                    }
+                    const response = await fetch(`http://127.0.0.1:3000/api/users/users/${userId}/stats`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(`Failed to fetch user stats: ${response.status} ${errorData.message || ''}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching user stats:', error.message);
+                    throw error;
+                }
+            },
             async fetchUserProfile() {
                 try {
                     const token = localStorage.getItem('token');
@@ -613,31 +624,31 @@
                 }
             },
             async fetchUserById(userId) {
-  try {
-    console.log('Fetching user profile for userId:', userId);
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('No token found. Please log in.');
-    }
-    const response = await fetch(`http://127.0.0.1:3000/api/users/users/${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(`Failed to fetch user profile: ${response.status} ${errorData.message || ''}`);
-    }
-    const data = await response.json();
-    console.log('User profile fetched:', data);
-    return data;
-  } catch (error) {
-    console.error('Error fetching user profile by ID:', error.message);
-    throw error;
-  }
-},
+                try {
+                    console.log('Fetching user profile for userId:', userId);
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        throw new Error('No token found. Please log in.');
+                    }
+                    const response = await fetch(`http://127.0.0.1:3000/api/users/users/${userId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(`Failed to fetch user profile: ${response.status} ${errorData.message || ''}`);
+                    }
+                    const data = await response.json();
+                    console.log('User profile fetched:', data);
+                    return data;
+                } catch (error) {
+                    console.error('Error fetching user profile by ID:', error.message);
+                    throw error;
+                }
+            },
             async submitQuestion(title, description) {
                 try {
                     const token = localStorage.getItem('token');
@@ -719,12 +730,12 @@
                                     <div class="answer-content">
                                         <div class="flex items-center">
                                             <div>
-                                                <a href="#" data-user-id="${answer.User?.id}" class="username-link font-semibold text-gray-800">${answer.User?.username}</a>
+                                                <a href="#" data-user-id="${answer.User?.id || ''}" class="username-link font-semibold text-gray-800">${answer.User?.username || 'Unknown'}</a>
                                             </div>
                                         </div>
                                         <div class="flex items-center">
-                                        <p class="text-gray-600">${answer.content}</p>
-                                           ${checkmark}
+                                            <p class="text-gray-600">${answer.content}</p>
+                                            ${checkmark}
                                             <span class="answer-timestamp">${formattedAnswerDate}</span>
                                         </div>
                                     </div>
@@ -737,7 +748,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div>
-                                    <a href="#" data-user-id="${question.User?.id}" class="username-link font-semibold text-gray-800">${question.User?.username}</a>
+                                    <a href="#" data-user-id="${question.User?.id || ''}" class="username-link font-semibold text-gray-800">${question.User?.username || 'Unknown'}</a>
                                     <div class="text-sm text-gray-500">Asked: ${formattedDate}</div>
                                 </div>
                             </div>
@@ -781,6 +792,7 @@
 
         async function loadUserProfile() {
             const usernameDisplay = document.getElementById('usernameDisplay');
+            if (!usernameDisplay) return; // Avoid errors if element doesn't exist
             usernameDisplay.classList.add('loading');
 
             try {
@@ -813,52 +825,72 @@
             }
         }
 
-       async function openProfilePopup(userId) {
- 
-    try {
-         console.log('Opening profile popup for userId:', userId);
-  if (!userId || isNaN(parseInt(userId))) {
-    document.getElementById('profilePopupContent').innerHTML = '<p class="error">Invalid user ID</p>';
-    document.getElementById('profilePopupOverlay').style.display = 'flex';
-    return;
-  }
+        async function openProfilePopup(userId) {
+            const profilePopupContent = document.getElementById('profilePopupContent');
+            const profilePopupOverlay = document.getElementById('profilePopupOverlay');
 
+            try {
+                console.log('Opening profile popup for userId:', userId);
+                if (!userId || isNaN(parseInt(userId)) || userId === 'undefined') {
+                    throw new Error('Invalid or missing user ID.');
+                }
 
-        const [profile, stats] = await Promise.all([
-            apiService.fetchUserById(userId),
-            apiService.fetchUserStats(userId)
-        ]);
-        const profilePopupContent = document.getElementById('profilePopupContent');
-        profilePopupContent.innerHTML = '';
+                const profile = await apiService.fetchUserById(userId).catch(err => {
+                    throw new Error(`Profile fetch failed: ${err.message}`);
+                });
+                if (!profile) {
+                    throw new Error('No profile data returned.');
+                }
+                let skillsArray = [];
+                if (Array.isArray(profile.skills)) {
+                    skillsArray = profile.skills;
+                } else if (typeof profile.skills === 'string') {
+                    try {
+                        skillsArray = JSON.parse(profile.skills);
+                        if (!Array.isArray(skillsArray)) {
+                            skillsArray = profile.skills.split(',').map(skill => skill.trim());
+                        }
+                    } catch (e) {
+                        skillsArray = profile.skills.split(',').map(skill => skill.trim());
+                    }
+                }
 
-        if (profile) {
-            const skillsHtml = profile.skills && profile.skills.length > 0
-                ? profile.skills.map(skill => `<span>${skill}</span>`).join('')
-                : '<span>No skills listed.</span>';
-            profilePopupContent.innerHTML = `
-                <div class="username">${profile.username || 'Unknown User'}</div>
-                <div class="bio">${profile.bio || 'No bio available.'}</div>
-                <div class="skills"><h3>Skills:</h3>${skillsHtml}</div>
-                <div class="stats">
-                    <h3>Stats:</h3>
-                    <p>Questions: ${stats.questionsCount || 0}</p>
-                    <p>Answers: ${stats.answersCount || 0}</p>
-                </div>
-            `;
-            document.getElementById('profilePopupOverlay').style.display = 'flex';
-        } else {
-            throw new Error('No profile data returned.');
+                const skillsHtml = skillsArray && skillsArray.length > 0
+                    ? skillsArray.map(skill => `<span>${skill}</span>`).join('')
+                    : '<span>No skills listed.</span>';
+
+                let stats = { questionsCount: 0, answersCount: 0 };
+                let statsError = null;
+                try {
+                    stats = await apiService.fetchUserStats(userId);
+                } catch (err) {
+                    statsError = `Failed to load stats: ${err.message}`;
+                    console.error('Stats fetch failed:', err.message);
+                }
+                profilePopupContent.innerHTML = `
+                    <div class="username">${profile.username || 'Unknown User'}</div>
+                    <div class="bio">${profile.bio || 'No bio available.'}</div>
+                    <div class="skills"><h3>Skills:</h3>${skillsHtml  || 'No skills updated.'}</div>
+                    <div class="stats">
+                        <h3>Stats:</h3>
+                        <p>Questions: ${stats?.questionsCount || 0}</p>
+                        <p>Answers: ${stats?.answersCount || 0}</p>
+                    </div>
+                `;
+
+                profilePopupOverlay.style.display = 'flex';
+            } catch (error) {
+                console.error('Error in openProfilePopup:', error.message);
+                profilePopupContent.innerHTML = `<p class="error">Error loading user profile: ${error.message}</p>`;
+                profilePopupOverlay.style.display = 'flex';
+            }
         }
-    } catch (error) {
-        console.error('Error loading user profile for popup:', error.message);
-        document.getElementById('profilePopupContent').innerHTML = `<p class="error">Error loading user profile: ${error.message}</p>`;
-        document.getElementById('profilePopupOverlay').style.display = 'flex';
-    }
-}       
-           
+
         function closeProfilePopup() {
-            document.getElementById('profilePopupOverlay').style.display = 'none';
-            document.getElementById('profilePopupContent').innerHTML = '';
+            const profilePopupOverlay = document.getElementById('profilePopupOverlay');
+            const profilePopupContent = document.getElementById('profilePopupContent');
+            profilePopupOverlay.style.display = 'none';
+            profilePopupContent.innerHTML = '';
         }
 
         async function openRecentQuestionsPopup() {
@@ -941,7 +973,7 @@
                                     <div class="sub-answer-item">
                                         <span class="sub-answer-number">${ansIndex + 1}.</span>
                                         <div class="sub-answer-content">
-                                            <a href="#" data-user-id="${answer.User?.id}" class="username-link font-semibold text-gray-700">${answer.User?.username}</a>
+                                            <a href="#" data-user-id="${answer.User?.id || ''}" class="username-link font-semibold text-gray-700">${answer.User?.username || 'Unknown'}</a>
                                             <p class="text-gray-600">${answer.content}</p>
                                             ${checkmark}
                                             <span class="answer-timestamp mt-1">${formattedAnswerDate}</span>
@@ -956,7 +988,7 @@
                         questionDiv.innerHTML = `
                             <span class="serial-number">${index + 1}.</span>
                             <div class="popup-question-content">
-                                <a href="#" data-user-id="${question.User?.id}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username}</a>
+                                <a href="#" data-user-id="${question.User?.id || ''}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username || 'Unknown'}</a>
                                 <h3 class="text-lg font-semibold text-gray-700 mt-1">Q: ${question.title || 'Untitled'}</h3>
                                 <p class="text-gray-600 mt-1">${question.description || ''}</p>
                                 <div class="text-sm text-gray-500 mt-2">Total Answers: ${answers.length}</div>
@@ -1014,7 +1046,7 @@
                         questionDiv.innerHTML = `
                             <span class="serial-number">${index + 1}.</span>
                             <div class="popup-question-content">
-                                <a href="#" data-user-id="${question.User?.id}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username}</a>
+                                <a href="#" data-user-id="${question.User?.id || ''}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username || 'Unknown'}</a>
                                 <h3 class="text-lg font-semibold text-gray-700 mt-1">Q: ${question.title || 'Untitled'}</h3>
                                 <p class="text-gray-600 mt-1">${question.description || ''}</p>
                             </div>
@@ -1061,7 +1093,7 @@
                                     <div class="answer-content">
                                         <div class="flex items-center">
                                             <div>
-                                                <a href="#" data-user-id="${answer.User?.id}" class="username-link font-semibold text-gray-800">${answer.User?.username}</a>
+                                                <a href="#" data-user-id="${answer.User?.id || ''}" class="username-link font-semibold text-gray-800">${answer.User?.username || 'Unknown'}</a>
                                                 <p class="text-gray-600">${answer.content}${checkmark}</p>
                                             </div>
                                         </div>
@@ -1187,6 +1219,8 @@
 
         async function fetchTotalUsers() {
             try {
+
+
                 const token = localStorage.getItem('token');
                 if (!token) {
                     window.location.href = 'login.html';
@@ -1228,7 +1262,7 @@
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
                     throw new Error(`Failed to fetch total questions: ${response.status} ${errorData.message || ''}`);
-                    }
+                }
                 const data = await response.json();
                 document.getElementById('total-questions').textContent = data.totalQuestions;
             } catch (error) {
@@ -1333,19 +1367,22 @@
                 window.location.href = 'login.html';
             });
 
-document.addEventListener('click', (e) => {
-  const link = e.target.closest('.username-link');
-  if (link) {
-    e.preventDefault();
-    const userId = link.getAttribute('data-user-id');
-    console.log('Username link clicked, userId:', userId);
-    if (userId && userId !== 'undefined') {
-      window.location.href = `demo.html?userId=${userId}`;
-    } else {
-      alert('User profile not available.');
-    }
-  }
-});
+            document.addEventListener('click', (e) => {
+                const link = e.target.closest('.username-link');
+                if (link) {
+                    e.preventDefault();
+                    const userId = link.getAttribute('data-user-id');
+                    console.log('Username link clicked, userId:', userId);
+                    if (userId && userId !== 'undefined' && userId !== '') {
+                        openProfilePopup(userId);
+                    } else {
+                        const profilePopupContent = document.getElementById('profilePopupContent');
+                        const profilePopupOverlay = document.getElementById('profilePopupOverlay');
+                        profilePopupContent.innerHTML = '<p class="error">User profile not available. Invalid or missing user ID.</p>';
+                        profilePopupOverlay.style.display = 'flex';
+                    }
+                }
+            });
         });
 
         window.addEventListener('beforeunload', () => {
