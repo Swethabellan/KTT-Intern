@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const userRoute = require('./routes/Userroute');
 const questionRoute = require('./routes/questionroute');
-const adminRoute=require('./routes/adminroute');
-
+// const adminRoute=require('./routes/adminroute');
+const answerRoute=require('./routes/answerroute');
 const db = require('./models'); 
 const sequelize = db.sequelize;
 require('dotenv').config();
@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use('/api/users', userRoute);
 app.use('/api/questions', questionRoute);
-app.use('/api/admins',adminRoute);
+app.use('/api/answers',answerRoute);
 
 const { User, Question, Answer } = db;
 User.associate(db);
