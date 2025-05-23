@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <style>
+        /* Existing styles unchanged */
         body {
             font-family: 'Roboto', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -171,6 +172,7 @@
 
         .answer-content,
         .question-content {
+            /* display: flex; */
             flex: 1;
             margin-right: 1rem;
         }
@@ -300,6 +302,56 @@
             font-size: 30px;
             margin-right: 10px;
         }
+
+        .profile-popup-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-popup-content h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .profile-popup-content .username {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-popup-content .bio {
+            color: #4b5563;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .profile-popup-content .skills {
+            margin-bottom: 1rem;
+        }
+
+        .profile-popup-content .skills span {
+            display: inline-block;
+            background: #e5e7eb;
+            padding: 0.25rem 0.5rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #1f2937;
+        }
+
+        .profile-popup-content .error {
+            color: #e53e3e;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 
@@ -405,6 +457,15 @@
         </div>
     </div>
 
+    <!-- New Profile Popup -->
+    <div class="popup-overlay" id="profilePopupOverlay">
+        <div class="profile-popup-content">
+            <h2>User Profile</h2>
+            <div id="profilePopupContent"></div>
+            <button class="btn-cancel" onclick="closeProfilePopup()">Close</button>
+        </div>
+    </div>
+
     <script>
         const apiService = {
             async fetchQuestions() {
@@ -505,6 +566,29 @@
                     return null;
                 }
             },
+            async fetchUserStats(userId) {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('No token found. Please log in.');
+        }
+        const response = await fetch(`http://127.0.0.1:3000/api/users/${userId}/stats`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`Failed to fetch user stats: ${response.status} ${errorData.message || ''}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching user stats:', error.message);
+        throw error;
+    }
+},
             async fetchUserProfile() {
                 try {
                     const token = localStorage.getItem('token');
@@ -528,6 +612,32 @@
                     throw error;
                 }
             },
+            async fetchUserById(userId) {
+  try {
+    console.log('Fetching user profile for userId:', userId);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token found. Please log in.');
+    }
+    const response = await fetch(`http://127.0.0.1:3000/api/users/users/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`Failed to fetch user profile: ${response.status} ${errorData.message || ''}`);
+    }
+    const data = await response.json();
+    console.log('User profile fetched:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching user profile by ID:', error.message);
+    throw error;
+  }
+},
             async submitQuestion(title, description) {
                 try {
                     const token = localStorage.getItem('token');
@@ -598,29 +708,28 @@
                     const previewAnswersCount = 2;
                     let answersHtml = '';
                     if (answers.length > 0) {
-                     const activeAnswers = answers.filter(answer => answer.isActive !== false);
-                        answersHtml = answers.map((answer, index) => {
+                        const activeAnswers = answers.filter(answer => answer.isActive !== false);
+                        answersHtml = activeAnswers.map((answer, index) => {
                             const answerCreatedAt = new Date(answer.createdAt);
                             const formattedAnswerDate = formatDate(answerCreatedAt);
                             const checkmark = answer.isCorrect ? '<span class="checkmark-container"><span class="checkmark">✔</span></span>' : '';
                             const isHidden = index >= previewAnswersCount ? 'hidden' : '';
                             return `
-        <div class="answer-item ${isHidden}" data-answer-id="answer-${question.id}-${index}">
-            <div class="answer-content">
-                <div class="flex items-center">
-                    <div>
-                        <a href="demo.html?userId=${answer.User?.id}" class="username-link font-semibold text-gray-800">${answer.User?.username}</a>
-                    </div>
-                </div>
-            </div>
-            <p class="text-gray-600">${answer.content}</p>
-            <div class="flex items-center">
-                ${checkmark}
-                <span class="answer-timestamp">${formattedAnswerDate}</span>
-                
-            </div>
-        </div>
-    `;
+                                <div class="answer-item ${isHidden}" data-answer-id="answer-${question.id}-${index}">
+                                    <div class="answer-content">
+                                        <div class="flex items-center">
+                                            <div>
+                                                <a href="#" data-user-id="${answer.User?.id}" class="username-link font-semibold text-gray-800">${answer.User?.username}</a>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center">
+                                        <p class="text-gray-600">${answer.content}</p>
+                                           ${checkmark}
+                                            <span class="answer-timestamp">${formattedAnswerDate}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
                         }).join('');
                     }
 
@@ -628,7 +737,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div>
-                                    <a href="demo.html?userId=${question.User?.id}" class="username-link font-semibold text-gray-800">${question.User?.username}</a>
+                                    <a href="#" data-user-id="${question.User?.id}" class="username-link font-semibold text-gray-800">${question.User?.username}</a>
                                     <div class="text-sm text-gray-500">Asked: ${formattedDate}</div>
                                 </div>
                             </div>
@@ -689,7 +798,6 @@
                             skillSpan.textContent = skill;
                             skillsContainer.appendChild(skillSpan);
                         });
-
                     } else {
                         skillsContainer.innerHTML += '<span>No skills listed.</span>';
                     }
@@ -703,6 +811,54 @@
                 document.getElementById('bioDisplay').textContent = 'Error loading bio';
                 document.getElementById('skillsDisplay').innerHTML = '<h3>Skills:</h3><span>Error loading skills</span>';
             }
+        }
+
+       async function openProfilePopup(userId) {
+ 
+    try {
+         console.log('Opening profile popup for userId:', userId);
+  if (!userId || isNaN(parseInt(userId))) {
+    document.getElementById('profilePopupContent').innerHTML = '<p class="error">Invalid user ID</p>';
+    document.getElementById('profilePopupOverlay').style.display = 'flex';
+    return;
+  }
+
+
+        const [profile, stats] = await Promise.all([
+            apiService.fetchUserById(userId),
+            apiService.fetchUserStats(userId)
+        ]);
+        const profilePopupContent = document.getElementById('profilePopupContent');
+        profilePopupContent.innerHTML = '';
+
+        if (profile) {
+            const skillsHtml = profile.skills && profile.skills.length > 0
+                ? profile.skills.map(skill => `<span>${skill}</span>`).join('')
+                : '<span>No skills listed.</span>';
+            profilePopupContent.innerHTML = `
+                <div class="username">${profile.username || 'Unknown User'}</div>
+                <div class="bio">${profile.bio || 'No bio available.'}</div>
+                <div class="skills"><h3>Skills:</h3>${skillsHtml}</div>
+                <div class="stats">
+                    <h3>Stats:</h3>
+                    <p>Questions: ${stats.questionsCount || 0}</p>
+                    <p>Answers: ${stats.answersCount || 0}</p>
+                </div>
+            `;
+            document.getElementById('profilePopupOverlay').style.display = 'flex';
+        } else {
+            throw new Error('No profile data returned.');
+        }
+    } catch (error) {
+        console.error('Error loading user profile for popup:', error.message);
+        document.getElementById('profilePopupContent').innerHTML = `<p class="error">Error loading user profile: ${error.message}</p>`;
+        document.getElementById('profilePopupOverlay').style.display = 'flex';
+    }
+}       
+           
+        function closeProfilePopup() {
+            document.getElementById('profilePopupOverlay').style.display = 'none';
+            document.getElementById('profilePopupContent').innerHTML = '';
         }
 
         async function openRecentQuestionsPopup() {
@@ -723,7 +879,7 @@
                         questionDiv.innerHTML = `
                             <span class="serial-number">${index + 1}.</span>
                             <div class="popup-question-content">
-                                <a href="demo.html?userId=${question.User?.id}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username}</a>
+                                <a href="#" data-user-id="${question.User?.id || ''}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username || 'Unknown'}</a>
                                 <h3 class="text-lg font-semibold text-gray-700 mt-1">Q: ${question.title || 'Untitled'}</h3>
                                 <p class="text-gray-600 mt-1">${question.description || ''}</p>
                             </div>
@@ -785,8 +941,9 @@
                                     <div class="sub-answer-item">
                                         <span class="sub-answer-number">${ansIndex + 1}.</span>
                                         <div class="sub-answer-content">
-                                            <a href="demo.html?userId=${answer.User?.id}" class="username-link font-semibold text-gray-700">${answer.User?.username}</a>
-                                            <p class="text-gray-600">${answer.content}${checkmark}</p>
+                                            <a href="#" data-user-id="${answer.User?.id}" class="username-link font-semibold text-gray-700">${answer.User?.username}</a>
+                                            <p class="text-gray-600">${answer.content}</p>
+                                            ${checkmark}
                                             <span class="answer-timestamp mt-1">${formattedAnswerDate}</span>
                                         </div>
                                     </div>
@@ -799,7 +956,7 @@
                         questionDiv.innerHTML = `
                             <span class="serial-number">${index + 1}.</span>
                             <div class="popup-question-content">
-                                <a href="demo.html?userId=${question.User?.id}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username}</a>
+                                <a href="#" data-user-id="${question.User?.id}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username}</a>
                                 <h3 class="text-lg font-semibold text-gray-700 mt-1">Q: ${question.title || 'Untitled'}</h3>
                                 <p class="text-gray-600 mt-1">${question.description || ''}</p>
                                 <div class="text-sm text-gray-500 mt-2">Total Answers: ${answers.length}</div>
@@ -857,7 +1014,7 @@
                         questionDiv.innerHTML = `
                             <span class="serial-number">${index + 1}.</span>
                             <div class="popup-question-content">
-                                <a href="demo.html?userId=${question.User?.id}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username}</a>
+                                <a href="#" data-user-id="${question.User?.id}" class="username-link font-bold capitalize text-xl text-gray-800">${question.User?.username}</a>
                                 <h3 class="text-lg font-semibold text-gray-700 mt-1">Q: ${question.title || 'Untitled'}</h3>
                                 <p class="text-gray-600 mt-1">${question.description || ''}</p>
                             </div>
@@ -888,13 +1045,13 @@
                 if (answersData.length === 0 || answersData.every(data => data.answers.length === 0)) {
                     answersPopupContent.innerHTML = '<p class="text-gray-500">No answers yet.</p>';
                 } else {
-                    answersData.forEach(data => {
-                            const activeAnswers = answers.filter(answer => answer.isActive !== false);
-                        if (data.answers.length > 0) {
+                    answersData.forEach(({ question, answers }) => {
+                        const activeAnswers = answers.filter(answer => answer.isActive !== false);
+                        if (activeAnswers.length > 0) {
                             const questionGroup = document.createElement('div');
                             questionGroup.className = 'question-group';
-                            questionGroup.innerHTML = `<h3>${data.question.title || 'Untitled'}</h3>`;
-                            data.answers.forEach(answer => {
+                            questionGroup.innerHTML = `<h3>${question.title || 'Untitled'}</h3>`;
+                            activeAnswers.forEach(answer => {
                                 const createdAt = new Date(answer.createdAt);
                                 const formattedAnswerDate = formatDate(createdAt);
                                 const checkmark = answer.isCorrect ? '<span class="checkmark">✔</span>' : '';
@@ -904,7 +1061,7 @@
                                     <div class="answer-content">
                                         <div class="flex items-center">
                                             <div>
-                                                <a href="demo.html?userId=${answer.User?.id}" class="username-link font-semibold text-gray-800">${answer.User?.username}</a>
+                                                <a href="#" data-user-id="${answer.User?.id}" class="username-link font-semibold text-gray-800">${answer.User?.username}</a>
                                                 <p class="text-gray-600">${answer.content}${checkmark}</p>
                                             </div>
                                         </div>
@@ -940,7 +1097,7 @@
                     if (questionCard) {
                         const commentCountSpan = questionCard.querySelector('.comment-count');
                         if (commentCountSpan) {
-                            commentCountSpan.textContent = answers.length;
+                            commentCountSpan.textContent = activeAnswers.length;
                         }
                     }
                 }
@@ -1035,7 +1192,7 @@
                     window.location.href = 'login.html';
                     return;
                 }
-                const response = await fetch('http://127.0.0.1:3000/api/questions/total-users', {
+                const response = await fetch('http://127.0.0.1:3000/api/users/total-users', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1071,7 +1228,7 @@
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
                     throw new Error(`Failed to fetch total questions: ${response.status} ${errorData.message || ''}`);
-                }
+                    }
                 const data = await response.json();
                 document.getElementById('total-questions').textContent = data.totalQuestions;
             } catch (error) {
@@ -1087,7 +1244,7 @@
                     window.location.href = 'login.html';
                     return;
                 }
-                const response = await fetch('http://127.0.0.1:3000/api/answers/answered-questions', {
+                const response = await fetch('http://127.0.0.1:3000/api/questions/answered-questions', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1149,7 +1306,7 @@
             if (userId) {
                 userProfileLink.href = `demo.html?userId=${userId}`;
             } else {
-                userProfileLink.href = `demo.html?userId=${userId}`;
+                userProfileLink.href = `demo.html`;
                 userProfileLink.addEventListener('click', (e) => {
                     userProfileLink.href = `demo.html?userId=${userId}`;
                 });
@@ -1175,18 +1332,19 @@
                 localStorage.removeItem('userId');
                 window.location.href = 'login.html';
             });
-        document.addEventListener('click', (e) => {
-    const link = e.target.closest('.username-link');
-    if (link) {
-        e.preventDefault(); 
-        const href = link.getAttribute('href');
-        console.log('Username link clicked, href:', href); 
-        if (href && href !== '#' && href.includes('userId=')) {
-            window.location.href = href;
-        } else {
-            alert('User profile not available.');
-        }
+
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('.username-link');
+  if (link) {
+    e.preventDefault();
+    const userId = link.getAttribute('data-user-id');
+    console.log('Username link clicked, userId:', userId);
+    if (userId && userId !== 'undefined') {
+      window.location.href = `demo.html?userId=${userId}`;
+    } else {
+      alert('User profile not available.');
     }
+  }
 });
         });
 
